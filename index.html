@@ -3,174 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stumble Ice 0.56 - Regras</title>
+    <title>Stumble Ice 0.56</title>
     <style>
+        :root {
+            /* Tema Escuro (Padrão) */
+            --bg-color: #0f2027;
+            --bg-gradient: linear-gradient(135deg, rgba(15, 32, 39, 0.85), rgba(44, 83, 100, 0.85)); /* Fundo escuro transparente para ver a imagem */
+            --text-color: #ffffff;
+            --box-bg: rgba(255, 255, 255, 0.1);
+            --box-border: rgba(255, 255, 255, 0.2);
+            --accent-color: #a0e8ff;
+            --btn-bg: #a0e8ff;
+            --btn-text: #0f2027;
+            --danger-color: #ff6b6b;
+            /* Imagem de Fundo Padrão (Salve ela no GitHub com esse nome) */
+            --default-bg-image: url('fundo-ice.png');
+        }
+
+        [data-theme="light"] {
+            --bg-color: #e0f7fa;
+            --bg-gradient: linear-gradient(135deg, rgba(224, 247, 250, 0.9), rgba(128, 222, 234, 0.9));
+            --text-color: #003333;
+            --box-bg: rgba(255, 255, 255, 0.8);
+            --box-border: rgba(0, 0, 0, 0.1);
+            --accent-color: #00796b;
+            --btn-bg: #00796b;
+            --btn-text: #ffffff;
+            --danger-color: #d32f2f;
+        }
+
+        [data-theme="neon"] {
+            --bg-color: #000000;
+            --bg-gradient: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(26, 0, 51, 0.9));
+            --text-color: #00ffcc;
+            --box-bg: rgba(0, 255, 204, 0.05);
+            --box-border: #00ffcc;
+            --accent-color: #ff00ff;
+            --btn-bg: #ff00ff;
+            --btn-text: #ffffff;
+            --danger-color: #ff0040;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* Fundo escuro gelado */
-            color: #ffffff;
+            background-color: var(--bg-color);
+            /* Carrega a imagem padrão + o gradiente de cor */
+            background-image: var(--bg-gradient), var(--default-bg-image);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-blend-mode: overlay;
+            color: var(--text-color);
             margin: 0;
             padding: 20px;
             line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
         }
+
         .container {
             max-width: 800px;
             margin: auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
+            background: var(--box-bg);
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid var(--box-border);
         }
+
         h1 {
             text-align: center;
-            color: #a0e8ff;
-            text-shadow: 0 0 10px rgba(160, 232, 255, 0.5);
-            font-size: 2em;
+            color: var(--accent-color);
+            text-shadow: 0 0 15px var(--accent-color);
+            font-size: 2.5em;
+            margin-bottom: 20px;
         }
+
+        /* ABAS */
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: var(--box-bg);
+            border: 2px solid var(--box-border);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--accent-color);
+            color: var(--btn-text);
+            border-color: var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* REGRAS */
         h2 {
-            color: #d4f1f9;
-            border-bottom: 2px solid #a0e8ff;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
             padding-bottom: 5px;
             margin-top: 30px;
         }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
+
+        ul { list-style-type: none; padding-left: 0; }
         li {
             margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--box-bg);
             padding: 10px;
             border-radius: 8px;
-            border-left: 4px solid #a0e8ff;
+            border-left: 4px solid var(--accent-color);
         }
-        .highlight {
-            color: #ff6b6b;
-            font-weight: bold;
-        }
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        th {
-            background-color: rgba(160, 232, 255, 0.2);
-            color: #a0e8ff;
-        }
-        .footer {
+
+        /* TABELAS */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--box-border); }
+        th { background-color: var(--box-bg); color: var(--accent-color); }
+
+        /* DISCORD TAB */
+        .discord-box {
             text-align: center;
-            margin-top: 40px;
-            font-style: italic;
-            color: #a0e8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
         }
+        .discord-logo { width: 120px; height: 120px; }
+        .discord-link {
+            background: var(--box-bg);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--box-border);
+            font-size: 1.2em;
+            word-break: break-all;
+        }
+        .btn {
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); }
+
+        /* CONFIG TAB */
+        .config-group { margin-bottom: 20px; }
+        select, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid var(--box-border);
+            background: var(--box-bg);
+            color: var(--text-color);
+        }
+        select option { background: var(--bg-color); color: var(--text-color); }
+
+        /* INFO TAB */
+        .info-text { font-size: 1.1em; text-align: center; }
+        .info-text strong { color: var(--accent-color); }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>❄️ Regras da Comunidade — Stumble Ice 0.56 🎮</h1>
-        <p>Bem-vindo ao servidor mais gelado do Stumble Guys! ❄️<br>
-        Aqui a diversão é levada a sério — mas o respeito vem sempre em primeiro lugar.<br>
-        Ao entrar e participar, você concorda automaticamente com todas as regras abaixo. Leia com atenção! 👇</p>
+        <h1>❄️ Stumble Ice 0.56 ❄️</h1>
 
-        <h2>🥶 1. Respeito é Regra Nº 1</h2>
-        <ul>
-            <li>🚫 Zero xingamento, ofensa ou desrespeito com membros, mods ou admins.</li>
-            <li>🚫 Proibido qualquer tipo de preconceito (racismo, homofobia, xenofobia, capacitismo, etc.). Isso é ban na hora, sem aviso.</li>
-            <li>✅ Brincadeiras? Liberadas! Mas não passe do limite dos outros.</li>
-            <li>💬 Discussões agressivas? Resolva no diálogo, não no grito.</li>
-        </ul>
+        <!-- BOTÕES DAS ABAS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('regras')" id="tab-btn-regras">📜 Regras</button>
+            <button class="tab-btn" onclick="openTab('discord')" id="tab-btn-discord">💬 Discord</button>
+            <button class="tab-btn" onclick="openTab('info')" id="tab-btn-info">🎮 Info do Jogo</button>
+            <button class="tab-btn" onclick="openTab('config')" id="tab-btn-config">⚙️ Config</button>
+        </div>
 
-        <h2>💬 2. Chat Limpo e Organizado</h2>
-        <ul>
-            <li>🚫 Sem spam, flood ou correntes — ninguém quer ver a mesma mensagem 20x.</li>
-            <li>🚫 Sem divulgação de outros servidores, canais ou links sem autorização da equipe.</li>
-            <li>🚫 Sem conteúdo NSFW (adulto, violento ou impróprio).</li>
-            <li>✅ Use os canais certos para cada assunto (dúvidas no suporte, memes no canal de memes 😄).</li>
-        </ul>
-
-        <h2>🎮 3. Jogo Limpo — Fair Play Sempre</h2>
-        <ul>
-            <li>🚫 Proibido cheats, hacks ou exploits de qualquer tipo.</li>
-            <li>🚫 Nada de trapaça em eventos, torneios ou sorteios.</li>
-            <li>✅ Respeite os resultados — sem toxidade por perder ou ganhar.</li>
-            <li>🏆 Divirta-se, mas não estrague a experiência dos outros jogadores.</li>
-        </ul>
-
-        <h2>🔒 4. Privacidade e Segurança</h2>
-        <ul>
-            <li>🚫 Não compartilhe dados pessoais (seus ou de outros): endereço, telefone, documentos, etc.</li>
-            <li>🚫 Não se passe por membros da equipe ou por outros jogadores.</li>
-            <li>✅ Denuncie comportamentos suspeitos à equipe em vez de revidar.</li>
-        </ul>
-
-        <h2>📢 5. Regras da Equipe</h2>
-        <ul>
-            <li>✅ Siga as orientações dos moderadores e administradores.</li>
-            <li>🚫 Não discuta punições publicamente — use o canal de suporte/recurso.</li>
-            <li>⚙️ A equipe pode remover conteúdos e aplicar punições conforme necessário.</li>
-        </ul>
-
-        <h2>🎉 6. Regras de Eventos e Torneios</h2>
-        <ul>
-            <li>📝 Inscrições apenas pelos canais oficiais — nada de "me bota no torneio" no privado.</li>
-            <li>🕒 Chegue no horário — atrasos podem causar desclassificação.</li>
-            <li>🚫 Sem trapaça, sem multi-conta, sem conluio entre jogadores.</li>
-            <li>🤝 Respeite os adversários — xingar durante o evento = punição.</li>
-            <li>🏅 Prêmios são entregues somente aos vencedores legítimos; qualquer fraude anula a premiação.</li>
-        </ul>
-
-        <h2>🎖️ 7. Sistema de Cargos e Hierarquia</h2>
-        <ul>
-            <li>🛡️ Cargos da equipe (Admin, Mod, Suporte) são conquistados por confiança e dedicação — não peça cargo no chat.</li>
-            <li>🎨 Cargos de destaque (ex: Membro VIP, Streamer, Event Winner) são dados pela equipe conforme participação.</li>
-            <li>🚫 Não se passe por cargo que você não tem — isso gera punição.</li>
-            <li>⭐ Quer ajudar a comunidade? Candidate-se pelo canal de recrutamento quando aberto.</li>
-        </ul>
-
-        <h2>🎬 8. Regras para Criadores de Conteúdo</h2>
-        <ul>
-            <li>📹 Criadores que divulgam o servidor (vídeos, lives, clipes) podem receber o cargo de Criador — solicite no canal de suporte.</li>
-            <li>✅ Conteúdo deve seguir todas as regras da comunidade (sem NSFW, sem preconceito, sem divulgação indevida).</li>
-            <li>🔗 Divulgação de canais próprios apenas no canal permitido.</li>
-            <li>🎥 Lives e vídeos do servidor são bem-vindos — marque a equipe para divulgação oficial!</li>
-        </ul>
-
-        <h2>⚠️ Tabela de Punições</h2>
-        <div class="table-container">
+        <!-- CONTEÚDO: REGRAS -->
+        <div id="tab-regras" class="tab-content active">
+            <h2>🥶 1. Respeito é Regra Nº 1</h2>
+            <ul>
+                <li>🚫 Zero xingamento, ofensa ou desrespeito com membros, mods ou admins.</li>
+                <li>🚫 Proibido qualquer tipo de preconceito. Isso é ban na hora, sem aviso.</li>
+                <li>✅ Brincadeiras? Liberadas! Mas não passe do limite dos outros.</li>
+                <li>💬 Discussões agressivas? Resolva no diálogo, não no grito.</li>
+            </ul>
+            <h2>💬 2. Chat Limpo e Organizado</h2>
+            <ul>
+                <li>🚫 Sem spam, flood ou correntes.</li>
+                <li>🚫 Sem divulgação de outros servidores, canais ou links sem autorização.</li>
+                <li>🚫 Sem conteúdo NSFW (adulto, violento ou impróprio).</li>
+                <li>✅ Use os canais certos para cada assunto.</li>
+            </ul>
+            <h2>🎮 3. Jogo Limpo — Fair Play Sempre</h2>
+            <ul>
+                <li>🚫 Proibido cheats, hacks ou exploits de qualquer tipo.</li>
+                <li>🚫 Nada de trapaça em eventos, torneios ou sorteios.</li>
+                <li>✅ Respeite os resultados — sem toxidade por perder ou ganhar.</li>
+                <li>🏆 Divirta-se, mas não estrague a experiência dos outros.</li>
+            </ul>
+            <h2>🔒 4. Privacidade e Segurança</h2>
+            <ul>
+                <li>🚫 Não compartilhe dados pessoais.</li>
+                <li>🚫 Não se passe por membros da equipe ou por outros jogadores.</li>
+                <li>✅ Denuncie comportamentos suspeitos à equipe.</li>
+            </ul>
+            <h2>📢 5. Regras da Equipe</h2>
+            <ul>
+                <li>✅ Siga as orientações dos moderadores e administradores.</li>
+                <li>🚫 Não discuta punições publicamente — use o canal de suporte.</li>
+            </ul>
+            <h2>🎉 6. Regras de Eventos e Torneios</h2>
+            <ul>
+                <li>📝 Inscrições apenas pelos canais oficiais.</li>
+                <li>🕒 Chegue no horário — atrasos podem causar desclassificação.</li>
+                <li>🚫 Sem trapaça, sem multi-conta, sem conluio.</li>
+                <li>🤝 Respeite os adversários.</li>
+                <li>🏅 Prêmios são entregues somente aos vencedores legítimos.</li>
+            </ul>
+            <h2>🎖️ 7. Sistema de Cargos e Hierarquia</h2>
+            <ul>
+                <li>🛡️ Cargos da equipe são conquistados por confiança — não peça cargo no chat.</li>
+                <li>🎨 Cargos de destaque são dados pela equipe conforme participação.</li>
+                <li>🚫 Não se passe por cargo que você não tem.</li>
+                <li>⭐ Candidate-se pelo canal de recrutamento quando aberto.</li>
+            </ul>
+            <h2>🎬 8. Regras para Criadores de Conteúdo</h2>
+            <ul>
+                <li>📹 Criadores podem receber o cargo de Criador — solicite no suporte.</li>
+                <li>✅ Conteúdo deve seguir todas as regras da comunidade.</li>
+                <li>🔗 Divulgação de canais próprios apenas no canal permitido.</li>
+            </ul>
+            <h2>⚠️ Tabela de Punições</h2>
             <table>
-                <tr>
-                    <th>Tipo de infração</th>
-                    <th>Possível punição</th>
-                </tr>
-                <tr>
-                    <td>🟡 Leve (spam, flood, desrespeito leve)</td>
-                    <td>Aviso ou mute temporário</td>
-                </tr>
-                <tr>
-                    <td>🟠 Média (ofensas, divulgação não autorizada, toxidade)</td>
-                    <td>Mute longo ou kick</td>
-                </tr>
-                <tr>
-                    <td>🔴 Grave (preconceito, cheats, NSFW, ameaças)</td>
-                    <td>Ban permanente</td>
-                </tr>
+                <tr><th>Tipo de infração</th><th>Possível punição</th></tr>
+                <tr><td>🟡 Leve (spam, desrespeito leve)</td><td>Aviso ou mute temporário</td></tr>
+                <tr><td>🟠 Média (ofensas, divulgação)</td><td>Mute longo ou kick</td></tr>
+                <tr><td>🔴 Grave (preconceito, cheats, NSFW)</td><td>Ban permanente</td></tr>
             </table>
         </div>
-        <p style="margin-top: 15px; font-size: 0.9em; color: #ccc;">As punições podem ser aplicadas diretamente, dependendo da gravidade, a critério da equipe. Recursos podem ser feitos pelo canal de suporte. ⚖️</p>
 
-        <h2>💙 Seja Bem-Vindo ao Ice!</h2>
-        <p>Aqui valorizamos diversão, amizade e fair play. Dúvidas? Fale com a equipe ou abra um ticket no suporte. Vamos construir juntos uma comunidade geladinha, justa e acolhedora no Stumble Ice 0.56! ❄️🎮</p>
-        <p class="footer">Entre, escorrega, cai, levanta... e divirta-se! 🧊✨</p>
+        <!-- CONTEÚDO: DISCORD -->
+        <div id="tab-discord" class="tab-content">
+            <div class="discord-box">
+                <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord Logo" class="discord-logo">
+                <p id="discord-text">Entre no nosso servidor oficial!</p>
+                <div class="discord-link" id="discord-link-text">https://discord.gg/zfE3y4FCA6</div>
+                <button class="btn" onclick="copyDiscordLink()" id="btn-copy">📋 Copiar Link</button>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO: INFO DO JOGO -->
+        <div id="tab-info" class="tab-content">
+            <div style="background: var(--box-bg); padding: 20px; border-radius: 15px; border: 1px solid var(--box-border); margin-top: 20px;">
+                <h2 style="text-align:center; margin-top:0;">🧊 STUMBLE ICE</h2>
+                <div class="info-text">
+                    <p>● O jogo terá a versão <strong>0.56</strong></p>
+                    <p>● Não temos data prevista para o lançamento, mas quando lançarmos iremos entregar já a <strong>mobile e PC</strong></p>
+                    <p>● Iremos começar a fazer a partir do dia: <strong>05/11/2026</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO: CONFIGURAÇÕES -->
+        <div id="tab-config" class="tab-content">
+            <div class="config-group">
+                <h2 style="margin-top:0;">🌐 Idioma / Language</h2>
+                <select id="langSelect" onchange="changeLanguage()">
+                    <option value="pt">Português (Brasil)</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="config-group">
+                <h2>🎨 Tema</h2>
+                <select id="themeSelect" onchange="changeTheme()">
+                    <option value="dark">Escuro (Padrão)</option>
+                    <option value="light">Claro</option>
+                    <option value="neon">Neon</option>
+                </select>
+            </div>
+            <div class="config-group">
+                <h2>🖼️ Imagem de Fundo (Upload)</h2>
+                <input type="file" id="bgUpload" accept="image/*" onchange="changeBackground(event)">
+                <button class="btn" style="margin-top: 10px; width: 100%;" onclick="resetBackground()" id="btn-reset-bg">Restaurar Fundo Padrão</button>
+            </div>
+        </div>
+
     </div>
+
+    <script>
+        const translations = {
+            pt: {
+                tabRegras: "📜 Regras",
+                tabDiscord: "💬 Discord",
+                tabInfo: "🎮 Info do Jogo",
+                tabConfig: "⚙️ Config",
+                discordText: "Entre no nosso servidor oficial!",
+                btnCopy: "📋 Copiar Link",
+                copied: "✅ Copiado!",
+                btnResetBg: "Restaurar Fundo Padrão"
+            },
+            en: {
+                tabRegras: "📜 Rules",
+                tabDiscord: "💬 Discord",
+                tabInfo: "🎮 Game Info",
+                tabConfig: "⚙️ Settings",
+                discordText: "Join our official server!",
+                btnCopy: "📋 Copy Link",
+                copied: "✅ Copied!",
+                btnResetBg: "Restore Default Background"
+            }
+        };
+
+        let currentLang = 'pt';
+
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.getElementById('tab-btn-' + tabName).classList.add('active');
+        }
+
+        function copyDiscordLink() {
+            const link = "https://discord.gg/zfE3y4FCA6";
+            navigator.clipboard.writeText(link).then(() => {
+                const btn = document.getElementById('btn-copy');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = translations[currentLang].copied;
+                setTimeout(() => { btn.innerHTML = translations[currentLang].btnCopy; }, 2000);
+            });
+        }
+
+        function changeTheme() {
+            const theme = document.getElementById('themeSelect').value;
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+
+        function changeBackground(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.backgroundImage = `var(--bg-gradient), url(${e.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetBackground() {
+            // Reseta para a imagem padrão definida no CSS
+            document.body.style.backgroundImage = '';
+            document.getElementById('bgUpload').value = '';
+        }
+
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelect').value;
+            const t = translations[currentLang];
+            document.getElementById('tab-btn-regras').innerHTML = t.tabRegras;
+            document.getElementById('tab-btn-discord').innerHTML = t.tabDiscord;
+            document.getElementById('tab-btn-info').innerHTML = t.tabInfo;
+            document.getElementById('tab-btn-config').innerHTML = t.tabConfig;
+            document.getElementById('discord-text').innerHTML = t.discordText;
+            document.getElementById('btn-copy').innerHTML = t.btnCopy;
+            document.getElementById('btn-reset-bg').innerHTML = t.btnResetBg;
+        }
+
+        document.getElementById('themeSelect').value = 'dark';
+        document.documentElement.setAttribute('data-theme', 'dark');
+    </script>
 </body>
 </html>
