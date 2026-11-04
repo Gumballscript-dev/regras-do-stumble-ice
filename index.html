@@ -3,95 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stumble Maker</title>
+    <title>Stumble Ice - Hub Oficial</title>
     <style>
         :root {
-            --bg-color: #e0f7fa;
-            --text-color: #003333;
-            --card-bg: #ffffff;
+            --bg-dark: #0a1c2b;
+            --bg-panel: rgba(14, 30, 48, 0.9);
+            --accent: #4dff9e;
+            --text: #e0f2fe;
+            --border: #1a3c5e;
         }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background: radial-gradient(circle at 20% 20%, #163a52, var(--bg-dark));
+            color: var(--text);
             margin: 0;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* Configurações (Engrenagem) */
-        #settings-modal {
-            display: none;
-            position: fixed;
-            top: 60px; right: 20px;
-            background: #1a1a1a; color: #fff;
-            padding: 20px; border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            z-index: 100; width: 280px;
-        }
-        .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .settings-close { cursor: pointer; font-weight: bold; color: #ff6b6b; font-size: 20px; }
-        
-        .discord-box {
-            background: #5865F2; border-radius: 8px; padding: 10px;
-            text-align: center; margin-bottom: 15px;
-        }
-        .discord-box img { width: 40px; margin-bottom: 5px; }
-        .btn-copy {
-            background: #fff; color: #5865F2; border: none;
-            padding: 5px 10px; border-radius: 5px; font-weight: bold;
-            cursor: pointer; margin-top: 5px; width: 100%;
         }
 
         /* Barra Superior */
         .top-bar {
             width: 100%; padding: 15px 20px; box-sizing: border-box;
             display: flex; justify-content: space-between; align-items: center;
-            background: #0f2027; color: white;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 50;
         }
-        .gear-btn { font-size: 28px; cursor: pointer; background: none; border: none; color: white; }
+        .logo-area { font-size: 20px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+        .gear-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: white; }
 
-        /* Área Principal */
-        .container {
-            display: flex; flex-direction: column; align-items: center;
-            padding: 20px; width: 100%; max-width: 500px; gap: 20px;
+        /* Modal de Configurações */
+        #settings-modal {
+            display: none;
+            position: fixed; top: 70px; right: 20px;
+            background: #1a1a1a; color: #fff;
+            padding: 20px; border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            z-index: 100; width: 300px;
+            border: 1px solid #333;
+        }
+        .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .settings-close { cursor: pointer; color: #ff6b6b; font-size: 24px; }
+        
+        .discord-box {
+            background: #5865F2; border-radius: 10px; padding: 15px;
+            text-align: center; margin-bottom: 15px;
+        }
+        .discord-box img { width: 50px; margin-bottom: 10px; }
+        .btn-copy {
+            background: #fff; color: #5865F2; border: none;
+            padding: 10px; border-radius: 5px; font-weight: bold;
+            cursor: pointer; width: 100%; margin-top: 5px;
         }
 
-        /* Canvas de Prévia */
-        #canvas-container {
-            position: relative; width: 100%; display: flex; justify-content: center;
+        /* Menu de Navegação (Abas) */
+        .nav-tabs {
+            display: flex; justify-content: center; gap: 10px;
+            padding: 20px; flex-wrap: wrap;
         }
-        canvas {
-            border: 2px solid #ccc; border-radius: 8px;
-            max-width: 100%; height: auto; background: #fff;
+        .nav-btn {
+            padding: 12px 24px; border-radius: 999px;
+            border: 2px solid var(--border); background: var(--bg-panel);
+            color: var(--text); font-weight: bold; cursor: pointer;
+            transition: 0.3s;
         }
+        .nav-btn.active, .nav-btn:hover { border-color: var(--accent); background: rgba(77,255,158,0.1); color: var(--accent); }
 
-        /* Painel de Controles */
-        .controls {
-            background: var(--card-bg); padding: 20px; border-radius: 15px;
-            width: 100%; box-sizing: border-box; display: flex;
-            flex-direction: column; gap: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        /* Conteúdo Principal */
+        .content-area {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            padding: 20px; width: 100%; max-width: 800px; margin: 0 auto;
         }
-        .input-group { display: flex; flex-direction: column; gap: 5px; }
-        .input-group label { font-weight: bold; font-size: 14px; }
-        input[type="text"] {
-            padding: 10px; border-radius: 8px; border: 1px solid #ccc;
-            font-size: 16px;
+        .tab-content { display: none; width: 100%; animation: fadeIn 0.4s; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estilos das Regras */
+        .rules-container { background: var(--bg-panel); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
+        .rules-container h2 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin-top: 25px; }
+        .rules-container ul { list-style: none; padding: 0; }
+        .rules-container li { margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent); }
+        .rules-container table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .rules-container th, .rules-container td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        .rules-container th { color: var(--accent); background: rgba(77,255,158,0.1); }
+
+        /* Estilos do Gerador */
+        .generator-container {
+            background: var(--bg-panel); padding: 20px; border-radius: 20px; 
+            border: 1px solid var(--border); display: flex; flex-direction: column; gap: 20px;
         }
+        #canvas-container { display: flex; justify-content: center; width: 100%; }
+        canvas { border: 2px solid var(--border); border-radius: 10px; max-width: 100%; height: auto; background: #fff; }
+        .controls { display: flex; flex-direction: column; gap: 15px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { font-weight: bold; color: var(--accent); font-size: 14px; }
+        input[type="text"] { padding: 14px; border-radius: 10px; border: 2px solid var(--border); background: #081824; color: #fff; font-size: 16px; outline: none; }
+        input[type="text"]:focus { border-color: var(--accent); }
         .download-btn {
-            background: #4dff9e; color: #003333; border: none;
-            padding: 15px; border-radius: 10px; font-size: 18px;
-            font-weight: bold; cursor: pointer; width: 100%;
-            margin-top: 10px;
+            background: var(--accent); color: #003333; border: none;
+            padding: 15px; border-radius: 10px; font-size: 16px;
+            font-weight: 900; cursor: pointer; width: 100%;
         }
-        .lang-switch {
-            display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #444; padding-top: 15px;
-        }
+        .download-btn:active { transform: scale(0.98); }
+        
+        .lang-switch { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #444; padding-top: 15px; }
         .lang-btn { flex: 1; padding: 8px; border-radius: 5px; border: 1px solid #666; background: #333; color: white; cursor: pointer; }
-        .lang-btn.active { background: #4dff9e; color: #000; border-color: #4dff9e; }
+        .lang-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
 
     </style>
 </head>
@@ -99,7 +118,7 @@
 
     <!-- Barra Superior -->
     <div class="top-bar">
-        <h2>Stumble Maker</h2>
+        <div class="logo-area">❄️ Stumble Ice</div>
         <button class="gear-btn" onclick="toggleSettings()">⚙️</button>
     </div>
 
@@ -112,7 +131,7 @@
         
         <div class="discord-box">
             <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord">
-            <div style="font-size: 12px; margin-bottom: 5px;">Stumble Ice Server</div>
+            <div style="font-size: 12px; margin-bottom: 5px;">Servidor Oficial</div>
             <button class="btn-copy" id="t-copy-btn" onclick="copyLink()">📋 Copiar Link</button>
         </div>
 
@@ -122,22 +141,67 @@
         </div>
     </div>
 
-    <!-- Conteúdo Principal -->
-    <div class="container">
-        <!-- Prévia da Imagem -->
-        <div id="canvas-container">
-            <canvas id="previewCanvas" width="800" height="800"></canvas>
-        </div>
+    <!-- Menu de Abas -->
+    <div class="nav-tabs">
+        <button class="nav-btn active" onclick="openTab('regras')" id="tab-btn-regras">📜 Regras</button>
+        <button class="nav-btn" onclick="openTab('gerador')" id="tab-btn-gerador">🎨 Criar Imagem</button>
+    </div>
 
-        <!-- Controles -->
-        <div class="controls">
-            <div class="input-group">
-                <label id="lbl-name">Texto da Imagem:</label>
-                <input type="text" id="playerName" value="STUMBLE CUPS" placeholder="Digite o texto..." maxlength="15">
+    <!-- Conteúdo -->
+    <div class="content-area">
+        
+        <!-- ABA: REGRAS -->
+        <div id="tab-regras" class="tab-content active">
+            <div class="rules-container">
+                <h1 style="text-align:center; color:var(--accent); text-shadow:0 0 15px var(--accent);">❄️ Regras do Stumble Ice</h1>
+                <p>Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.</p>
+
+                <h2>🥶 1. Respeito é a Regra Nº 1</h2>
+                <ul>
+                    <li>🚫 Zero xingamento, ofensa ou desrespeito.</li>
+                    <li>🚫 Proibido preconceito. Ban na hora.</li>
+                    <li>✅ Brincadeiras liberadas, sem passar do limite.</li>
+                </ul>
+
+                <h2>💬 2. Chat Limpo</h2>
+                <ul>
+                    <li>🚫 Sem spam, flood ou correntes.</li>
+                    <li>🚫 Sem divulgação de outros servidores.</li>
+                    <li>🚫 Sem conteúdo NSFW.</li>
+                </ul>
+
+                <h2>🎮 3. Fair Play</h2>
+                <ul>
+                    <li>🚫 Proibido cheats, hacks ou exploits.</li>
+                    <li>✅ Respeite os resultados.</li>
+                </ul>
+
+                <h2>⚠️ Tabela de Punições</h2>
+                <table>
+                    <tr><th>Infração</th><th>Punição</th></tr>
+                    <tr><td>🟡 Leve (spam)</td><td>Aviso ou mute temporário</td></tr>
+                    <tr><td>🟠 Média (ofensas)</td><td>Mute longo ou kick</td></tr>
+                    <tr><td>🔴 Grave (cheats, NSFW)</td><td>Ban permanente</td></tr>
+                </table>
             </div>
-
-            <button class="download-btn" id="t-download" onclick="downloadImage()">⬇️ Baixar Imagem</button>
         </div>
+
+        <!-- ABA: GERADOR -->
+        <div id="tab-gerador" class="tab-content">
+            <div class="generator-container">
+                <div id="canvas-container">
+                    <canvas id="previewCanvas" width="800" height="800"></canvas>
+                </div>
+                <div class="controls">
+                    <div class="input-group">
+                        <label id="lbl-name">Texto da Imagem:</label>
+                        <input type="text" id="playerName" value="STUMBLE CUPS" maxlength="15">
+                    </div>
+                    <button class="download-btn" id="t-download" onclick="downloadImage()">⬇️ Baixar Imagem</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -146,20 +210,14 @@
 
         const translations = {
             pt: {
-                settings: "Configurações",
-                copyBtn: "📋 Copiar Link",
-                copied: "✅ Copiado!",
-                lblName: "Texto da Imagem:",
-                download: "⬇️ Baixar Imagem",
-                placeholder: "Digite o texto..."
+                settings: "Configurações", copyBtn: "📋 Copiar Link", copied: "✅ Copiado!",
+                lblName: "Texto da Imagem:", download: "⬇️ Baixar Imagem", 
+                tabRegras: "📜 Regras", tabGerador: "🎨 Criar Imagem"
             },
             en: {
-                settings: "Settings",
-                copyBtn: "📋 Copy Link",
-                copied: "✅ Copied!",
-                lblName: "Image Text:",
-                download: "⬇️ Download Image",
-                placeholder: "Type the text..."
+                settings: "Settings", copyBtn: "📋 Copy Link", copied: "✅ Copied!",
+                lblName: "Image Text:", download: "⬇️ Download Image",
+                tabRegras: "📜 Rules", tabGerador: "🎨 Create Image"
             }
         };
 
@@ -180,15 +238,21 @@
             currentLang = lang;
             document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
             document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-            
             const t = translations[lang];
             document.getElementById('t-settings').innerText = t.settings;
             document.getElementById('t-copy-btn').innerText = t.copyBtn;
             document.getElementById('lbl-name').innerText = t.lblName;
             document.getElementById('t-download').innerText = t.download;
-            document.getElementById('playerName').placeholder = t.placeholder;
-            
+            document.getElementById('tab-btn-regras').innerText = t.tabRegras;
+            document.getElementById('tab-btn-gerador').innerText = t.tabGerador;
             drawPreview(); 
+        }
+
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.getElementById('tab-btn-' + tabName).classList.add('active');
         }
 
         const canvas = document.getElementById('previewCanvas');
@@ -196,63 +260,48 @@
         const playerNameInput = document.getElementById('playerName');
 
         function drawPreview() {
-            // 1. Fundo em Degradê Azul (como na imagem)
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#0072ff'); // Azul claro em cima
-            gradient.addColorStop(1, '#00c6ff'); // Azul mais claro embaixo
+            gradient.addColorStop(0, '#0072ff'); 
+            gradient.addColorStop(1, '#00c6ff'); 
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 2. Configurar o Texto
             const text = (playerNameInput.value || "STUMBLE CUPS").toUpperCase();
-            
-            // Vamos dividir o texto em duas linhas se tiver espaço
-            let line1 = text;
-            let line2 = "";
-            
+            let line1 = text, line2 = "";
             if (text.includes(" ")) {
                 const parts = text.split(" ");
                 line1 = parts[0];
                 line2 = parts.slice(1).join(" ");
             }
 
-            // 3. Função para desenhar o texto com o estilo 3D (Adesivo)
             const draw3DText = (txt, x, y, size, fillColor1, fillColor2) => {
                 ctx.font = `900 ${size}px 'Arial Black', sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 
-                // Sombra Preta (Deslocada)
                 ctx.fillStyle = 'rgba(0,0,0,0.8)';
                 ctx.fillText(txt, x + 10, y + 15);
-                
-                // Contorno Preto Grosso
                 ctx.lineWidth = 20;
                 ctx.strokeStyle = '#000000';
                 ctx.strokeText(txt, x, y);
                 
-                // Preenchimento com Degradê (Cima branco, baixo amarelo/laranja)
                 const textGradient = ctx.createLinearGradient(0, y - size/2, 0, y + size/2);
                 textGradient.addColorStop(0, fillColor1);
                 textGradient.addColorStop(1, fillColor2);
-                
                 ctx.fillStyle = textGradient;
                 ctx.fillText(txt, x, y);
             };
 
-            // Desenhar a primeira parte (STUMBLE) - Branco para Cinza claro
             if (line2) {
                 draw3DText(line1, canvas.width / 2, canvas.height / 2 - 100, 150, '#ffffff', '#e0e0e0');
-                // Desenhar a segunda parte (CUPS) - Amarelo para Laranja
                 draw3DText(line2, canvas.width / 2, canvas.height / 2 + 100, 170, '#ffff00', '#ff8c00');
             } else {
-                // Se for uma palavra só, desenha no meio
                 draw3DText(line1, canvas.width / 2, canvas.height / 2, 150, '#ffff00', '#ff8c00');
             }
         }
 
         playerNameInput.addEventListener('input', drawPreview);
-
+        
         function downloadImage() {
             const link = document.createElement('a');
             link.download = 'stumble-image.png';
