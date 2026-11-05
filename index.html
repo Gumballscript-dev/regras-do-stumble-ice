@@ -107,20 +107,30 @@
         canvas { border: 2px solid var(--border); border-radius: 10px; max-width: 100%; height: auto; background: #fff; box-shadow: 0 0 20px rgba(77,255,158,0.2); }
         .color-inputs { display: flex; gap: 10px; }
         .color-inputs input[type="color"] { flex: 1; height: 50px; border: none; border-radius: 8px; cursor: pointer; background: #081824; }
-        
         .sticker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .sticker-btn { 
-            background: #081824; border: 2px solid var(--border); border-radius: 10px; 
-            font-size: 24px; padding: 10px; cursor: pointer; transition: 0.2s;
-        }
+        .sticker-btn { background: #081824; border: 2px solid var(--border); border-radius: 10px; font-size: 24px; padding: 10px; cursor: pointer; transition: 0.2s; }
         .sticker-btn.active { border-color: var(--accent); background: rgba(77,255,158,0.2); }
 
         /* Mural de Times */
         .team-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--accent); }
         .team-card h3 { margin: 0 0 5px 0; color: var(--accent); }
         .team-card p { margin: 0; font-size: 14px; color: #ccc; }
-
         .feedback-msg { margin-top: 10px; text-align: center; font-weight: bold; min-height: 20px; }
+
+        /* --- CRIADOR DE NICKS --- */
+        .quiz-box { display: flex; flex-direction: column; gap: 15px; }
+        .question-text { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .option-btn {
+            background: #081824; border: 2px solid var(--border); color: white;
+            padding: 12px; border-radius: 10px; font-size: 16px; cursor: pointer;
+            text-align: left; transition: 0.2s;
+        }
+        .option-btn:hover { border-color: var(--accent); background: rgba(77,255,158,0.1); }
+        .final-nick {
+            font-size: 32px; font-weight: 900; text-align: center; color: var(--accent);
+            padding: 20px; background: rgba(77,255,158,0.1); border: 2px dashed var(--accent);
+            border-radius: 15px; margin: 20px 0; word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -145,25 +155,23 @@
             <h3>Configurações</h3>
             <span class="settings-close" onclick="toggleSettings()">×</span>
         </div>
-        
         <div id="login-section">
-            <input type="text" id="discordUsername" placeholder="Seu usuário do Discord (ex: miranhaX_00)">
+            <input type="text" id="discordUsername" placeholder="Seu usuário do Discord">
             <button class="btn-primary" style="margin-top: 10px; padding: 10px;" onclick="loginDiscord()">Conectar Discord</button>
             <p id="loginStatus" style="font-size: 12px; margin-top: 5px; color: var(--accent);"></p>
         </div>
-
         <div class="discord-box">
             <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord">
             <div style="font-size: 12px; margin-bottom: 5px;">Servidor Oficial</div>
             <button class="btn-copy" onclick="copyLink()">📋 Copiar Link</button>
         </div>
-
         <div class="credits">Developed by: miranhaX_00</div>
     </div>
 
     <!-- Abas -->
     <div class="nav-tabs">
         <button class="nav-btn active" onclick="openTab('gerador', this)">🎨 Criar Imagem</button>
+        <button class="nav-btn" onclick="openTab('nicks', this)">🏷️ Criador de Nicks</button>
         <button class="nav-btn" onclick="openTab('mural', this)">🤝 Mural de Times</button>
         <button class="nav-btn" onclick="openTab('sugestoes', this)">💡 Sugerir Mapa</button>
         <button class="nav-btn" onclick="openTab('regras', this)">📜 Regras</button>
@@ -172,19 +180,17 @@
     <!-- Conteúdo -->
     <div class="content-area">
         
-        <!-- ABA: GERADOR -->
+        <!-- ABA: GERADOR DE IMAGEM -->
         <div id="tab-gerador" class="tab-content active">
             <div class="panel">
                 <h2>Gerador de Imagens</h2>
                 <div id="canvas-container">
                     <canvas id="previewCanvas" width="800" height="800"></canvas>
                 </div>
-                
                 <div class="form-group">
                     <label>Texto da Imagem:</label>
                     <input type="text" id="playerName" value="STUMBLE ICE" maxlength="15">
                 </div>
-
                 <div class="form-group">
                     <label>Fonte do Texto:</label>
                     <select id="fontSelect">
@@ -194,7 +200,6 @@
                         <option value="Verdana">Verdana (Clássico)</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>Estilo de Borda:</label>
                     <select id="borderSelect">
@@ -203,7 +208,6 @@
                         <option value="glow">Brilho Neon</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label>Cor do Texto 1 (Cima) e 2 (Baixo):</label>
                     <div class="color-inputs">
@@ -211,7 +215,6 @@
                         <input type="color" id="color2" value="#ff8c00">
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label>Adesivos (Clique para ativar/desativar):</label>
                     <div class="sticker-grid">
@@ -221,13 +224,29 @@
                         <button class="sticker-btn" onclick="toggleSticker('🔥', this)">🔥</button>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label>Fundo Personalizado (Opcional):</label>
                     <input type="file" id="bgUpload" accept="image/*" onchange="loadBgImage(event)" style="background: transparent; border: none; padding: 0;">
                 </div>
-
                 <button class="btn-primary" onclick="downloadImage()">⬇️ Baixar Imagem</button>
+            </div>
+        </div>
+
+        <!-- ABA: CRIADOR DE NICKS -->
+        <div id="tab-nicks" class="tab-content">
+            <div class="panel">
+                <h2>🏷️ Criador de Nicks</h2>
+                <p style="font-size: 14px; color: var(--muted); margin-bottom: 20px;">Responda as perguntas abaixo para gerar o seu nick ideal (sem cores, apenas texto normal).</p>
+                
+                <div id="quiz-container" class="quiz-box">
+                    <!-- O conteúdo do quiz será inserido via JavaScript -->
+                </div>
+                
+                <div id="result-container" style="display: none;">
+                    <div class="final-nick" id="finalNick">NICK</div>
+                    <button class="btn-primary" onclick="copyNick()">📋 Copiar Nick</button>
+                    <button class="btn-primary" style="background: transparent; border: 2px solid var(--border); color: white; margin-top: 10px;" onclick="resetQuiz()">🔄 Fazer Novamente</button>
+                </div>
             </div>
         </div>
 
@@ -273,20 +292,11 @@
                 <h1 style="text-align:center; color:var(--accent);">❄️ Regras do Stumble Ice</h1>
                 <p>Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.</p>
                 <h2>1. Respeito</h2>
-                <ul>
-                    <li>🚫 Zero xingamento ou preconceito.</li>
-                    <li>✅ Brincadeiras liberadas, sem passar do limite.</li>
-                </ul>
+                <ul><li>🚫 Zero xingamento ou preconceito.</li><li>✅ Brincadeiras liberadas, sem passar do limite.</li></ul>
                 <h2>2. Chat Limpo</h2>
-                <ul>
-                    <li>🚫 Sem spam, flood ou divulgação de outros servidores.</li>
-                    <li>🚫 Sem conteúdo NSFW.</li>
-                </ul>
+                <ul><li>🚫 Sem spam, flood ou divulgação de outros servidores.</li><li>🚫 Sem conteúdo NSFW.</li></ul>
                 <h2>3. Fair Play</h2>
-                <ul>
-                    <li>🚫 Proibido cheats, hacks ou exploits.</li>
-                    <li>✅ Respeite os resultados.</li>
-                </ul>
+                <ul><li>🚫 Proibido cheats, hacks ou exploits.</li><li>✅ Respeite os resultados.</li></ul>
             </div>
         </div>
 
@@ -319,13 +329,11 @@
             const username = document.getElementById('discordUsername').value.trim();
             if (!username) return;
             const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${username}`;
-            
             document.getElementById('userAvatar').src = avatarUrl;
             document.getElementById('userAvatar').style.display = 'block';
             document.getElementById('userNameDisplay').innerText = `Olá, ${username}!`;
             document.getElementById('userNameDisplay').style.display = 'block';
-            document.getElementById('loginStatus').innerText = 'Conectado com sucesso!';
-            
+            document.getElementById('loginStatus').innerText = 'Conectado!';
             localStorage.setItem('stumble_user', username);
             localStorage.setItem('stumble_avatar', avatarUrl);
         }
@@ -341,6 +349,7 @@
             }
             drawPreview();
             loadTeams();
+            startQuiz(); // Inicia o quiz de nicks
         };
 
         // --- UI ---
@@ -348,11 +357,7 @@
             const modal = document.getElementById('settings-modal');
             modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
         }
-
-        function copyLink() {
-            navigator.clipboard.writeText(DISCORD_LINK).then(() => alert("Link do Discord copiado!"));
-        }
-
+        function copyLink() { navigator.clipboard.writeText(DISCORD_LINK).then(() => alert("Link do Discord copiado!")); }
         function openTab(tabName, btn) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -365,191 +370,206 @@
         const ctx = canvas.getContext('2d');
         
         function toggleSticker(emoji, btn) {
-            if (activeStickers.includes(emoji)) {
-                activeStickers = activeStickers.filter(s => s !== emoji);
-                btn.classList.remove('active');
-            } else {
-                activeStickers.push(emoji);
-                btn.classList.add('active');
-            }
+            if (activeStickers.includes(emoji)) { activeStickers = activeStickers.filter(s => s !== emoji); btn.classList.remove('active'); }
+            else { activeStickers.push(emoji); btn.classList.add('active'); }
             drawPreview();
         }
-
         function loadBgImage(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const file = event.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                const img = new Image();
-                img.onload = () => { customBgImage = img; drawPreview(); };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                const img = new Image(); img.onload = () => { customBgImage = img; drawPreview(); }; img.src = e.target.result;
+            }; reader.readAsDataURL(file);
         }
-
         function drawPreview() {
-            // Fundo
-            if (customBgImage) {
-                ctx.drawImage(customBgImage, 0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = 'rgba(0,0,0,0.4)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-            } else {
-                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                gradient.addColorStop(0, '#0072ff'); 
-                gradient.addColorStop(1, '#00c6ff'); 
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-            }
-
-            // Pega os valores padrão (STUMBLE ICE)
+            if (customBgImage) { ctx.drawImage(customBgImage, 0, 0, canvas.width, canvas.height); ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+            else { const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); gradient.addColorStop(0, '#0072ff'); gradient.addColorStop(1, '#00c6ff'); ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+            
             const text = (document.getElementById('playerName').value || "STUMBLE ICE").toUpperCase();
             const font = document.getElementById('fontSelect').value;
             const borderStyle = document.getElementById('borderSelect').value;
-            const c1 = document.getElementById('color1').value;
-            const c2 = document.getElementById('color2').value;
-
+            const c1 = document.getElementById('color1').value; const c2 = document.getElementById('color2').value;
             let line1 = text, line2 = "";
-            if (text.includes(" ")) {
-                const parts = text.split(" ");
-                line1 = parts[0];
-                line2 = parts.slice(1).join(" ");
-            }
-
+            if (text.includes(" ")) { const parts = text.split(" "); line1 = parts[0]; line2 = parts.slice(1).join(" "); }
+            
             const draw3DText = (txt, x, y, size, fillColor) => {
-                ctx.font = `900 ${size}px '${font}', sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                
-                // Sombra
-                ctx.fillStyle = 'rgba(0,0,0,0.8)';
-                ctx.fillText(txt, x + 10, y + 15);
-
-                // Estilo de Borda
-                if (borderStyle === 'glow') {
-                    ctx.shadowColor = fillColor;
-                    ctx.shadowBlur = 30;
-                    ctx.lineWidth = 10;
-                    ctx.strokeStyle = fillColor;
-                } else if (borderStyle === 'thin') {
-                    ctx.shadowBlur = 0;
-                    ctx.lineWidth = 6;
-                    ctx.strokeStyle = '#ffffff';
-                } else {
-                    ctx.shadowBlur = 0;
-                    ctx.lineWidth = 20;
-                    ctx.strokeStyle = '#000000';
-                }
-                
-                ctx.strokeText(txt, x, y);
-                ctx.shadowBlur = 0; // Reseta o brilho
-                
-                // Preenchimento
-                ctx.fillStyle = fillColor;
-                ctx.fillText(txt, x, y);
+                ctx.font = `900 ${size}px '${font}', sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillStyle = 'rgba(0,0,0,0.8)'; ctx.fillText(txt, x + 10, y + 15);
+                if (borderStyle === 'glow') { ctx.shadowColor = fillColor; ctx.shadowBlur = 30; ctx.lineWidth = 10; ctx.strokeStyle = fillColor; }
+                else if (borderStyle === 'thin') { ctx.shadowBlur = 0; ctx.lineWidth = 6; ctx.strokeStyle = '#ffffff'; }
+                else { ctx.shadowBlur = 0; ctx.lineWidth = 20; ctx.strokeStyle = '#000000'; }
+                ctx.strokeText(txt, x, y); ctx.shadowBlur = 0;
+                ctx.fillStyle = fillColor; ctx.fillText(txt, x, y);
             };
-
-            if (line2) {
-                draw3DText(line1, canvas.width / 2, canvas.height / 2 - 100, 150, c1);
-                draw3DText(line2, canvas.width / 2, canvas.height / 2 + 100, 170, c2);
-            } else {
-                draw3DText(line1, canvas.width / 2, canvas.height / 2, 150, c2);
-            }
-
-            // Desenhar Adesivos
-            activeStickers.forEach((sticker, index) => {
-                ctx.font = "80px Arial";
-                ctx.fillText(sticker, 100 + (index * 150), 100);
-            });
+            if (line2) { draw3DText(line1, canvas.width / 2, canvas.height / 2 - 100, 150, c1); draw3DText(line2, canvas.width / 2, canvas.height / 2 + 100, 170, c2); }
+            else { draw3DText(line1, canvas.width / 2, canvas.height / 2, 150, c2); }
+            activeStickers.forEach((sticker, index) => { ctx.font = "80px Arial"; ctx.fillText(sticker, 100 + (index * 150), 100); });
         }
-
-        // Adiciona eventos para atualizar em tempo real
         document.getElementById('playerName').addEventListener('input', drawPreview);
         document.getElementById('fontSelect').addEventListener('change', drawPreview);
         document.getElementById('borderSelect').addEventListener('change', drawPreview);
         document.getElementById('color1').addEventListener('input', drawPreview);
         document.getElementById('color2').addEventListener('input', drawPreview);
+        function downloadImage() { const link = document.createElement('a'); link.download = 'stumble-image.png'; link.href = canvas.toDataURL('image/png'); link.click(); }
 
-        function downloadImage() {
-            const link = document.createElement('a');
-            link.download = 'stumble-image.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+        // --- CRIADOR DE NICKS (QUIZ) ---
+        let quizData = {
+            baseName: "",
+            element: "",
+            adjective: "",
+            hasYT: false,
+            maxLength: ""
+        };
+        let currentQuestion = 1;
+
+        function startQuiz() {
+            currentQuestion = 1;
+            quizData = { baseName: "", element: "", adjective: "", hasYT: false, maxLength: "" };
+            document.getElementById('result-container').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'flex';
+            renderQuestion();
         }
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            if (currentQuestion === 1) {
+                container.innerHTML = `
+                    <div class="question-text">1. O nick deve ter algo inspirado no seu nome real?</div>
+                    <button class="option-btn" onclick="setNameAnswer(true)">Sim</button>
+                    <button class="option-btn" onclick="setNameAnswer(false)">Não</button>
+                `;
+            } else if (currentQuestion === 2) {
+                container.innerHTML = `
+                    <div class="question-text">2. Escolha um elemento do jogo:</div>
+                    <button class="option-btn" onclick="setElement('Cell')">🧬 Célula (Cell)</button>
+                    <button class="option-btn" onclick="setElement('Ice')">❄️ Gelo (Ice)</button>
+                    <button class="option-btn" onclick="setElement('Run')">🏃 Corrida (Run)</button>
+                    <button class="option-btn" onclick="setElement('Jump')">🦘 Salto (Jump)</button>
+                `;
+            } else if (currentQuestion === 3) {
+                container.innerHTML = `
+                    <div class="question-text">3. Escolha um adjetivo:</div>
+                    <button class="option-btn" onclick="setAdjective('Fast')">⚡ Rápido (Fast)</button>
+                    <button class="option-btn" onclick="setAdjective('Cute')">🐱 Fofo (Cute)</button>
+                    <button class="option-btn" onclick="setAdjective('Crazy')">🤪 Louco (Crazy)</button>
+                    <button class="option-btn" onclick="setAdjective('Master')">👑 Mestre (Master)</button>
+                `;
+            } else if (currentQuestion === 4) {
+                container.innerHTML = `
+                    <div class="question-text">4. Você quer que o nick termine com "YT"?</div>
+                    <button class="option-btn" onclick="setYT(true)">Sim</button>
+                    <button class="option-btn" onclick="setYT(false)">Não</button>
+                `;
+            } else if (currentQuestion === 5) {
+                container.innerHTML = `
+                    <div class="question-text">5. Qual o tamanho máximo do nick?</div>
+                    <button class="option-btn" onclick="setLength('short')">Curto (até 6 letras)</button>
+                    <button class="option-btn" onclick="setLength('medium')">Médio (até 10 letras)</button>
+                    <button class="option-btn" onclick="setLength('any')">Não importa</button>
+                `;
+            }
+        }
+
+        function setNameAnswer(isRealName) {
+            if (isRealName) {
+                const container = document.getElementById('quiz-container');
+                container.innerHTML = `
+                    <div class="question-text">Qual é o seu nome real?</div>
+                    <input type="text" id="realNameInput" placeholder="Digite seu nome..." maxlength="10">
+                    <button class="btn-primary" onclick="saveRealName()">Avançar</button>
+                `;
+            } else {
+                currentQuestion = 2;
+                renderQuestion();
+            }
+        }
+
+        function saveRealName() {
+            quizData.baseName = document.getElementById('realNameInput').value.trim();
+            currentQuestion = 2;
+            renderQuestion();
+        }
+
+        function setElement(el) { quizData.element = el; currentQuestion = 3; renderQuestion(); }
+        function setAdjective(adj) { quizData.adjective = adj; currentQuestion = 4; renderQuestion(); }
+        function setYT(hasYt) { quizData.hasYT = hasYt; currentQuestion = 5; renderQuestion(); }
+        
+        function setLength(len) {
+            quizData.maxLength = len;
+            generateNick();
+        }
+
+        function generateNick() {
+            let nick = "";
+            if (quizData.baseName) {
+                nick = quizData.baseName;
+                if (quizData.adjective) nick += "_" + quizData.adjective;
+                if (quizData.element) nick += quizData.element;
+            } else {
+                if (quizData.adjective) nick = quizData.adjective;
+                if (quizData.element) nick += quizData.element;
+            }
+
+            // Aplica o limite de tamanho se não for "any"
+            if (quizData.maxLength === 'short' && nick.length > 6) {
+                nick = nick.substring(0, 6);
+            } else if (quizData.maxLength === 'medium' && nick.length > 10) {
+                nick = nick.substring(0, 10);
+            }
+
+            // Adiciona YT se o jogador quis
+            if (quizData.hasYT) {
+                if (nick.length > 10) nick = nick.substring(0, 10); // Garante que o YT caiba
+                nick += "YT";
+            }
+
+            // Se o nick ficou vazio (improvável, mas por segurança)
+            if (!nick) nick = "IcePlayer";
+
+            document.getElementById('finalNick').innerText = nick;
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+        }
+
+        function copyNick() {
+            const nick = document.getElementById('finalNick').innerText;
+            navigator.clipboard.writeText(nick).then(() => {
+                alert("Nick copiado: " + nick);
+            });
+        }
+
+        function resetQuiz() { startQuiz(); }
 
         // --- MURAL DE TIMES ---
         function createTeam() {
-            const name = document.getElementById('teamName').value;
-            const desc = document.getElementById('teamDesc').value;
+            const name = document.getElementById('teamName').value; const desc = document.getElementById('teamDesc').value;
             if (!name || !desc) return alert("Preencha todos os campos!");
-
             let teams = JSON.parse(localStorage.getItem('stumble_teams') || '[]');
-            teams.push({ name, desc });
-            localStorage.setItem('stumble_teams', JSON.stringify(teams));
-            document.getElementById('teamName').value = '';
-            document.getElementById('teamDesc').value = '';
-            loadTeams();
+            teams.push({ name, desc }); localStorage.setItem('stumble_teams', JSON.stringify(teams));
+            document.getElementById('teamName').value = ''; document.getElementById('teamDesc').value = ''; loadTeams();
         }
-
         function loadTeams() {
-            const teamList = document.getElementById('teamList');
-            teamList.innerHTML = '';
+            const teamList = document.getElementById('teamList'); teamList.innerHTML = '';
             let teams = JSON.parse(localStorage.getItem('stumble_teams') || '[]');
-            if (teams.length === 0) { teamList.innerHTML = '<p style="color: #888;">Nenhum time recrutando no momento.</p>'; return; }
-            teams.forEach(team => {
-                const div = document.createElement('div');
-                div.className = 'team-card';
-                div.innerHTML = `<h3>${team.name}</h3><p>${team.desc}</p>`;
-                teamList.appendChild(div);
-            });
+            if (teams.length === 0) { teamList.innerHTML = '<p style="color: #888;">Nenhum time recrutando.</p>'; return; }
+            teams.forEach(team => { const div = document.createElement('div'); div.className = 'team-card'; div.innerHTML = `<h3>${team.name}</h3><p>${team.desc}</p>`; teamList.appendChild(div); });
         }
 
         // --- SUGESTÕES ---
         async function sendSuggestion() {
-            const name = document.getElementById('mapName').value;
-            const desc = document.getElementById('mapDesc').value;
-            const msgDiv = document.getElementById('suggestionMsg');
-            const btn = document.getElementById('btnSendSuggestion');
-
+            const name = document.getElementById('mapName').value; const desc = document.getElementById('mapDesc').value;
+            const msgDiv = document.getElementById('suggestionMsg'); const btn = document.getElementById('btnSendSuggestion');
             if (!name || !desc) return alert("Preencha todos os campos!");
-
-            msgDiv.innerText = "Enviando...";
-            msgDiv.style.color = "#ffd166"; 
-            btn.disabled = true;
-
-            const discordMessage = {
-                content: "💡 **Nova Sugestão de Mapa!**",
-                embeds: [{
-                    title: "Mapa: " + name,
-                    description: desc,
-                    color: 0x4dff9e,
-                    footer: { text: "Enviado pelo Hub do Stumble Ice" },
-                    timestamp: new Date().toISOString()
-                }]
-            };
-
+            msgDiv.innerText = "Enviando..."; msgDiv.style.color = "#ffd166"; btn.disabled = true;
+            const discordMessage = { content: "💡 **Nova Sugestão de Mapa!**", embeds: [{ title: "Mapa: " + name, description: desc, color: 0x4dff9e, footer: { text: "Enviado pelo Hub do Stumble Ice" }, timestamp: new Date().toISOString() }] };
             try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(discordMessage)
-                });
-
-                if (response.ok) {
-                    msgDiv.innerText = "✅ Sugestão enviada com sucesso para o Discord!";
-                    msgDiv.style.color = "var(--accent)";
-                    document.getElementById('mapName').value = '';
-                    document.getElementById('mapDesc').value = '';
-                } else {
-                    msgDiv.innerText = "❌ Erro ao enviar. Tente novamente.";
-                    msgDiv.style.color = "var(--danger)";
-                }
-            } catch (error) {
-                msgDiv.innerText = "❌ Erro de conexão. Verifique sua internet.";
-                msgDiv.style.color = "var(--danger)";
-            }
-
-            btn.disabled = false;
-            setTimeout(() => { msgDiv.innerText = ''; }, 5000);
+                const response = await fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(discordMessage) });
+                if (response.ok) { msgDiv.innerText = "✅ Sugestão enviada com sucesso!"; msgDiv.style.color = "var(--accent)"; document.getElementById('mapName').value = ''; document.getElementById('mapDesc').value = ''; }
+                else { msgDiv.innerText = "❌ Erro ao enviar."; msgDiv.style.color = "var(--danger)"; }
+            } catch (error) { msgDiv.innerText = "❌ Erro de conexão."; msgDiv.style.color = "var(--danger)"; }
+            btn.disabled = false; setTimeout(() => { msgDiv.innerText = ''; }, 5000);
         }
     </script>
 </body>
