@@ -3,574 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stumble Ice - Hub Oficial</title>
+    <title>Stumble Ice - Em Breve</title>
     <style>
-        :root {
-            --bg-dark: #0a1c2b;
-            --bg-panel: rgba(14, 30, 48, 0.95);
-            --accent: #4dff9e;
-            --text: #e0f2fe;
-            --border: #1a3c5e;
-            --danger: #ff6b6b;
-        }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text);
-            margin: 0; min-height: 100vh; display: flex; flex-direction: column;
-            overflow-x: hidden;
+            margin: 0;
+            overflow: hidden;
+            background-color: #e0f7fa; /* Fundo azul claro de gelo */
+            font-family: 'Arial Black', Impact, sans-serif;
         }
-
-        /* --- EFEITO DE NEVE CAINDO (CSS) --- */
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            color: #fff;
-            font-size: 1em;
-            font-family: Arial, sans-serif;
-            text-shadow: 0 0 5px rgba(255,255,255,0.8);
-            user-select: none;
-            pointer-events: none;
-            z-index: 1;
-            animation: fall linear forwards;
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            display: block;
         }
-        @keyframes fall {
-            to { transform: translateY(105vh); }
+        /* Estilo do texto "Em Breve" */
+        #texto-em-breve {
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            font-size: 8vw;
+            color: #ffffff;
+            text-shadow: 
+                3px 3px 0 #0055ff, 
+                -3px -3px 0 #0055ff, 
+                3px -3px 0 #0055ff, 
+                -3px 3px 0 #0055ff,
+                0px 6px 10px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 10;
+            animation: pulse 2s infinite alternate;
         }
-
-        /* --- FUNDO ANIMADO --- */
-        .bg-gradient {
-            position: fixed; inset: 0; z-index: 0;
-            background: radial-gradient(circle at 20% 20%, #163a52, #0a1c2b);
-        }
-
-        /* Barra Superior */
-        .top-bar {
-            width: 100%; padding: 12px 20px; box-sizing: border-box;
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;
-        }
-        .logo-area { font-size: 20px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
-        .user-area { display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--accent); display: none; background: #000; }
-        .gear-btn { font-size: 26px; cursor: pointer; background: none; border: none; color: white; }
-
-        /* Modal de Configurações */
-        #settings-modal {
-            display: none; position: fixed; top: 70px; right: 20px;
-            background: #1a1a1a; color: #fff; padding: 20px; border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 100; width: 320px; border: 1px solid #333;
-        }
-        .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .settings-close { cursor: pointer; color: var(--danger); font-size: 24px; }
-        .credits { text-align: center; font-size: 12px; color: #888; margin-top: 15px; border-top: 1px solid #444; padding-top: 10px; }
-        
-        .discord-box { background: #5865F2; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 15px; }
-        .discord-box img { width: 50px; margin-bottom: 10px; }
-        .btn-copy { background: #fff; color: #5865F2; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
-
-        /* Abas */
-        .nav-tabs { display: flex; justify-content: center; gap: 8px; padding: 15px 10px; flex-wrap: wrap; position: relative; z-index: 10; }
-        .nav-btn {
-            padding: 10px 16px; border-radius: 999px; border: 2px solid var(--border);
-            background: var(--bg-panel); color: var(--text); font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 14px;
-        }
-        .nav-btn.active, .nav-btn:hover { border-color: var(--accent); background: rgba(77,255,158,0.1); color: var(--accent); }
-
-        /* Conteúdo Principal */
-        .content-area { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; width: 100%; max-width: 800px; margin: 0 auto; position: relative; z-index: 10; }
-        .tab-content { display: none; width: 100%; animation: fadeIn 0.4s; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Estilos Gerais */
-        .panel { background: var(--bg-panel); padding: 25px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px; backdrop-filter: blur(5px); }
-        .panel h2 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin-top: 0; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        .form-group label { font-weight: bold; color: var(--accent); font-size: 14px; }
-        input[type="text"], textarea, select {
-            padding: 14px; border-radius: 10px; border: 2px solid var(--border); background: #081824; color: #fff; font-size: 16px; outline: none; width: 100%;
-        }
-        input:focus, textarea:focus, select:focus { border-color: var(--accent); }
-        .btn-primary { background: var(--accent); color: #003333; border: none; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: 900; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* Regras */
-        .rules-container ul { list-style: none; padding: 0; }
-        .rules-container li { margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent); }
-
-        /* Gerador Canvas */
-        #canvas-container { display: flex; justify-content: center; width: 100%; margin-bottom: 20px; }
-        canvas { border: 2px solid var(--border); border-radius: 10px; max-width: 100%; height: auto; background: #fff; box-shadow: 0 0 20px rgba(77,255,158,0.2); }
-        .color-inputs { display: flex; gap: 10px; }
-        .color-inputs input[type="color"] { flex: 1; height: 50px; border: none; border-radius: 8px; cursor: pointer; background: #081824; }
-        .sticker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .sticker-btn { background: #081824; border: 2px solid var(--border); border-radius: 10px; font-size: 24px; padding: 10px; cursor: pointer; transition: 0.2s; }
-        .sticker-btn.active { border-color: var(--accent); background: rgba(77,255,158,0.2); }
-
-        /* Mural de Times */
-        .team-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--accent); }
-        .team-card h3 { margin: 0 0 5px 0; color: var(--accent); }
-        .team-card p { margin: 0; font-size: 14px; color: #ccc; }
-        .feedback-msg { margin-top: 10px; text-align: center; font-weight: bold; min-height: 20px; }
-
-        /* --- CRIADOR DE NICKS --- */
-        .quiz-box { display: flex; flex-direction: column; gap: 15px; }
-        .question-text { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
-        .option-btn {
-            background: #081824; border: 2px solid var(--border); color: white;
-            padding: 12px; border-radius: 10px; font-size: 16px; cursor: pointer;
-            text-align: left; transition: 0.2s;
-        }
-        .option-btn:hover { border-color: var(--accent); background: rgba(77,255,158,0.1); }
-        .final-nick {
-            font-size: 32px; font-weight: 900; text-align: center; color: var(--accent);
-            padding: 20px; background: rgba(77,255,158,0.1); border: 2px dashed var(--accent);
-            border-radius: 15px; margin: 20px 0; word-break: break-all;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
         }
     </style>
+    <!-- Importando a biblioteca Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-
-    <!-- Fundo e Neve -->
-    <div class="bg-gradient"></div>
-    <div id="snow-container"></div>
-
-    <!-- Barra Superior -->
-    <div class="top-bar">
-        <div class="logo-area">❄️ Stumble Ice</div>
-        <div class="user-area">
-            <img id="userAvatar" class="avatar" src="" alt="Avatar">
-            <span id="userNameDisplay" style="font-weight: bold; font-size: 14px; display: none;"></span>
-            <button class="gear-btn" onclick="toggleSettings()">⚙️</button>
-        </div>
-    </div>
-
-    <!-- Modal de Configurações -->
-    <div id="settings-modal">
-        <div class="settings-header">
-            <h3>Configurações</h3>
-            <span class="settings-close" onclick="toggleSettings()">×</span>
-        </div>
-        <div id="login-section">
-            <input type="text" id="discordUsername" placeholder="Seu usuário do Discord">
-            <button class="btn-primary" style="margin-top: 10px; padding: 10px;" onclick="loginDiscord()">Conectar Discord</button>
-            <p id="loginStatus" style="font-size: 12px; margin-top: 5px; color: var(--accent);"></p>
-        </div>
-        <div class="discord-box">
-            <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord">
-            <div style="font-size: 12px; margin-bottom: 5px;">Servidor Oficial</div>
-            <button class="btn-copy" onclick="copyLink()">📋 Copiar Link</button>
-        </div>
-        <div class="credits">Developed by: miranhaX_00</div>
-    </div>
-
-    <!-- Abas -->
-    <div class="nav-tabs">
-        <button class="nav-btn active" onclick="openTab('gerador', this)">🎨 Criar Imagem</button>
-        <button class="nav-btn" onclick="openTab('nicks', this)">🏷️ Criador de Nicks</button>
-        <button class="nav-btn" onclick="openTab('mural', this)">🤝 Mural de Times</button>
-        <button class="nav-btn" onclick="openTab('sugestoes', this)">💡 Sugerir Mapa</button>
-        <button class="nav-btn" onclick="openTab('regras', this)">📜 Regras</button>
-    </div>
-
-    <!-- Conteúdo -->
-    <div class="content-area">
-        
-        <!-- ABA: GERADOR DE IMAGEM -->
-        <div id="tab-gerador" class="tab-content active">
-            <div class="panel">
-                <h2>Gerador de Imagens</h2>
-                <div id="canvas-container">
-                    <canvas id="previewCanvas" width="800" height="800"></canvas>
-                </div>
-                <div class="form-group">
-                    <label>Texto da Imagem:</label>
-                    <input type="text" id="playerName" value="STUMBLE ICE" maxlength="15">
-                </div>
-                <div class="form-group">
-                    <label>Fonte do Texto:</label>
-                    <select id="fontSelect">
-                        <option value="Arial Black">Arial Black (Padrão)</option>
-                        <option value="Impact">Impact (Grosso)</option>
-                        <option value="Comic Sans MS">Comic Sans (Divertido)</option>
-                        <option value="Verdana">Verdana (Clássico)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Estilo de Borda:</label>
-                    <select id="borderSelect">
-                        <option value="thick">Grossa Preta</option>
-                        <option value="thin">Fina Branca</option>
-                        <option value="glow">Brilho Neon</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Cor do Texto 1 (Cima) e 2 (Baixo):</label>
-                    <div class="color-inputs">
-                        <input type="color" id="color1" value="#ffffff">
-                        <input type="color" id="color2" value="#ff8c00">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Adesivos (Clique para ativar/desativar):</label>
-                    <div class="sticker-grid">
-                        <button class="sticker-btn" onclick="toggleSticker('❄️', this)">❄️</button>
-                        <button class="sticker-btn" onclick="toggleSticker('👑', this)">👑</button>
-                        <button class="sticker-btn" onclick="toggleSticker('🏆', this)">🏆</button>
-                        <button class="sticker-btn" onclick="toggleSticker('🔥', this)">🔥</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Fundo Personalizado (Opcional):</label>
-                    <input type="file" id="bgUpload" accept="image/*" onchange="loadBgImage(event)" style="background: transparent; border: none; padding: 0;">
-                </div>
-                <button class="btn-primary" onclick="downloadImage()">⬇️ Baixar Imagem</button>
-            </div>
-        </div>
-
-        <!-- ABA: CRIADOR DE NICKS -->
-        <div id="tab-nicks" class="tab-content">
-            <div class="panel">
-                <h2>🏷️ Criador de Nicks</h2>
-                <p style="font-size: 14px; color: var(--muted); margin-bottom: 20px;">Responda as perguntas abaixo para gerar o seu nick ideal (sem cores, apenas texto normal).</p>
-                
-                <div id="quiz-container" class="quiz-box">
-                    <!-- O conteúdo do quiz será inserido via JavaScript -->
-                </div>
-                
-                <div id="result-container" style="display: none;">
-                    <div class="final-nick" id="finalNick">NICK</div>
-                    <button class="btn-primary" onclick="copyNick()">📋 Copiar Nick</button>
-                    <button class="btn-primary" style="background: transparent; border: 2px solid var(--border); color: white; margin-top: 10px;" onclick="resetQuiz()">🔄 Fazer Novamente</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ABA: MURAL DE TIMES -->
-        <div id="tab-mural" class="tab-content">
-            <div class="panel">
-                <h2>Criar Anúncio de Time</h2>
-                <div class="form-group">
-                    <label>Nome do Time:</label>
-                    <input type="text" id="teamName" placeholder="Ex: Ice Wolves">
-                </div>
-                <div class="form-group">
-                    <label>Requisitos / Descrição:</label>
-                    <input type="text" id="teamDesc" placeholder="Ex: Procuramos jogadores nível 10+">
-                </div>
-                <button class="btn-primary" onclick="createTeam()">Publicar Anúncio</button>
-                <hr style="border-color: var(--border); margin: 20px 0;">
-                <h3>Times Recrutando:</h3>
-                <div id="teamList"></div>
-            </div>
-        </div>
-
-        <!-- ABA: SUGESTÕES -->
-        <div id="tab-sugestoes" class="tab-content">
-            <div class="panel">
-                <h2>Sugerir um Mapa</h2>
-                <div class="form-group">
-                    <label>Nome do Mapa:</label>
-                    <input type="text" id="mapName" placeholder="Ex: Floresta Congelada">
-                </div>
-                <div class="form-group">
-                    <label>Descrição / Ideia:</label>
-                    <textarea id="mapDesc" rows="4" placeholder="Descreva os obstáculos e o tema do mapa..."></textarea>
-                </div>
-                <button class="btn-primary" id="btnSendSuggestion" onclick="sendSuggestion()">Enviar Sugestão</button>
-                <div id="suggestionMsg" class="feedback-msg"></div>
-            </div>
-        </div>
-
-        <!-- ABA: REGRAS -->
-        <div id="tab-regras" class="tab-content">
-            <div class="panel rules-container">
-                <h1 style="text-align:center; color:var(--accent);">❄️ Regras do Stumble Ice</h1>
-                <p>Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.</p>
-                <h2>1. Respeito</h2>
-                <ul><li>🚫 Zero xingamento ou preconceito.</li><li>✅ Brincadeiras liberadas, sem passar do limite.</li></ul>
-                <h2>2. Chat Limpo</h2>
-                <ul><li>🚫 Sem spam, flood ou divulgação de outros servidores.</li><li>🚫 Sem conteúdo NSFW.</li></ul>
-                <h2>3. Fair Play</h2>
-                <ul><li>🚫 Proibido cheats, hacks ou exploits.</li><li>✅ Respeite os resultados.</li></ul>
-            </div>
-        </div>
-
-    </div>
+    <div id="texto-em-breve">Em Breve: Stumble Ice</div>
+    <div id="canvas-container"></div>
 
     <script>
-        // --- VARIÁVEIS GLOBAIS ---
-        const DISCORD_LINK = "https://discord.gg/Q9SnqTkRb";
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1567619034852102337/4kNqjiSuZ2fmid1M8BF_6_Deo2V5qdLXbqpL63aBNDyoyeNSc6QXFsXy9Wd4LD2Onlm1";
-        let customBgImage = null;
-        let activeStickers = [];
+        // 1. Configuração Básica da Cena
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 2, 10);
 
-        // --- SISTEMA DE NEVE ---
-        function createSnow() {
-            const snowContainer = document.getElementById('snow-container');
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            snowflake.innerHTML = '❄';
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-            snowflake.style.opacity = Math.random();
-            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
-            snowContainer.appendChild(snowflake);
-            setTimeout(() => { snowflake.remove(); }, 5000);
-        }
-        setInterval(createSnow, 200);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // --- LOGIN SIMULADO ---
-        function loginDiscord() {
-            const username = document.getElementById('discordUsername').value.trim();
-            if (!username) return;
-            const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${username}`;
-            document.getElementById('userAvatar').src = avatarUrl;
-            document.getElementById('userAvatar').style.display = 'block';
-            document.getElementById('userNameDisplay').innerText = `Olá, ${username}!`;
-            document.getElementById('userNameDisplay').style.display = 'block';
-            document.getElementById('loginStatus').innerText = 'Conectado!';
-            localStorage.setItem('stumble_user', username);
-            localStorage.setItem('stumble_avatar', avatarUrl);
-        }
+        // 2. Iluminação
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(5, 10, 7);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
 
-        window.onload = () => {
-            const savedUser = localStorage.getItem('stumble_user');
-            const savedAvatar = localStorage.getItem('stumble_avatar');
-            if (savedUser && savedAvatar) {
-                document.getElementById('userAvatar').src = savedAvatar;
-                document.getElementById('userAvatar').style.display = 'block';
-                document.getElementById('userNameDisplay').innerText = `Olá, ${savedUser}!`;
-                document.getElementById('userNameDisplay').style.display = 'block';
-            }
-            drawPreview();
-            loadTeams();
-            startQuiz(); // Inicia o quiz de nicks
-        };
-
-        // --- UI ---
-        function toggleSettings() {
-            const modal = document.getElementById('settings-modal');
-            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
-        }
-        function copyLink() { navigator.clipboard.writeText(DISCORD_LINK).then(() => alert("Link do Discord copiado!")); }
-        function openTab(tabName, btn) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-' + tabName).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        // --- GERADOR DE IMAGEM ---
-        const canvas = document.getElementById('previewCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        function toggleSticker(emoji, btn) {
-            if (activeStickers.includes(emoji)) { activeStickers = activeStickers.filter(s => s !== emoji); btn.classList.remove('active'); }
-            else { activeStickers.push(emoji); btn.classList.add('active'); }
-            drawPreview();
-        }
-        function loadBgImage(event) {
-            const file = event.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image(); img.onload = () => { customBgImage = img; drawPreview(); }; img.src = e.target.result;
-            }; reader.readAsDataURL(file);
-        }
-        function drawPreview() {
-            if (customBgImage) { ctx.drawImage(customBgImage, 0, 0, canvas.width, canvas.height); ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
-            else { const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); gradient.addColorStop(0, '#0072ff'); gradient.addColorStop(1, '#00c6ff'); ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+        // 3. Função para criar o Personagem Azul (Estilo Stumble Guys)
+        function criarPersonagemAzul() {
+            const grupo = new THREE.Group();
             
-            const text = (document.getElementById('playerName').value || "STUMBLE ICE").toUpperCase();
-            const font = document.getElementById('fontSelect').value;
-            const borderStyle = document.getElementById('borderSelect').value;
-            const c1 = document.getElementById('color1').value; const c2 = document.getElementById('color2').value;
-            let line1 = text, line2 = "";
-            if (text.includes(" ")) { const parts = text.split(" "); line1 = parts[0]; line2 = parts.slice(1).join(" "); }
+            // Material Azul
+            const matAzul = new THREE.MeshStandardMaterial({ color: 0x0044ff, roughness: 0.4 });
+            const matBranco = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            const matPreto = new THREE.MeshStandardMaterial({ color: 0x111111 });
+            const matPele = new THREE.MeshStandardMaterial({ color: 0xd18b56 });
+
+            // Corpo (Cápsula)
+            const corpo = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1, 4, 16), matAzul);
+            corpo.position.y = 1.5;
+            grupo.add(corpo);
+
+            // Cabeça
+            const cabeca = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1, 1), matPele);
+            cabeca.position.y = 2.8;
+            grupo.add(cabeca);
+
+            // Olhos
+            const olhoGeo = new THREE.BoxGeometry(0.1, 0.2, 0.1);
+            const olhoEsq = new THREE.Mesh(olhoGeo, matPreto);
+            olhoEsq.position.set(-0.3, 2.8, 0.55);
+            const olhoDir = new THREE.Mesh(olhoGeo, matPreto);
+            olhoDir.position.set(0.3, 2.8, 0.55);
+            grupo.add(olhoEsq, olhoDir);
+
+            // Gorro
+            const gorro = new THREE.Mesh(new THREE.SphereGeometry(0.65, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2), matAzul);
+            gorro.position.y = 3.3;
+            grupo.add(gorro);
             
-            const draw3DText = (txt, x, y, size, fillColor) => {
-                ctx.font = `900 ${size}px '${font}', sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.fillStyle = 'rgba(0,0,0,0.8)'; ctx.fillText(txt, x + 10, y + 15);
-                if (borderStyle === 'glow') { ctx.shadowColor = fillColor; ctx.shadowBlur = 30; ctx.lineWidth = 10; ctx.strokeStyle = fillColor; }
-                else if (borderStyle === 'thin') { ctx.shadowBlur = 0; ctx.lineWidth = 6; ctx.strokeStyle = '#ffffff'; }
-                else { ctx.shadowBlur = 0; ctx.lineWidth = 20; ctx.strokeStyle = '#000000'; }
-                ctx.strokeText(txt, x, y); ctx.shadowBlur = 0;
-                ctx.fillStyle = fillColor; ctx.fillText(txt, x, y);
-            };
-            if (line2) { draw3DText(line1, canvas.width / 2, canvas.height / 2 - 100, 150, c1); draw3DText(line2, canvas.width / 2, canvas.height / 2 + 100, 170, c2); }
-            else { draw3DText(line1, canvas.width / 2, canvas.height / 2, 150, c2); }
-            activeStickers.forEach((sticker, index) => { ctx.font = "80px Arial"; ctx.fillText(sticker, 100 + (index * 150), 100); });
-        }
-        document.getElementById('playerName').addEventListener('input', drawPreview);
-        document.getElementById('fontSelect').addEventListener('change', drawPreview);
-        document.getElementById('borderSelect').addEventListener('change', drawPreview);
-        document.getElementById('color1').addEventListener('input', drawPreview);
-        document.getElementById('color2').addEventListener('input', drawPreview);
-        function downloadImage() { const link = document.createElement('a'); link.download = 'stumble-image.png'; link.href = canvas.toDataURL('image/png'); link.click(); }
+            // Borda do gorro
+            const borda = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.68, 0.2, 16), matBranco);
+            borda.position.y = 3.2;
+            grupo.add(borda);
 
-        // --- CRIADOR DE NICKS (QUIZ) ---
-        let quizData = {
-            baseName: "",
-            element: "",
-            adjective: "",
-            hasYT: false,
-            maxLength: ""
-        };
-        let currentQuestion = 1;
+            // Braços
+            const bracoGeo = new THREE.CapsuleGeometry(0.25, 0.6, 4, 8);
+            const bracoEsq = new THREE.Mesh(bracoGeo, matAzul);
+            bracoEsq.position.set(-1, 1.8, 0);
+            bracoEsq.rotation.z = Math.PI / 4;
+            const bracoDir = new THREE.Mesh(bracoGeo, matAzul);
+            bracoDir.position.set(1, 1.8, 0);
+            bracoDir.rotation.z = -Math.PI / 4;
+            grupo.add(bracoEsq, bracoDir);
 
-        function startQuiz() {
-            currentQuestion = 1;
-            quizData = { baseName: "", element: "", adjective: "", hasYT: false, maxLength: "" };
-            document.getElementById('result-container').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'flex';
-            renderQuestion();
+            // Botas
+            const botaGeo = new THREE.BoxGeometry(0.5, 0.4, 0.8);
+            const botaEsq = new THREE.Mesh(botaGeo, matPreto);
+            botaEsq.position.set(-0.4, 0.2, 0.1);
+            const botaDir = new THREE.Mesh(botaGeo, matPreto);
+            botaDir.position.set(0.4, 0.2, 0.1);
+            grupo.add(botaEsq, botaDir);
+
+            return grupo;
         }
 
-        function renderQuestion() {
-            const container = document.getElementById('quiz-container');
-            container.innerHTML = '';
-
-            if (currentQuestion === 1) {
-                container.innerHTML = `
-                    <div class="question-text">1. O nick deve ter algo inspirado no seu nome real?</div>
-                    <button class="option-btn" onclick="setNameAnswer(true)">Sim</button>
-                    <button class="option-btn" onclick="setNameAnswer(false)">Não</button>
-                `;
-            } else if (currentQuestion === 2) {
-                container.innerHTML = `
-                    <div class="question-text">2. Escolha um elemento do jogo:</div>
-                    <button class="option-btn" onclick="setElement('Cell')">🧬 Célula (Cell)</button>
-                    <button class="option-btn" onclick="setElement('Ice')">❄️ Gelo (Ice)</button>
-                    <button class="option-btn" onclick="setElement('Run')">🏃 Corrida (Run)</button>
-                    <button class="option-btn" onclick="setElement('Jump')">🦘 Salto (Jump)</button>
-                `;
-            } else if (currentQuestion === 3) {
-                container.innerHTML = `
-                    <div class="question-text">3. Escolha um adjetivo:</div>
-                    <button class="option-btn" onclick="setAdjective('Fast')">⚡ Rápido (Fast)</button>
-                    <button class="option-btn" onclick="setAdjective('Cute')">🐱 Fofo (Cute)</button>
-                    <button class="option-btn" onclick="setAdjective('Crazy')">🤪 Louco (Crazy)</button>
-                    <button class="option-btn" onclick="setAdjective('Master')">👑 Mestre (Master)</button>
-                `;
-            } else if (currentQuestion === 4) {
-                container.innerHTML = `
-                    <div class="question-text">4. Você quer que o nick termine com "YT"?</div>
-                    <button class="option-btn" onclick="setYT(true)">Sim</button>
-                    <button class="option-btn" onclick="setYT(false)">Não</button>
-                `;
-            } else if (currentQuestion === 5) {
-                container.innerHTML = `
-                    <div class="question-text">5. Qual o tamanho máximo do nick?</div>
-                    <button class="option-btn" onclick="setLength('short')">Curto (até 6 letras)</button>
-                    <button class="option-btn" onclick="setLength('medium')">Médio (até 10 letras)</button>
-                    <button class="option-btn" onclick="setLength('any')">Não importa</button>
-                `;
-            }
-        }
-
-        function setNameAnswer(isRealName) {
-            if (isRealName) {
-                const container = document.getElementById('quiz-container');
-                container.innerHTML = `
-                    <div class="question-text">Qual é o seu nome real?</div>
-                    <input type="text" id="realNameInput" placeholder="Digite seu nome..." maxlength="10">
-                    <button class="btn-primary" onclick="saveRealName()">Avançar</button>
-                `;
-            } else {
-                currentQuestion = 2;
-                renderQuestion();
-            }
-        }
-
-        function saveRealName() {
-            quizData.baseName = document.getElementById('realNameInput').value.trim();
-            currentQuestion = 2;
-            renderQuestion();
-        }
-
-        function setElement(el) { quizData.element = el; currentQuestion = 3; renderQuestion(); }
-        function setAdjective(adj) { quizData.adjective = adj; currentQuestion = 4; renderQuestion(); }
-        function setYT(hasYt) { quizData.hasYT = hasYt; currentQuestion = 5; renderQuestion(); }
-        
-        function setLength(len) {
-            quizData.maxLength = len;
-            generateNick();
-        }
-
-        function generateNick() {
-            let nick = "";
-            if (quizData.baseName) {
-                nick = quizData.baseName;
-                if (quizData.adjective) nick += "_" + quizData.adjective;
-                if (quizData.element) nick += quizData.element;
-            } else {
-                if (quizData.adjective) nick = quizData.adjective;
-                if (quizData.element) nick += quizData.element;
-            }
-
-            // Aplica o limite de tamanho se não for "any"
-            if (quizData.maxLength === 'short' && nick.length > 6) {
-                nick = nick.substring(0, 6);
-            } else if (quizData.maxLength === 'medium' && nick.length > 10) {
-                nick = nick.substring(0, 10);
-            }
-
-            // Adiciona YT se o jogador quis
-            if (quizData.hasYT) {
-                if (nick.length > 10) nick = nick.substring(0, 10); // Garante que o YT caiba
-                nick += "YT";
-            }
-
-            // Se o nick ficou vazio (improvável, mas por segurança)
-            if (!nick) nick = "IcePlayer";
-
-            document.getElementById('finalNick').innerText = nick;
-            document.getElementById('quiz-container').style.display = 'none';
-            document.getElementById('result-container').style.display = 'block';
-        }
-
-        function copyNick() {
-            const nick = document.getElementById('finalNick').innerText;
-            navigator.clipboard.writeText(nick).then(() => {
-                alert("Nick copiado: " + nick);
+        // 4. Função para criar o Personagem de Gelo
+        function criarPersonagemGelo() {
+            const grupo = new THREE.Group();
+            
+            // Material de Gelo
+            const matGelo = new THREE.MeshStandardMaterial({ 
+                color: 0x55ccff, 
+                transparent: true, 
+                opacity: 0.8, 
+                roughness: 0.1,
+                metalness: 0.5
             });
+
+            // Corpo
+            const corpo = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1, 4, 16), matGelo);
+            corpo.position.y = 1.5;
+            grupo.add(corpo);
+
+            // Cabeça
+            const cabeca = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1, 1), matGelo);
+            cabeca.position.y = 2.8;
+            grupo.add(cabeca);
+
+            // Olhos (Fendas)
+            const olhoGeo = new THREE.BoxGeometry(0.15, 0.25, 0.1);
+            const matOlho = new THREE.MeshStandardMaterial({ color: 0x003366 });
+            const olhoEsq = new THREE.Mesh(olhoGeo, matOlho);
+            olhoEsq.position.set(-0.3, 2.8, 0.55);
+            const olhoDir = new THREE.Mesh(olhoGeo, matOlho);
+            olhoDir.position.set(0.3, 2.8, 0.55);
+            grupo.add(olhoEsq, olhoDir);
+
+            // Cabelo Espetado (Cristais de gelo)
+            const espinhoGeo = new THREE.ConeGeometry(0.2, 1.2, 4);
+            for(let i=0; i<5; i++){
+                const espinho = new THREE.Mesh(espinhoGeo, matGelo);
+                espinho.position.set((i-2)*0.3, 3.6 + Math.random()*0.2, 0);
+                espinho.rotation.z = (i-2) * 0.3;
+                grupo.add(espinho);
+            }
+
+            // Braços
+            const bracoGeo = new THREE.CapsuleGeometry(0.25, 0.6, 4, 8);
+            const bracoEsq = new THREE.Mesh(bracoGeo, matGelo);
+            bracoEsq.position.set(-1, 1.8, 0);
+            bracoEsq.rotation.z = Math.PI / 4;
+            const bracoDir = new THREE.Mesh(bracoGeo, matGelo);
+            bracoDir.position.set(1, 1.8, 0);
+            bracoDir.rotation.z = -Math.PI / 4;
+            grupo.add(bracoEsq, bracoDir);
+
+            return grupo;
         }
 
-        function resetQuiz() { startQuiz(); }
+        // Instanciando os personagens na cena
+        const personagem1 = criarPersonagemAzul();
+        personagem1.position.set(-2.5, -2, 0);
+        scene.add(personagem1);
 
-        // --- MURAL DE TIMES ---
-        function createTeam() {
-            const name = document.getElementById('teamName').value; const desc = document.getElementById('teamDesc').value;
-            if (!name || !desc) return alert("Preencha todos os campos!");
-            let teams = JSON.parse(localStorage.getItem('stumble_teams') || '[]');
-            teams.push({ name, desc }); localStorage.setItem('stumble_teams', JSON.stringify(teams));
-            document.getElementById('teamName').value = ''; document.getElementById('teamDesc').value = ''; loadTeams();
-        }
-        function loadTeams() {
-            const teamList = document.getElementById('teamList'); teamList.innerHTML = '';
-            let teams = JSON.parse(localStorage.getItem('stumble_teams') || '[]');
-            if (teams.length === 0) { teamList.innerHTML = '<p style="color: #888;">Nenhum time recrutando.</p>'; return; }
-            teams.forEach(team => { const div = document.createElement('div'); div.className = 'team-card'; div.innerHTML = `<h3>${team.name}</h3><p>${team.desc}</p>`; teamList.appendChild(div); });
+        const personagem2 = criarPersonagemGelo();
+        personagem2.position.set(2.5, -2, 0);
+        scene.add(personagem2);
+
+        // 5. Animação (Passinho do Yamal)
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            // Animação do Personagem 1 (Balançando o corpo e os braços)
+            personagem1.position.y = -2 + Math.abs(Math.sin(time * 8)) * 0.5; // Pulinho
+            personagem1.rotation.z = Math.sin(time * 4) * 0.1; // Balanço lateral
+            personagem1.rotation.y = Math.sin(time * 2) * 0.2; // Virando pra cá e pra lá
+
+            // Animação do Personagem 2 (Sincronizado, mas fazendo movimentos diferentes)
+            personagem2.position.y = -2 + Math.abs(Math.sin(time * 8 + 1)) * 0.5;
+            personagem2.rotation.z = Math.sin(time * 4 + 1) * 0.1;
+            personagem2.rotation.y = Math.sin(time * 2 + 1) * 0.2;
+
+            // Câmera dando um leve zoom in e out
+            camera.position.z = 10 + Math.sin(time * 1) * 0.5;
+
+            renderer.render(scene, camera);
         }
 
-        // --- SUGESTÕES ---
-        async function sendSuggestion() {
-            const name = document.getElementById('mapName').value; const desc = document.getElementById('mapDesc').value;
-            const msgDiv = document.getElementById('suggestionMsg'); const btn = document.getElementById('btnSendSuggestion');
-            if (!name || !desc) return alert("Preencha todos os campos!");
-            msgDiv.innerText = "Enviando..."; msgDiv.style.color = "#ffd166"; btn.disabled = true;
-            const discordMessage = { content: "💡 **Nova Sugestão de Mapa!**", embeds: [{ title: "Mapa: " + name, description: desc, color: 0x4dff9e, footer: { text: "Enviado pelo Hub do Stumble Ice" }, timestamp: new Date().toISOString() }] };
-            try {
-                const response = await fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(discordMessage) });
-                if (response.ok) { msgDiv.innerText = "✅ Sugestão enviada com sucesso!"; msgDiv.style.color = "var(--accent)"; document.getElementById('mapName').value = ''; document.getElementById('mapDesc').value = ''; }
-                else { msgDiv.innerText = "❌ Erro ao enviar."; msgDiv.style.color = "var(--danger)"; }
-            } catch (error) { msgDiv.innerText = "❌ Erro de conexão."; msgDiv.style.color = "var(--danger)"; }
-            btn.disabled = false; setTimeout(() => { msgDiv.innerText = ''; }, 5000);
-        }
+        animate();
+
+        // Ajuste da tela ao redimensionar
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
     </script>
 </body>
-    </html>
+</html>
