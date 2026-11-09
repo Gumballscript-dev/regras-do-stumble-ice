@@ -64,13 +64,13 @@
         .menu-btn span {
             display: block; height: 4px; width: 100%; border-radius: 2px;
         }
-        .menu-btn span:nth-child(1) { background: #ff0000; } /* Vermelho */
-        .menu-btn span:nth-child(2) { background: #00ff00; } /* Verde */
-        .menu-btn span:nth-child(3) { background: #0000ff; } /* Azul */
+        .menu-btn span:nth-child(1) { background: #ff0000; }
+        .menu-btn span:nth-child(2) { background: #00ff00; }
+        .menu-btn span:nth-child(3) { background: #0000ff; }
 
         .logo-area { font-size: 20px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
-        /* Menu Lateral (Sidebar) */
+        /* Menu Lateral */
         #sidebar {
             position: fixed; top: 0; left: -280px; width: 260px; height: 100vh;
             background: var(--bg-panel); border-right: 2px solid var(--border-color);
@@ -118,10 +118,10 @@
         .rules-container li { margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent); }
         [data-theme="light"] .rules-container li { background: rgba(0,0,0,0.05); }
 
-        /* Tema Switch */
-        .theme-buttons { display: flex; gap: 10px; }
-        .theme-btn { flex: 1; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; border: 2px solid var(--border-color); background: transparent; color: var(--text-color); }
-        .theme-btn.active { border-color: var(--accent); color: var(--accent); }
+        /* Tema Switch e Tradutor */
+        .theme-buttons, .lang-buttons { display: flex; gap: 10px; }
+        .theme-btn, .lang-btn { flex: 1; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; border: 2px solid var(--border-color); background: transparent; color: var(--text-color); }
+        .theme-btn.active, .lang-btn.active { border-color: var(--accent); color: var(--accent); }
 
         /* Forms CC */
         .platform-select { display: flex; gap: 10px; margin-bottom: 15px; }
@@ -138,57 +138,52 @@
 </head>
 <body data-theme="dark">
 
-    <!-- Fundo Neve -->
     <div id="snow-container"></div>
-
-    <!-- Overlay para fechar o menu -->
     <div id="overlay" onclick="toggleMenu()"></div>
 
-    <!-- Sidebar (Menu Lateral) -->
+    <!-- Sidebar -->
     <div id="sidebar">
         <div class="sidebar-header">
             <span class="logo-area">❄️ Stumble Ice</span>
             <button class="close-btn" onclick="toggleMenu()">×</button>
         </div>
-        <button class="nav-item active" onclick="openTab('regras', this)">📜 Regras</button>
-        <button class="nav-item" onclick="openTab('discord', this)">💬 Discord</button>
-        <button class="nav-item" onclick="openTab('formscc', this)">📝 Forms CC</button>
-        <button class="nav-item" onclick="openTab('config', this)">⚙️ Configurações</button>
+        <button class="nav-item active" onclick="openTab('regras', this)" data-i18n="menu_rules">📜 Regras</button>
+        <button class="nav-item" onclick="openTab('discord', this)" data-i18n="menu_discord">💬 Discord</button>
+        <button class="nav-item" onclick="openTab('formscc', this)" data-i18n="menu_forms">📝 Forms CC</button>
+        <button class="nav-item" onclick="openTab('config', this)" data-i18n="menu_config">⚙️ Configurações</button>
     </div>
 
     <!-- Barra Superior -->
     <div class="top-bar">
         <button class="menu-btn" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </button>
         <div class="logo-area">❄️ Stumble Ice</div>
-        <div style="width: 30px;"></div> <!-- Espaçador -->
+        <div style="width: 30px;"></div>
     </div>
 
-    <!-- Conteúdo Principal -->
+    <!-- Conteúdo -->
     <div class="content-area">
         
         <!-- ABA: REGRAS -->
         <div id="tab-regras" class="tab-content active">
             <div class="panel rules-container">
-                <h1 style="text-align:center; color:var(--accent);">❄️ Regras do Stumble Ice</h1>
-                <p>Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.</p>
-                <h2>1. Respeito</h2>
+                <h1 style="text-align:center; color:var(--accent);" data-i18n="rules_title">❄️ Regras do Stumble Ice</h1>
+                <p data-i18n="rules_welcome">Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.</p>
+                <h2 data-i18n="rules_h1">1. Respeito</h2>
                 <ul>
-                    <li>🚫 Zero xingamento ou preconceito.</li>
-                    <li>✅ Brincadeiras liberadas, sem passar do limite.</li>
+                    <li data-i18n="rules_li1">🚫 Zero xingamento ou preconceito.</li>
+                    <li data-i18n="rules_li2">✅ Brincadeiras liberadas, sem passar do limite.</li>
                 </ul>
-                <h2>2. Chat Limpo</h2>
+                <h2 data-i18n="rules_h2">2. Chat Limpo</h2>
                 <ul>
-                    <li>🚫 Sem spam, flood ou divulgação de outros servidores.</li>
-                    <li>🚫 Sem conteúdo NSFW.</li>
+                    <li data-i18n="rules_li3">🚫 Sem spam, flood ou divulgação de outros servidores.</li>
+                    <li data-i18n="rules_li4">🚫 Sem conteúdo NSFW.</li>
                 </ul>
-                <h2>3. Fair Play</h2>
+                <h2 data-i18n="rules_h3">3. Fair Play</h2>
                 <ul>
-                    <li>🚫 Proibido cheats, hacks ou exploits.</li>
-                    <li>✅ Respeite os resultados.</li>
+                    <li data-i18n="rules_li5">🚫 Proibido cheats, hacks ou exploits.</li>
+                    <li data-i18n="rules_li6">✅ Respeite os resultados.</li>
                 </ul>
             </div>
         </div>
@@ -196,12 +191,12 @@
         <!-- ABA: DISCORD -->
         <div id="tab-discord" class="tab-content">
             <div class="panel" style="text-align: center;">
-                <h2>Junte-se ao nosso Discord!</h2>
-                <p>Clique no botão abaixo para copiar o link e entrar no servidor.</p>
+                <h2 data-i18n="discord_title">Junte-se ao nosso Discord!</h2>
+                <p data-i18n="discord_desc">Clique no botão abaixo para copiar o link e entrar no servidor.</p>
                 <div style="background: #5865F2; border-radius: 10px; padding: 20px; margin: 20px 0;">
                     <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" style="width: 60px; margin-bottom: 10px;" alt="Discord">
                     <br>
-                    <button class="btn-primary" onclick="copyLink()" style="background: #fff; color: #5865F2;">📋 Copiar Link do Discord</button>
+                    <button class="btn-primary" onclick="copyLink()" style="background: #fff; color: #5865F2;" data-i18n="discord_btn">📋 Copiar Link do Discord</button>
                 </div>
             </div>
         </div>
@@ -209,16 +204,16 @@
         <!-- ABA: FORMS CC -->
         <div id="tab-formscc" class="tab-content">
             <div class="panel">
-                <h2>Formulário de Criador de Conteúdo</h2>
-                <p style="font-size: 12px; color: var(--danger); margin-bottom: 20px;">Nota: envie apenas um formulário, sujeito a mute.</p>
+                <h2 data-i18n="forms_title">Formulário de Criador de Conteúdo</h2>
+                <p style="font-size: 12px; color: var(--danger); margin-bottom: 20px;" data-i18n="forms_note">Nota: envie apenas um formulário, sujeito a mute.</p>
                 
                 <div class="form-group">
-                    <label>Qual seu Nick do discord?</label>
+                    <label data-i18n="forms_nick">Qual seu Nick do discord?</label>
                     <input type="text" id="ccNick" placeholder="Seu nick...">
                 </div>
 
                 <div class="form-group">
-                    <label>Selecione a sua plataforma:</label>
+                    <label data-i18n="forms_platform">Selecione a sua plataforma:</label>
                     <div class="platform-select">
                         <button class="platform-btn" id="btn-yt" onclick="selectPlatform('youtube')">📺 YouTube</button>
                         <button class="platform-btn" id="btn-tiktok" onclick="selectPlatform('tiktok')">🎵 TikTok</button>
@@ -226,31 +221,31 @@
                 </div>
 
                 <div id="yt-section" class="form-group hidden">
-                    <label>Qual é o link do seu canal do YouTube?</label>
+                    <label data-i18n="forms_yt">Qual é o link do seu canal do YouTube?</label>
                     <input type="text" id="ccYtLink" placeholder="https://youtube.com/...">
                 </div>
 
                 <div id="tiktok-section" class="form-group hidden">
-                    <label>Qual é o link do seu canal do TikTok?</label>
+                    <label data-i18n="forms_tiktok">Qual é o link do seu canal do TikTok?</label>
                     <input type="text" id="ccTiktokLink" placeholder="https://tiktok.com/@...">
                 </div>
 
                 <div class="form-group">
-                    <label>Você já foi influencer de outra versão? Ou já gravou vídeo sobre ela?</label>
+                    <label data-i18n="forms_exp">Você já foi influencer de outra versão? Ou já gravou vídeo sobre ela?</label>
                     <textarea id="ccExp" rows="2" placeholder="Sua experiência..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Porque você quer se tornar influencer de nossa versão?</label>
+                    <label data-i18n="forms_why">Porque você quer se tornar influencer de nossa versão?</label>
                     <textarea id="ccWhy" rows="2" placeholder="Sua motivação..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Você tem alguma ideia para nosso servidor? (Não obrigatório*)</label>
+                    <label data-i18n="forms_ideas">Você tem alguma ideia para nosso servidor? (Não obrigatório*)</label>
                     <textarea id="ccIdeas" rows="2" placeholder="Suas ideias..."></textarea>
                 </div>
 
-                <button class="btn-primary" id="btnSubmitCC" onclick="submitCC()">Enviar Formulário</button>
+                <button class="btn-primary" id="btnSubmitCC" onclick="submitCC()" data-i18n="forms_submit">Enviar Formulário</button>
                 <div id="ccFeedback" class="feedback-msg"></div>
             </div>
         </div>
@@ -258,15 +253,25 @@
         <!-- ABA: CONFIGURAÇÕES -->
         <div id="tab-config" class="tab-content">
             <div class="panel">
-                <h2>Configurações</h2>
+                <h2 data-i18n="config_title">Configurações</h2>
+                
                 <div class="form-group">
-                    <label>Mudar Tema:</label>
+                    <label data-i18n="config_theme">Mudar Tema:</label>
                     <div class="theme-buttons">
-                        <button class="theme-btn active" onclick="setTheme('dark')">Escuro</button>
-                        <button class="theme-btn" onclick="setTheme('light')">Branco</button>
-                        <button class="theme-btn" onclick="setTheme('neon')">Neon</button>
+                        <button class="theme-btn active" onclick="setTheme('dark')" data-i18n="theme_dark">Escuro</button>
+                        <button class="theme-btn" onclick="setTheme('light')" data-i18n="theme_light">Branco</button>
+                        <button class="theme-btn" onclick="setTheme('neon')" data-i18n="theme_neon">Neon</button>
                     </div>
                 </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label data-i18n="config_lang">Tradutor:</label>
+                    <div class="lang-buttons">
+                        <button class="lang-btn active" onclick="setLang('pt')" data-i18n="lang_pt">Brasil</button>
+                        <button class="lang-btn" onclick="setLang('en')" data-i18n="lang_en">Inglês</button>
+                    </div>
+                </div>
+
                 <div class="credits" style="text-align:center; font-size:12px; margin-top:20px; color:var(--text-color); opacity:0.7;">
                     Developed by: miranhaX_00
                 </div>
@@ -277,9 +282,60 @@
 
     <script>
         // --- CONFIGURAÇÕES GLOBAIS ---
-        const DISCORD_LINK = "https://discord.gg/Q9SnqTkRb"; // Atualize se necessário
+        const DISCORD_LINK = "https://discord.gg/ZtDZVQd7y"; // Link Atualizado
         const WEBHOOK_CC = "https://discord.com/api/webhooks/1569415821837475850/MnReb-wAvFVBLdXkdh02mZFCmc2i7qFNVtPlTZdTjb5iZpXdAPmJDsnMcU_LRZcNz5xI";
         let selectedPlatform = '';
+        let currentLang = 'pt';
+
+        // --- SISTEMA DE TRADUÇÃO ---
+        const translations = {
+            pt: {
+                menu_rules: "📜 Regras", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_config: "⚙️ Configurações",
+                rules_title: "❄️ Regras do Stumble Ice", rules_welcome: "Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.",
+                rules_h1: "1. Respeito", rules_li1: "🚫 Zero xingamento ou preconceito.", rules_li2: "✅ Brincadeiras liberadas, sem passar do limite.",
+                rules_h2: "2. Chat Limpo", rules_li3: "🚫 Sem spam, flood ou divulgação de outros servidores.", rules_li4: "🚫 Sem conteúdo NSFW.",
+                rules_h3: "3. Fair Play", rules_li5: "🚫 Proibido cheats, hacks ou exploits.", rules_li6: "✅ Respeite os resultados.",
+                discord_title: "Junte-se ao nosso Discord!", discord_desc: "Clique no botão abaixo para copiar o link e entrar no servidor.", discord_btn: "📋 Copiar Link do Discord",
+                forms_title: "Formulário de Criador de Conteúdo", forms_note: "Nota: envie apenas um formulário, sujeito a mute.",
+                forms_nick: "Qual seu Nick do discord?", forms_platform: "Selecione a sua plataforma:",
+                forms_yt: "Qual é o link do seu canal do YouTube?", forms_tiktok: "Qual é o link do seu canal do TikTok?",
+                forms_exp: "Você já foi influencer de outra versão? Ou já gravou vídeo sobre ela?",
+                forms_why: "Porque você quer se tornar influencer de nossa versão?",
+                forms_ideas: "Você tem alguma ideia para nosso servidor? (Não obrigatório*)",
+                forms_submit: "Enviar Formulário", config_title: "Configurações", config_theme: "Mudar Tema:",
+                theme_dark: "Escuro", theme_light: "Branco", theme_neon: "Neon", config_lang: "Tradutor:", lang_pt: "Brasil", lang_en: "Inglês"
+            },
+            en: {
+                menu_rules: "📜 Rules", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_config: "⚙️ Settings",
+                rules_title: "❄️ Stumble Ice Rules", rules_welcome: "Welcome to the coolest server! By entering, you agree to the rules below.",
+                rules_h1: "1. Respect", rules_li1: "🚫 No swearing or prejudice.", rules_li2: "✅ Jokes allowed, don't cross the line.",
+                rules_h2: "2. Clean Chat", rules_li3: "🚫 No spam, flood, or advertising other servers.", rules_li4: "🚫 No NSFW content.",
+                rules_h3: "3. Fair Play", rules_li5: "🚫 No cheats, hacks, or exploits.", rules_li6: "✅ Respect the results.",
+                discord_title: "Join our Discord!", discord_desc: "Click the button below to copy the link and join the server.", discord_btn: "📋 Copy Discord Link",
+                forms_title: "Content Creator Form", forms_note: "Note: submit only one form, subject to mute.",
+                forms_nick: "What is your Discord Nick?", forms_platform: "Select your platform:",
+                forms_yt: "What is your YouTube channel link?", forms_tiktok: "What is your TikTok channel link?",
+                forms_exp: "Have you been an influencer for another version? Or recorded a video about it?",
+                forms_why: "Why do you want to become an influencer for our version?",
+                forms_ideas: "Do you have any ideas for our server? (Not required*)",
+                forms_submit: "Submit Form", config_title: "Settings", config_theme: "Change Theme:",
+                theme_dark: "Dark", theme_light: "Light", theme_neon: "Neon", config_lang: "Translator:", lang_pt: "Brazil", lang_en: "English"
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Atualiza todos os elementos com data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+        }
 
         // --- SISTEMA DE NEVE ---
         function createSnow() {
@@ -307,7 +363,7 @@
             document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
             btn.classList.add('active');
-            toggleMenu(); // Fecha o menu ao clicar
+            toggleMenu();
         }
 
         // --- TEMA ---
@@ -320,7 +376,7 @@
         // --- DISCORD COPY ---
         function copyLink() {
             navigator.clipboard.writeText(DISCORD_LINK).then(() => {
-                alert("Link do Discord copiado!");
+                alert(currentLang === 'pt' ? "Link do Discord copiado!" : "Discord link copied!");
             });
         }
 
@@ -350,20 +406,19 @@
             const btn = document.getElementById('btnSubmitCC');
 
             if (!nick || !selectedPlatform || !why) {
-                return alert("Preencha os campos obrigatórios (Nick, Plataforma e Motivo)!");
+                return alert(currentLang === 'pt' ? "Preencha os campos obrigatórios (Nick, Plataforma e Motivo)!" : "Fill in the required fields (Nick, Platform and Reason)!");
             }
 
             let link = "";
             if (selectedPlatform === 'youtube') link = document.getElementById('ccYtLink').value;
             else link = document.getElementById('ccTiktokLink').value;
 
-            if (!link) return alert("Por favor, insira o link do seu canal!");
+            if (!link) return alert(currentLang === 'pt' ? "Por favor, insira o link do seu canal!" : "Please enter your channel link!");
 
-            feedback.innerText = "Enviando...";
+            feedback.innerText = currentLang === 'pt' ? "Enviando..." : "Sending...";
             feedback.style.color = "#ffd166";
             btn.disabled = true;
 
-            // Monta a mensagem para o Webhook
             const discordMessage = {
                 content: "📝 **Novo Formulário de Criador de Conteúdo!**",
                 embeds: [{
@@ -389,9 +444,8 @@
                 });
 
                 if (response.ok) {
-                    feedback.innerText = "✅ Formulário enviado com sucesso!";
+                    feedback.innerText = currentLang === 'pt' ? "✅ Formulário enviado com sucesso!" : "✅ Form submitted successfully!";
                     feedback.style.color = "var(--accent)";
-                    // Limpa os campos
                     document.getElementById('ccNick').value = '';
                     document.getElementById('ccExp').value = '';
                     document.getElementById('ccWhy').value = '';
@@ -404,11 +458,11 @@
                     document.getElementById('yt-section').classList.add('hidden');
                     document.getElementById('tiktok-section').classList.add('hidden');
                 } else {
-                    feedback.innerText = "❌ Erro ao enviar. Tente novamente.";
+                    feedback.innerText = currentLang === 'pt' ? "❌ Erro ao enviar. Tente novamente." : "❌ Error sending. Try again.";
                     feedback.style.color = "var(--danger)";
                 }
             } catch (error) {
-                feedback.innerText = "❌ Erro de conexão. Verifique sua internet.";
+                feedback.innerText = currentLang === 'pt' ? "❌ Erro de conexão. Verifique sua internet." : "❌ Connection error. Check your internet.";
                 feedback.style.color = "var(--danger)";
             }
 
