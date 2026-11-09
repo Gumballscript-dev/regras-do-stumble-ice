@@ -8,7 +8,7 @@
         body {
             margin: 0;
             overflow: hidden;
-            background-color: #e0f7fa; /* Fundo azul claro de gelo */
+            background: linear-gradient(180deg, #001133 0%, #0055ff 100%); /* Fundo escuro de gelo */
             font-family: 'Arial Black', Impact, sans-serif;
         }
         #canvas-container {
@@ -16,209 +16,198 @@
             height: 100vh;
             display: block;
         }
-        /* Estilo do texto "Em Breve" */
         #texto-em-breve {
             position: absolute;
             top: 10%;
             width: 100%;
             text-align: center;
-            font-size: 8vw;
+            font-size: 7vw;
             color: #ffffff;
             text-shadow: 
-                3px 3px 0 #0055ff, 
-                -3px -3px 0 #0055ff, 
-                3px -3px 0 #0055ff, 
-                -3px 3px 0 #0055ff,
-                0px 6px 10px rgba(0,0,0,0.5);
+                2px 2px 0 #0055ff, 
+                -2px -2px 0 #0055ff, 
+                2px -2px 0 #0055ff, 
+                -2px 2px 0 #0055ff,
+                0px 8px 15px rgba(0,0,0,0.8);
             text-transform: uppercase;
             letter-spacing: 2px;
             z-index: 10;
-            animation: pulse 2s infinite alternate;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
         }
     </style>
-    <!-- Importando a biblioteca Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Importando o Three.js por um link mais estável -->
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 </head>
 <body>
-    <div id="texto-em-breve">Em Breve: Stumble Ice</div>
+    <div id="texto-em-breve">EM BREVE: STUMBLE ICE</div>
     <div id="canvas-container"></div>
 
     <script>
-        // 1. Configuração Básica da Cena
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 2, 10);
+        // Se o Three.js não carregar pelo link, avisa no console
+        if (typeof THREE === 'undefined') {
+            document.getElementById('texto-em-breve').innerText = "Erro: Three.js não carregou.";
+        } else {
+            // 1. Configuração Básica
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 2, 10);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // 2. Iluminação
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        dirLight.position.set(5, 10, 7);
-        dirLight.castShadow = true;
-        scene.add(dirLight);
-
-        // 3. Função para criar o Personagem Azul (Estilo Stumble Guys)
-        function criarPersonagemAzul() {
-            const grupo = new THREE.Group();
+            // 2. Iluminação (Mais forte para destacar os bonecos)
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
             
-            // Material Azul
-            const matAzul = new THREE.MeshStandardMaterial({ color: 0x0044ff, roughness: 0.4 });
-            const matBranco = new THREE.MeshStandardMaterial({ color: 0xffffff });
-            const matPreto = new THREE.MeshStandardMaterial({ color: 0x111111 });
-            const matPele = new THREE.MeshStandardMaterial({ color: 0xd18b56 });
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            dirLight.position.set(5, 10, 7);
+            scene.add(dirLight);
 
-            // Corpo (Cápsula)
-            const corpo = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1, 4, 16), matAzul);
-            corpo.position.y = 1.5;
-            grupo.add(corpo);
+            // 3. Criar o Personagem Azul (Gorro e Cachecol)
+            function criarPersonagemAzul() {
+                const grupo = new THREE.Group();
+                const matAzul = new THREE.MeshStandardMaterial({ color: 0x0044ff, roughness: 0.3 });
+                const matBranco = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
+                const matPreto = new THREE.MeshStandardMaterial({ color: 0x111111 });
+                const matPele = new THREE.MeshStandardMaterial({ color: 0xd18b56 });
 
-            // Cabeça
-            const cabeca = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1, 1), matPele);
-            cabeca.position.y = 2.8;
-            grupo.add(cabeca);
+                // Corpo
+                const corpo = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1, 4, 16), matAzul);
+                corpo.position.y = 1.5;
+                grupo.add(corpo);
 
-            // Olhos
-            const olhoGeo = new THREE.BoxGeometry(0.1, 0.2, 0.1);
-            const olhoEsq = new THREE.Mesh(olhoGeo, matPreto);
-            olhoEsq.position.set(-0.3, 2.8, 0.55);
-            const olhoDir = new THREE.Mesh(olhoGeo, matPreto);
-            olhoDir.position.set(0.3, 2.8, 0.55);
-            grupo.add(olhoEsq, olhoDir);
+                // Cabeça
+                const cabeca = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1, 1), matPele);
+                cabeca.position.y = 2.8;
+                grupo.add(cabeca);
 
-            // Gorro
-            const gorro = new THREE.Mesh(new THREE.SphereGeometry(0.65, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2), matAzul);
-            gorro.position.y = 3.3;
-            grupo.add(gorro);
-            
-            // Borda do gorro
-            const borda = new THREE.Mesh(new THREE.CylinderGeometry(0.68, 0.68, 0.2, 16), matBranco);
-            borda.position.y = 3.2;
-            grupo.add(borda);
+                // Olhos
+                const olhoGeo = new THREE.BoxGeometry(0.1, 0.2, 0.1);
+                const olhoEsq = new THREE.Mesh(olhoGeo, matPreto);
+                olhoEsq.position.set(-0.3, 2.8, 0.55);
+                const olhoDir = new THREE.Mesh(olhoGeo, matPreto);
+                olhoDir.position.set(0.3, 2.8, 0.55);
+                grupo.add(olhoEsq, olhoDir);
 
-            // Braços
-            const bracoGeo = new THREE.CapsuleGeometry(0.25, 0.6, 4, 8);
-            const bracoEsq = new THREE.Mesh(bracoGeo, matAzul);
-            bracoEsq.position.set(-1, 1.8, 0);
-            bracoEsq.rotation.z = Math.PI / 4;
-            const bracoDir = new THREE.Mesh(bracoGeo, matAzul);
-            bracoDir.position.set(1, 1.8, 0);
-            bracoDir.rotation.z = -Math.PI / 4;
-            grupo.add(bracoEsq, bracoDir);
+                // Gorro
+                const gorro = new THREE.Mesh(new THREE.SphereGeometry(0.6, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2), matAzul);
+                gorro.position.y = 3.3;
+                grupo.add(gorro);
+                
+                // Borda do gorro
+                const borda = new THREE.Mesh(new THREE.CylinderGeometry(0.65, 0.65, 0.2, 16), matBranco);
+                borda.position.y = 3.25;
+                grupo.add(borda);
 
-            // Botas
-            const botaGeo = new THREE.BoxGeometry(0.5, 0.4, 0.8);
-            const botaEsq = new THREE.Mesh(botaGeo, matPreto);
-            botaEsq.position.set(-0.4, 0.2, 0.1);
-            const botaDir = new THREE.Mesh(botaGeo, matPreto);
-            botaDir.position.set(0.4, 0.2, 0.1);
-            grupo.add(botaEsq, botaDir);
+                // Braços
+                const bracoGeo = new THREE.CapsuleGeometry(0.25, 0.6, 4, 8);
+                const bracoEsq = new THREE.Mesh(bracoGeo, matAzul);
+                bracoEsq.position.set(-1, 1.8, 0);
+                bracoEsq.rotation.z = Math.PI / 4;
+                const bracoDir = new THREE.Mesh(bracoGeo, matAzul);
+                bracoDir.position.set(1, 1.8, 0);
+                bracoDir.rotation.z = -Math.PI / 4;
+                grupo.add(bracoEsq, bracoDir);
 
-            return grupo;
-        }
+                // Botas
+                const botaGeo = new THREE.BoxGeometry(0.5, 0.4, 0.8);
+                const botaEsq = new THREE.Mesh(botaGeo, matPreto);
+                botaEsq.position.set(-0.4, 0.2, 0.1);
+                const botaDir = new THREE.Mesh(botaGeo, matPreto);
+                botaDir.position.set(0.4, 0.2, 0.1);
+                grupo.add(botaEsq, botaDir);
 
-        // 4. Função para criar o Personagem de Gelo
-        function criarPersonagemGelo() {
-            const grupo = new THREE.Group();
-            
-            // Material de Gelo
-            const matGelo = new THREE.MeshStandardMaterial({ 
-                color: 0x55ccff, 
-                transparent: true, 
-                opacity: 0.8, 
-                roughness: 0.1,
-                metalness: 0.5
-            });
-
-            // Corpo
-            const corpo = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1, 4, 16), matGelo);
-            corpo.position.y = 1.5;
-            grupo.add(corpo);
-
-            // Cabeça
-            const cabeca = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1, 1), matGelo);
-            cabeca.position.y = 2.8;
-            grupo.add(cabeca);
-
-            // Olhos (Fendas)
-            const olhoGeo = new THREE.BoxGeometry(0.15, 0.25, 0.1);
-            const matOlho = new THREE.MeshStandardMaterial({ color: 0x003366 });
-            const olhoEsq = new THREE.Mesh(olhoGeo, matOlho);
-            olhoEsq.position.set(-0.3, 2.8, 0.55);
-            const olhoDir = new THREE.Mesh(olhoGeo, matOlho);
-            olhoDir.position.set(0.3, 2.8, 0.55);
-            grupo.add(olhoEsq, olhoDir);
-
-            // Cabelo Espetado (Cristais de gelo)
-            const espinhoGeo = new THREE.ConeGeometry(0.2, 1.2, 4);
-            for(let i=0; i<5; i++){
-                const espinho = new THREE.Mesh(espinhoGeo, matGelo);
-                espinho.position.set((i-2)*0.3, 3.6 + Math.random()*0.2, 0);
-                espinho.rotation.z = (i-2) * 0.3;
-                grupo.add(espinho);
+                return grupo;
             }
 
-            // Braços
-            const bracoGeo = new THREE.CapsuleGeometry(0.25, 0.6, 4, 8);
-            const bracoEsq = new THREE.Mesh(bracoGeo, matGelo);
-            bracoEsq.position.set(-1, 1.8, 0);
-            bracoEsq.rotation.z = Math.PI / 4;
-            const bracoDir = new THREE.Mesh(bracoGeo, matGelo);
-            bracoDir.position.set(1, 1.8, 0);
-            bracoDir.rotation.z = -Math.PI / 4;
-            grupo.add(bracoEsq, bracoDir);
+            // 4. Criar o Personagem de Gelo
+            function criarPersonagemGelo() {
+                const grupo = new THREE.Group();
+                const matGelo = new THREE.MeshStandardMaterial({ 
+                    color: 0x55ccff, 
+                    transparent: true, 
+                    opacity: 0.9, 
+                    roughness: 0.1,
+                    metalness: 0.5
+                });
 
-            return grupo;
+                // Corpo
+                const corpo = new THREE.Mesh(new THREE.CapsuleGeometry(0.8, 1, 4, 16), matGelo);
+                corpo.position.y = 1.5;
+                grupo.add(corpo);
+
+                // Cabeça
+                const cabeca = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1, 1), matGelo);
+                cabeca.position.y = 2.8;
+                grupo.add(cabeca);
+
+                // Olhos
+                const olhoGeo = new THREE.BoxGeometry(0.15, 0.25, 0.1);
+                const matOlho = new THREE.MeshStandardMaterial({ color: 0x001133 });
+                const olhoEsq = new THREE.Mesh(olhoGeo, matOlho);
+                olhoEsq.position.set(-0.3, 2.8, 0.55);
+                const olhoDir = new THREE.Mesh(olhoGeo, matOlho);
+                olhoDir.position.set(0.3, 2.8, 0.55);
+                grupo.add(olhoEsq, olhoDir);
+
+                // Cabelo Espetado (Gelo)
+                const espinhoGeo = new THREE.ConeGeometry(0.2, 1.2, 4);
+                for(let i=0; i<5; i++){
+                    const espinho = new THREE.Mesh(espinhoGeo, matGelo);
+                    espinho.position.set((i-2)*0.3, 3.6 + Math.random()*0.2, 0);
+                    espinho.rotation.z = (i-2) * 0.3;
+                    grupo.add(espinho);
+                }
+
+                // Braços
+                const bracoGeo = new THREE.CapsuleGeometry(0.25, 0.6, 4, 8);
+                const bracoEsq = new THREE.Mesh(bracoGeo, matGelo);
+                bracoEsq.position.set(-1, 1.8, 0);
+                bracoEsq.rotation.z = Math.PI / 4;
+                const bracoDir = new THREE.Mesh(bracoGeo, matGelo);
+                bracoDir.position.set(1, 1.8, 0);
+                bracoDir.rotation.z = -Math.PI / 4;
+                grupo.add(bracoEsq, bracoDir);
+
+                return grupo;
+            }
+
+            // Adicionando os personagens à cena
+            const personagem1 = criarPersonagemAzul();
+            personagem1.position.set(-2.5, -2, 0);
+            scene.add(personagem1);
+
+            const personagem2 = criarPersonagemGelo();
+            personagem2.position.set(2.5, -2, 0);
+            scene.add(personagem2);
+
+            // 5. Animação (Passinho do Yamal)
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = clock.getElapsedTime();
+
+                // Animação do Boneco 1
+                personagem1.position.y = -2 + Math.abs(Math.sin(time * 8)) * 0.5; 
+                personagem1.rotation.z = Math.sin(time * 4) * 0.1; 
+                personagem1.rotation.y = Math.sin(time * 2) * 0.2; 
+
+                // Animação do Boneco 2
+                personagem2.position.y = -2 + Math.abs(Math.sin(time * 8 + 1)) * 0.5;
+                personagem2.rotation.z = Math.sin(time * 4 + 1) * 0.1;
+                personagem2.rotation.y = Math.sin(time * 2 + 1) * 0.2;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Ajuste de tela
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
         }
-
-        // Instanciando os personagens na cena
-        const personagem1 = criarPersonagemAzul();
-        personagem1.position.set(-2.5, -2, 0);
-        scene.add(personagem1);
-
-        const personagem2 = criarPersonagemGelo();
-        personagem2.position.set(2.5, -2, 0);
-        scene.add(personagem2);
-
-        // 5. Animação (Passinho do Yamal)
-        const clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const time = clock.getElapsedTime();
-
-            // Animação do Personagem 1 (Balançando o corpo e os braços)
-            personagem1.position.y = -2 + Math.abs(Math.sin(time * 8)) * 0.5; // Pulinho
-            personagem1.rotation.z = Math.sin(time * 4) * 0.1; // Balanço lateral
-            personagem1.rotation.y = Math.sin(time * 2) * 0.2; // Virando pra cá e pra lá
-
-            // Animação do Personagem 2 (Sincronizado, mas fazendo movimentos diferentes)
-            personagem2.position.y = -2 + Math.abs(Math.sin(time * 8 + 1)) * 0.5;
-            personagem2.rotation.z = Math.sin(time * 4 + 1) * 0.1;
-            personagem2.rotation.y = Math.sin(time * 2 + 1) * 0.2;
-
-            // Câmera dando um leve zoom in e out
-            camera.position.z = 10 + Math.sin(time * 1) * 0.5;
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
-        // Ajuste da tela ao redimensionar
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
     </script>
 </body>
 </html>
