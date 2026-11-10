@@ -70,10 +70,8 @@
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 90; display: none; }
         #overlay.open { display: block; }
 
-        /* --- ESTILOS DO TECLA HUB (OVERLAY) --- */
         #keyboard-overlay {
-            position: fixed;
-            bottom: 20px; right: 20px; width: 220px; height: 130px;
+            position: fixed; bottom: 20px; right: 20px; width: 220px; height: 130px;
             background-color: rgba(0, 0, 0, 0.7); background-size: cover; background-position: center;
             border: 2px solid var(--accent); border-radius: 10px;
             display: none; resize: both; overflow: hidden; cursor: move; z-index: 9999;
@@ -82,8 +80,6 @@
         }
         .key { border: 2px solid #fff; border-radius: 5px; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; background-color: transparent; color: #fff; transition: background-color 0.1s, color 0.1s; user-select: none; }
         .key.active { background-color: #fff; color: #000; }
-
-        /* Aviso de Compatibilidade */
         .pip-warning { background: rgba(255, 107, 107, 0.2); border: 2px solid var(--danger); padding: 15px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; display: none; }
     </style>
 </head>
@@ -91,7 +87,6 @@
     <div id="snow-container"></div>
     <div id="overlay" onclick="toggleMenu()"></div>
 
-    <!-- Sidebar -->
     <div id="sidebar">
         <div class="sidebar-header">
             <span class="logo-area">❄️ Stumble Ice</span>
@@ -104,16 +99,13 @@
         <button class="nav-item" onclick="openTab('config', this)" data-i18n="menu_config">⚙️ Configurações</button>
     </div>
 
-    <!-- Barra Superior -->
     <div class="top-bar">
         <button class="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></button>
         <div class="logo-area">❄️ Stumble Ice</div>
         <div style="width: 30px;"></div>
     </div>
 
-    <!-- Conteúdo -->
     <div class="content-area">
-        
         <!-- ABA: REGRAS -->
         <div id="tab-regras" class="tab-content active">
             <div class="panel rules-container">
@@ -169,15 +161,12 @@
         <div id="tab-teclahub" class="tab-content">
             <div class="panel">
                 <h2>🎮 Tecla Hub (Picture-in-Picture)</h2>
-                
                 <div class="pip-warning" id="pipWarning">
                     <strong>Atenção:</strong> O seu navegador não suporta a janela flutuante nativa (Picture-in-Picture). O overlay funcionará apenas dentro desta aba.
                 </div>
-
                 <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px;">
-                    Configure o overlay abaixo. Ao clicar em ativar, uma <strong>janela flutuante</strong> do navegador abrirá. Você pode jogar na aba normal e a janelinha ficará por cima!
+                    Configure o overlay abaixo. Ao clicar em ativar, uma <strong>janela flutuante</strong> abrirá (no PC). No celular, ele ficará fixo na tela.
                 </p>
-
                 <div class="form-group">
                     <label>Layout das Teclas:</label>
                     <select id="layoutSelect">
@@ -200,8 +189,7 @@
                     <label>Fundo com Imagem (Upload):</label>
                     <input type="file" id="bgImageInput" accept="image/*">
                 </div>
-
-                <button class="btn-primary" onclick="salvarTeclaHub()">Salvar e Abrir Janela Flutuante</button>
+                <button class="btn-primary" onclick="salvarTeclaHub()">Salvar e Ativar Overlay</button>
             </div>
         </div>
 
@@ -229,7 +217,6 @@
         </div>
     </div>
 
-    <!-- O Elemento que será movido para a janela flutuante -->
     <div id="keyboard-overlay"></div>
 
     <script>
@@ -239,10 +226,35 @@
         let currentLang = 'pt';
         let pipWindow = null;
 
-        // Traduções (Resumido para economizar espaço)
         const translations = {
-            pt: { menu_rules: "📜 Regras", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_config: "⚙️ Configurações", menu_keys: "🎮 Tecla Hub", config_title: "Configurações", config_theme: "Mudar Tema:", theme_dark: "Escuro", theme_light: "Branco", theme_neon: "Neon", config_lang: "Tradutor:", lang_pt: "Brasil", lang_en: "Inglês" },
-            en: { menu_rules: "📜 Rules", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_config: "⚙️ Settings", menu_keys: "🎮 Key Hub", config_title: "Settings", config_theme: "Change Theme:", theme_dark: "Dark", theme_light: "Light", theme_neon: "Neon", config_lang: "Translator:", lang_pt: "Brazil", lang_en: "English" }
+            pt: {
+                menu_rules: "📜 Regras", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_config: "⚙️ Configurações", menu_keys: "🎮 Tecla Hub",
+                rules_title: "❄️ Regras do Stumble Ice", rules_welcome: "Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.",
+                rules_h1: "1. Respeito", rules_li1: "🚫 Zero xingamento ou preconceito.", rules_li2: "✅ Brincadeiras liberadas, sem passar do limite.",
+                rules_h2: "2. Chat Limpo", rules_li3: "🚫 Sem spam, flood ou divulgação de outros servidores.", rules_li4: "🚫 Sem conteúdo NSFW.",
+                rules_h3: "3. Fair Play", rules_li5: "🚫 Proibido cheats, hacks ou exploits.", rules_li6: "✅ Respeite os resultados.",
+                discord_title: "Junte-se ao nosso Discord!", discord_desc: "Clique no botão abaixo para copiar o link e entrar no servidor.", discord_btn: "📋 Copiar Link do Discord",
+                forms_title: "Formulário de Criador de Conteúdo", forms_note: "Nota: envie apenas um formulário, sujeito a mute.",
+                forms_nick: "Qual seu Nick do discord?", forms_views: "Quantas views em média você tem?", forms_followers: "Quantos seguidores você tem?",
+                forms_platform: "Selecione a sua plataforma:", forms_yt: "Qual é o link do seu canal do YouTube?", forms_tiktok: "Qual é o link do seu canal do TikTok?",
+                forms_exp: "Você já foi influencer de outra versão? Ou já gravou vídeo sobre ela?", forms_why: "Porque você quer se tornar influencer de nossa versão?",
+                forms_ideas: "Você tem alguma ideia para nosso servidor? (Não obrigatório*)", forms_submit: "Enviar Formulário",
+                config_title: "Configurações", config_theme: "Mudar Tema:", theme_dark: "Escuro", theme_light: "Branco", theme_neon: "Neon", config_lang: "Tradutor:", lang_pt: "Brasil", lang_en: "Inglês"
+            },
+            en: {
+                menu_rules: "📜 Rules", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_config: "⚙️ Settings", menu_keys: "🎮 Key Hub",
+                rules_title: "❄️ Stumble Ice Rules", rules_welcome: "Welcome to the coolest server! By entering, you agree to the rules below.",
+                rules_h1: "1. Respect", rules_li1: "🚫 No swearing or prejudice.", rules_li2: "✅ Jokes allowed, don't cross the line.",
+                rules_h2: "2. Clean Chat", rules_li3: "🚫 No spam, flood, or advertising other servers.", rules_li4: "🚫 No NSFW content.",
+                rules_h3: "3. Fair Play", rules_li5: "🚫 No cheats, hacks, or exploits.", rules_li6: "✅ Respect the results.",
+                discord_title: "Join our Discord!", discord_desc: "Click the button below to copy the link and join the server.", discord_btn: "📋 Copy Discord Link",
+                forms_title: "Content Creator Form", forms_note: "Note: submit only one form, subject to mute.",
+                forms_nick: "What is your Discord Nick?", forms_views: "How many views on average do you have?", forms_followers: "How many followers do you have?",
+                forms_platform: "Select your platform:", forms_yt: "What is your YouTube channel link?", forms_tiktok: "What is your TikTok channel link?",
+                forms_exp: "Have you been an influencer for another version? Or recorded a video about it?", forms_why: "Why do you want to become an influencer for our version?",
+                forms_ideas: "Do you have any ideas for our server? (Not required*)", forms_submit: "Submit Form",
+                config_title: "Settings", config_theme: "Change Theme:", theme_dark: "Dark", theme_light: "Light", theme_neon: "Neon", config_lang: "Translator:", lang_pt: "Brazil", lang_en: "English"
+            }
         };
 
         function setLang(lang) {
@@ -307,16 +319,89 @@
             }
         }
 
+        // --- FORMULÁRIO CC (FUNÇÃO RESTAURADA) ---
         async function submitCC() {
-            // A função de envio do formulário continua igualzinha ao seu código original.
-            // Omitida aqui apenas para o texto não ficar muito longo, mas você deve manter a sua.
-            alert("Formulário simulado com sucesso!");
+            const nick = document.getElementById('ccNick').value;
+            const views = document.getElementById('ccViews').value;
+            const followers = document.getElementById('ccFollowers').value;
+            const exp = document.getElementById('ccExp').value;
+            const why = document.getElementById('ccWhy').value;
+            const ideas = document.getElementById('ccIdeas').value;
+            const feedback = document.getElementById('ccFeedback');
+            const btn = document.getElementById('btnSubmitCC');
+
+            if (!nick || !selectedPlatform || !why || !views || !followers) {
+                return alert(currentLang === 'pt' ? "Preencha os campos obrigatórios (Nick, Views, Seguidores, Plataforma e Motivo)!" : "Fill in the required fields!");
+            }
+
+            let link = "";
+            if (selectedPlatform === 'youtube') link = document.getElementById('ccYtLink').value;
+            else link = document.getElementById('ccTiktokLink').value;
+
+            if (!link) return alert(currentLang === 'pt' ? "Por favor, insira o link do seu canal!" : "Please enter your channel link!");
+
+            feedback.innerText = currentLang === 'pt' ? "Enviando..." : "Sending...";
+            feedback.style.color = "#ffd166";
+            btn.disabled = true;
+
+            const discordMessage = {
+                content: "📝 **Novo Formulário de Criador de Conteúdo!**",
+                embeds: [{
+                    title: "Candidato: " + nick,
+                    color: 0x4dff9e,
+                    fields: [
+                        { name: "Views Médias", value: views, inline: true },
+                        { name: "Seguidores", value: followers, inline: true },
+                        { name: "Plataforma", value: selectedPlatform === 'youtube' ? "YouTube" : "TikTok", inline: true },
+                        { name: "Link do Canal", value: link, inline: false },
+                        { name: "Já foi Influencer?", value: exp || "Não informado", inline: false },
+                        { name: "Por que quer ser Influencer?", value: why, inline: false },
+                        { name: "Ideias para o Servidor", value: ideas || "Nenhuma ideia enviada", inline: false }
+                    ],
+                    footer: { text: "Stumble Ice - Forms CC" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            try {
+                const response = await fetch(WEBHOOK_CC, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(discordMessage)
+                });
+
+                if (response.ok) {
+                    feedback.innerText = currentLang === 'pt' ? "✅ Formulário enviado com sucesso!" : "✅ Form submitted successfully!";
+                    feedback.style.color = "var(--accent)";
+                    document.getElementById('ccNick').value = '';
+                    document.getElementById('ccViews').value = '';
+                    document.getElementById('ccFollowers').value = '';
+                    document.getElementById('ccExp').value = '';
+                    document.getElementById('ccWhy').value = '';
+                    document.getElementById('ccIdeas').value = '';
+                    document.getElementById('ccYtLink').value = '';
+                    document.getElementById('ccTiktokLink').value = '';
+                    selectedPlatform = '';
+                    document.getElementById('btn-yt').classList.remove('active');
+                    document.getElementById('btn-tiktok').classList.remove('active');
+                    document.getElementById('yt-section').classList.add('hidden');
+                    document.getElementById('tiktok-section').classList.add('hidden');
+                } else {
+                    feedback.innerText = currentLang === 'pt' ? "❌ Erro ao enviar. Tente novamente." : "❌ Error sending. Try again.";
+                    feedback.style.color = "var(--danger)";
+                }
+            } catch (error) {
+                feedback.innerText = currentLang === 'pt' ? "❌ Erro de conexão. Verifique sua internet." : "❌ Connection error.";
+                feedback.style.color = "var(--danger)";
+            }
+
+            btn.disabled = false;
+            setTimeout(() => { feedback.innerText = ''; }, 5000);
         }
 
-        // --- LÓGICA DO OVERLAY PICTURE-IN-PICTURE ---
+        // --- LÓGICA DO TECLA HUB ---
         const overlayBox = document.getElementById('keyboard-overlay');
 
-        // Verifica se o navegador suporta a janela flutuante (Chrome Desktop suporta, celular geralmente não)
         if (!('documentPictureInPicture' in window)) {
             document.getElementById('pipWarning').style.display = 'block';
         }
@@ -357,11 +442,9 @@
                 overlayBox.style.backgroundImage = 'none';
             }
 
-            // Tenta abrir a janela flutuante
             if ('documentPictureInPicture' in window) {
                 try {
-                    if (pipWindow) pipWindow.close(); // Fecha a anterior se existir
-                    
+                    if (pipWindow) pipWindow.close();
                     pipWindow = await documentPictureInPicture.requestWindow({ width: 250, height: 150 });
                     pipWindow.document.body.appendChild(overlayBox);
                     
@@ -369,7 +452,6 @@
                     style.textContent = `body { margin: 0; background: transparent; overflow: hidden; } #keyboard-overlay { width: 100%; height: 100%; border-radius: 0; display: grid; border: none; }`;
                     pipWindow.document.head.appendChild(style);
 
-                    // Adiciona os ouvintes de teclado na janela nova
                     pipWindow.document.addEventListener('keydown', (e) => {
                         const keyDiv = pipWindow.document.getElementById(`key-${e.code}`);
                         if (keyDiv) {
@@ -389,13 +471,11 @@
                     alert("Não foi possível abrir a janela flutuante. Verifique se o navegador permite.");
                 }
             } else {
-                // Fallback: se o navegador não suportar, deixa o overlay fixo na tela normal
                 overlayBox.style.display = 'grid';
                 alert("Janela flutuante não suportada neste navegador. O overlay ficará fixo nesta tela.");
             }
         }
 
-        // Detecção de Teclas na tela principal (fallback)
         document.addEventListener('keydown', (e) => {
             const keyDiv = document.getElementById(`key-${e.code}`);
             if (keyDiv) {
