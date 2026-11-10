@@ -131,7 +131,7 @@
         
         .feedback-msg { margin-top: 10px; text-align: center; font-weight: bold; min-height: 20px; }
 
-        /* Overlay */
+        /* Overlay do Menu */
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 90; display: none; }
         #overlay.open { display: block; }
 
@@ -147,7 +147,7 @@
             background-position: center;
             border: 2px solid var(--accent);
             border-radius: 10px;
-            display: none; /* Escondido até ativar */
+            display: none; 
             resize: both;
             overflow: hidden;
             cursor: move;
@@ -193,7 +193,6 @@
         <button class="nav-item active" onclick="openTab('regras', this)" data-i18n="menu_rules">📜 Regras</button>
         <button class="nav-item" onclick="openTab('discord', this)" data-i18n="menu_discord">💬 Discord</button>
         <button class="nav-item" onclick="openTab('formscc', this)" data-i18n="menu_forms">📝 Forms CC</button>
-        <!-- NOVO BOTÃO DO TECLA HUB -->
         <button class="nav-item" onclick="openTab('teclahub', this)" data-i18n="menu_keys">🎮 Tecla Hub</button>
         <button class="nav-item" onclick="openTab('config', this)" data-i18n="menu_config">⚙️ Configurações</button>
     </div>
@@ -212,7 +211,6 @@
         
         <!-- ABA: REGRAS -->
         <div id="tab-regras" class="tab-content active">
-            <!-- (Conteúdo de regras mantido igual) -->
             <div class="panel rules-container">
                 <h1 style="text-align:center; color:var(--accent);" data-i18n="rules_title">❄️ Regras do Stumble Ice</h1>
                 <p data-i18n="rules_welcome">Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.</p>
@@ -236,7 +234,6 @@
 
         <!-- ABA: DISCORD -->
         <div id="tab-discord" class="tab-content">
-             <!-- (Conteúdo do discord mantido igual) -->
             <div class="panel" style="text-align: center;">
                 <h2 data-i18n="discord_title">Junte-se ao nosso Discord!</h2>
                 <p data-i18n="discord_desc">Clique no botão abaixo para copiar o link e entrar no servidor.</p>
@@ -250,7 +247,6 @@
 
         <!-- ABA: FORMS CC -->
         <div id="tab-formscc" class="tab-content">
-            <!-- (Conteúdo do formulário mantido igual) -->
             <div class="panel">
                 <h2 data-i18n="forms_title">Formulário de Criador de Conteúdo</h2>
                 <p style="font-size: 12px; color: var(--danger); margin-bottom: 20px;" data-i18n="forms_note">Nota: envie apenas um formulário, sujeito a mute.</p>
@@ -308,13 +304,12 @@
             </div>
         </div>
 
-        <!-- NOVA ABA: TECLA HUB -->
+        <!-- ABA: TECLA HUB -->
         <div id="tab-teclahub" class="tab-content">
             <div class="panel">
-                <h2>🎮 Tecla Hub (Overlay)</h2>
+                <h2>🎮 Tecla Hub (Overlay Fixo)</h2>
                 <p style="font-size: 14px; opacity: 0.8; margin-bottom: 20px;">
-                    Configure o overlay de teclas para usar enquanto joga no navegador. 
-                    <br><b>Dica:</b> Ao salvar, o navegador pode pedir permissão para abrir uma janela flutuante (Picture-in-Picture) para que o overlay fique visível em outras abas.
+                    Configure o overlay e abra um jogo ou site abaixo. O overlay ficará flutuando sobre ele!
                 </p>
 
                 <div class="form-group">
@@ -343,13 +338,24 @@
                     <input type="file" id="bgImageInput" accept="image/*">
                 </div>
 
-                <button class="btn-primary" onclick="salvarTeclaHub()">Salvar e Ativar Overlay</button>
+                <button class="btn-primary" onclick="salvarTeclaHub()" style="margin-bottom: 20px;">Salvar e Ativar Overlay</button>
+
+                <!-- Área do Navegador Embutido -->
+                <div style="border-top: 2px solid var(--border-color); padding-top: 15px; margin-top: 15px;">
+                    <h3 style="color: var(--accent); font-size: 16px; margin-bottom: 10px;">Navegador Embutido</h3>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="urlInput" placeholder="Cole o link do jogo aqui (ex: https://...)" style="flex: 1;">
+                        <button class="btn-primary" onclick="abrirJogo()" style="width: auto; padding: 0 20px;">Abrir Jogo</button>
+                    </div>
+                    
+                    <!-- O Iframe onde o jogo vai rodar -->
+                    <iframe id="gameFrame" style="width: 100%; height: 400px; border: 2px solid var(--border-color); border-radius: 10px; display: none; background: #000;" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
 
         <!-- ABA: CONFIGURAÇÕES -->
         <div id="tab-config" class="tab-content">
-            <!-- (Conteúdo de configurações mantido igual) -->
             <div class="panel">
                 <h2 data-i18n="config_title">Configurações</h2>
                 
@@ -501,9 +507,82 @@
         }
 
         async function submitCC() {
-            // ... (código do submitCC mantido igual, copie do seu original se necessário)
-            // Para economizar espaço, omiti o corpo do submitCC pois não mudou nada nele. 
-            // Cole o corpo do seu submitCC original aqui.
+            const nick = document.getElementById('ccNick').value;
+            const views = document.getElementById('ccViews').value;
+            const followers = document.getElementById('ccFollowers').value;
+            const exp = document.getElementById('ccExp').value;
+            const why = document.getElementById('ccWhy').value;
+            const ideas = document.getElementById('ccIdeas').value;
+            const feedback = document.getElementById('ccFeedback');
+            const btn = document.getElementById('btnSubmitCC');
+
+            if (!nick || !selectedPlatform || !why || !views || !followers) {
+                return alert(currentLang === 'pt' ? "Preencha os campos obrigatórios (Nick, Views, Seguidores, Plataforma e Motivo)!" : "Fill in the required fields (Nick, Views, Followers, Platform and Reason)!");
+            }
+
+            let link = "";
+            if (selectedPlatform === 'youtube') link = document.getElementById('ccYtLink').value;
+            else link = document.getElementById('ccTiktokLink').value;
+
+            if (!link) return alert(currentLang === 'pt' ? "Por favor, insira o link do seu canal!" : "Please enter your channel link!");
+
+            feedback.innerText = currentLang === 'pt' ? "Enviando..." : "Sending...";
+            feedback.style.color = "#ffd166";
+            btn.disabled = true;
+
+            const discordMessage = {
+                content: "📝 **Novo Formulário de Criador de Conteúdo!**",
+                embeds: [{
+                    title: "Candidato: " + nick,
+                    color: 0x4dff9e,
+                    fields: [
+                        { name: "Views Médias", value: views, inline: true },
+                        { name: "Seguidores", value: followers, inline: true },
+                        { name: "Plataforma", value: selectedPlatform === 'youtube' ? "YouTube" : "TikTok", inline: true },
+                        { name: "Link do Canal", value: link, inline: false },
+                        { name: "Já foi Influencer?", value: exp || "Não informado", inline: false },
+                        { name: "Por que quer ser Influencer?", value: why, inline: false },
+                        { name: "Ideias para o Servidor", value: ideas || "Nenhuma ideia enviada", inline: false }
+                    ],
+                    footer: { text: "Stumble Ice - Forms CC" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            try {
+                const response = await fetch(WEBHOOK_CC, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(discordMessage)
+                });
+
+                if (response.ok) {
+                    feedback.innerText = currentLang === 'pt' ? "✅ Formulário enviado com sucesso!" : "✅ Form submitted successfully!";
+                    feedback.style.color = "var(--accent)";
+                    document.getElementById('ccNick').value = '';
+                    document.getElementById('ccViews').value = '';
+                    document.getElementById('ccFollowers').value = '';
+                    document.getElementById('ccExp').value = '';
+                    document.getElementById('ccWhy').value = '';
+                    document.getElementById('ccIdeas').value = '';
+                    document.getElementById('ccYtLink').value = '';
+                    document.getElementById('ccTiktokLink').value = '';
+                    selectedPlatform = '';
+                    document.getElementById('btn-yt').classList.remove('active');
+                    document.getElementById('btn-tiktok').classList.remove('active');
+                    document.getElementById('yt-section').classList.add('hidden');
+                    document.getElementById('tiktok-section').classList.add('hidden');
+                } else {
+                    feedback.innerText = currentLang === 'pt' ? "❌ Erro ao enviar. Tente novamente." : "❌ Error sending. Try again.";
+                    feedback.style.color = "var(--danger)";
+                }
+            } catch (error) {
+                feedback.innerText = currentLang === 'pt' ? "❌ Erro de conexão. Verifique sua internet." : "❌ Connection error. Check your internet.";
+                feedback.style.color = "var(--danger)";
+            }
+
+            btn.disabled = false;
+            setTimeout(() => { feedback.innerText = ''; }, 5000);
         }
 
         // --- LÓGICA DO TECLA HUB (OVERLAY) ---
@@ -558,10 +637,7 @@
             }
 
             overlayBox.style.display = 'grid';
-            
-            // Tentar abrir a janela flutuante
-            tentarAtivarPiP();
-            alert("Tecla Hub ativado! Você pode mover e redimensionar a caixa no canto da tela.");
+            alert(currentLang === 'pt' ? "Overlay ativado! Mova-o para o canto." : "Overlay activated!");
         }
 
         // Detecção de Teclas
@@ -610,38 +686,27 @@
 
         document.addEventListener('mouseup', () => { isDragging = false; });
 
-        // Tentar Picture-in-Picture
-        async function tentarAtivarPiP() {
-            if (!('documentPictureInPicture' in window)) {
-                console.log("Picture-in-Picture não suportado neste navegador.");
+        // --- FUNÇÃO PARA ABRIR O JOGO NO NAVEGADOR EMBUTIDO ---
+        function abrirJogo() {
+            const url = document.getElementById('urlInput').value;
+            const frame = document.getElementById('gameFrame');
+            
+            if (!url) {
+                alert("Por favor, cole o link do jogo primeiro!");
                 return;
             }
-            try {
-                const pipWindow = await documentPictureInPicture.requestWindow({ width: 250, height: 150 });
-                pipWindow.document.body.appendChild(overlayBox);
-                
-                const style = document.createElement('style');
-                style.textContent = `body { margin: 0; background: transparent; overflow: hidden; } #keyboard-overlay { width: 100%; height: 100%; border-radius: 0; display: grid; }`;
-                pipWindow.document.head.appendChild(style);
 
-                pipWindow.document.addEventListener('keydown', (e) => {
-                    const keyDiv = pipWindow.document.getElementById(`key-${e.code}`);
-                    if (keyDiv) {
-                        keyDiv.classList.add('active');
-                        if (document.getElementById('colorSelect').value === 'white') { keyDiv.style.backgroundColor = '#fff'; keyDiv.style.color = '#000'; } 
-                        else { keyDiv.style.backgroundColor = '#000'; keyDiv.style.color = '#fff'; }
-                    }
-                });
-                pipWindow.document.addEventListener('keyup', (e) => {
-                    const keyDiv = pipWindow.document.getElementById(`key-${e.code}`);
-                    if (keyDiv) {
-                        keyDiv.classList.remove('active');
-                        keyDiv.style.backgroundColor = 'transparent'; keyDiv.style.color = '#fff';
-                    }
-                });
-            } catch (error) {
-                console.log("PiP recusado ou falhou:", error);
+            let finalUrl = url;
+            if (!finalUrl.startsWith('http')) {
+                finalUrl = 'https://' + finalUrl;
             }
+
+            frame.src = finalUrl;
+            frame.style.display = 'block';
+            
+            setTimeout(() => {
+                frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
     </script>
 </body>
