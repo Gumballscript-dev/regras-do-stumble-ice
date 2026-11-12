@@ -206,6 +206,22 @@
         #admin-success-area { text-align: center; display: none; }
         .feedback-msg { margin-top: 15px; text-align: center; font-weight: bold; min-height: 20px; }
 
+        /* Opções de Envio */
+        .send-options { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
+        .send-btn { 
+            padding: 10px 20px; border-radius: 10px; border: 2px solid var(--border-color);
+            background: transparent; color: var(--text-color); font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; gap: 5px; transition: 0.2s;
+        }
+        .send-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .send-btn.gear { font-size: 20px; padding: 8px 15px; }
+
+        /* Editor de Emojis */
+        #emoji-editor { display: none; margin-top: 20px; text-align: left; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
+        #emoji-editor .form-group { margin-bottom: 10px; }
+        #emoji-editor input { padding: 10px; font-size: 14px; }
+        .editor-actions { display: flex; gap: 10px; margin-top: 15px; }
+
         /* Overlay */
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 90; display: none; }
         #overlay.open { display: block; }
@@ -310,7 +326,53 @@
 
                 <div id="admin-success-area">
                     <h3 style="color: var(--accent);" data-i18n="adm_success">✅ Acesso Concedido!</h3>
-                    <p data-i18n="adm_success_desc">A mensagem do torneio foi enviada para o Discord.</p>
+                    <p data-i18n="adm_success_desc">Escolha como enviar a mensagem do torneio:</p>
+                    
+                    <!-- Opções de Envio -->
+                    <div class="send-options" id="send-options-area">
+                        <button class="send-btn" onclick="sendTournament('padrao')">Padrão</button>
+                        <button class="send-btn gear" onclick="toggleEmojiEditor()">⚙️</button>
+                    </div>
+
+                    <!-- Editor de Emojis -->
+                    <div id="emoji-editor">
+                        <h4 style="color: var(--accent); margin-top: 0;">Editar Emojis (IDs)</h4>
+                        
+                        <div class="form-group">
+                            <label>StumbleIce:</label>
+                            <input type="text" id="emoji-ice" value="1568312467589824674">
+                        </div>
+                        <div class="form-group">
+                            <label>Blockdash (Mapa):</label>
+                            <input type="text" id="emoji-map" value="1570486524997533826">
+                        </div>
+                        <div class="form-group">
+                            <label>BFHW (Separador):</label>
+                            <input type="text" id="emoji-bfhw" value="1570490998335733821">
+                        </div>
+                        <div class="form-group">
+                            <label>Soco:</label>
+                            <input type="text" id="emoji-soco" value="1568312390788063314">
+                        </div>
+                        <div class="form-group">
+                            <label>FirePunch:</label>
+                            <input type="text" id="emoji-fire" value="1570485523800137930">
+                        </div>
+                        <div class="form-group">
+                            <label>Chorando:</label>
+                            <input type="text" id="emoji-choro" value="1569409303037870140">
+                        </div>
+                        <div class="form-group">
+                            <label>Gems2 (Recompensa):</label>
+                            <input type="text" id="emoji-gems" value="1570485055187456072">
+                        </div>
+
+                        <div class="editor-actions">
+                            <button class="btn-primary" onclick="saveAndSendCustom()" style="padding: 10px;">Salvar e Enviar</button>
+                            <button class="send-btn" onclick="toggleEmojiEditor()" style="flex:1; justify-content:center;">Cancelar</button>
+                        </div>
+                    </div>
+
                     <button class="btn-primary" onclick="logoutAdmin()" style="background: var(--danger); color: white; margin-top: 20px;" data-i18n="adm_logout">Sair</button>
                 </div>
             </div>
@@ -363,7 +425,7 @@
                 rules_h3: "3. Fair Play", rules_li5: "🚫 Proibido cheats, hacks ou exploits.", rules_li6: "✅ Respeite os resultados.",
                 discord_title: "Junte-se ao nosso Discord!", discord_desc: "Clique no botão abaixo para copiar o link e entrar no servidor.", discord_btn: "📋 Copiar Link do Discord",
                 forms_title: "Formulário de Criador de Conteúdo", forms_closed_title: "🚫 Vagas Fechadas!", forms_closed_desc: "No momento, não estamos aceitando novos influenciadores. Fique de olho no nosso Discord para futuras oportunidades!",
-                adm_title: "Painel ADM", adm_label: "Login Admin:", adm_connect: "Conectar", adm_success: "✅ Acesso Concedido!", adm_success_desc: "A mensagem do torneio foi enviada para o Discord.", adm_logout: "Sair",
+                adm_title: "Painel ADM", adm_label: "Login Admin:", adm_connect: "Conectar", adm_success: "✅ Acesso Concedido!", adm_success_desc: "Escolha como enviar a mensagem do torneio:", adm_logout: "Sair",
                 config_title: "Configurações", config_theme: "Mudar Tema:", theme_dark: "Escuro", theme_light: "Branco", theme_neon: "Neon", config_lang: "Tradutor:", lang_pt: "Brasil", lang_en: "Inglês"
             },
             en: {
@@ -374,7 +436,7 @@
                 rules_h3: "3. Fair Play", rules_li5: "🚫 No cheats, hacks, or exploits.", rules_li6: "✅ Respect the results.",
                 discord_title: "Join our Discord!", discord_desc: "Click the button below to copy the link and join the server.", discord_btn: "📋 Copy Discord Link",
                 forms_title: "Content Creator Form", forms_closed_title: "🚫 Applications Closed!", forms_closed_desc: "We are currently not accepting new influencers. Keep an eye on our Discord for future opportunities!",
-                adm_title: "ADM Panel", adm_label: "Admin Login:", adm_connect: "Connect", adm_success: "✅ Access Granted!", adm_success_desc: "The tournament message was sent to Discord.", adm_logout: "Logout",
+                adm_title: "ADM Panel", adm_label: "Admin Login:", adm_connect: "Connect", adm_success: "✅ Access Granted!", adm_success_desc: "Choose how to send the tournament message:", adm_logout: "Logout",
                 config_title: "Settings", config_theme: "Change Theme:", theme_dark: "Dark", theme_light: "Light", theme_neon: "Neon", config_lang: "Translator:", lang_pt: "Brazil", lang_en: "English"
             }
         };
@@ -443,18 +505,42 @@
                 return;
             }
 
+            document.getElementById('admin-login-area').style.display = 'none';
+            document.getElementById('admin-success-area').style.display = 'block';
+            document.getElementById('admPassword').value = '';
+        }
+
+        function toggleEmojiEditor() {
+            const editor = document.getElementById('emoji-editor');
+            editor.style.display = editor.style.display === 'block' ? 'none' : 'block';
+        }
+
+        async function sendTournament(mode) {
+            const feedback = document.getElementById('admFeedback');
+            const btns = document.querySelectorAll('.send-btn');
+            
+            btns.forEach(b => b.disabled = true);
             feedback.innerText = currentLang === 'pt' ? "Enviando torneio..." : "Sending tournament...";
             feedback.style.color = "#ffd166";
-            btn.disabled = true;
 
-            const message = `# Torneio <:StumbleIce:1568312467589824674> 
+            // Pega os valores do editor
+            const ice = document.getElementById('emoji-ice').value;
+            const map = document.getElementById('emoji-map').value;
+            const bfhw = document.getElementById('emoji-bfhw').value;
+            const soco = document.getElementById('emoji-soco').value;
+            const fire = document.getElementById('emoji-fire').value;
+            const choro = document.getElementById('emoji-choro').value;
+            const gems = document.getElementById('emoji-gems').value;
+
+            // Monta a mensagem com os emojis escolhidos
+            const message = `# Torneio <:StumbleIce:${ice}> 
 
 \`\`\`Horario: 16:00\`\`\`
-***Mapa: <:blockdash:1570486524997533826> 
-<:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> ***
-***Emotes: <:soco:1568312390788063314> <:FirePunch:1570485523800137930> <:chorando:1569409303037870140> 
-<:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821>***
-***Recompensa: 500 <:gems2:1570485055187456072> ***`;
+***Mapa: <:blockdash:${map}> 
+<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> ***
+***Emotes: <:soco:${soco}> <:FirePunch:${fire}> <:chorando:${choro}> 
+<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}>***
+***Recompensa: 500 <:gems2:${gems}> ***`;
 
             try {
                 const response = await fetch(WEBHOOK_ADM, {
@@ -464,26 +550,8 @@
                 });
 
                 if (response.ok) {
-                    document.getElementById('admin-login-area').style.display = 'none';
-                    document.getElementById('admin-success-area').style.display = 'block';
-                    document.getElementById('admPassword').value = '';
-                } else {
-                    feedback.innerText = currentLang === 'pt' ? "❌ Erro ao enviar. Verifique o Webhook." : "❌ Error sending. Check the Webhook.";
-                    feedback.style.color = "var(--danger)";
-                }
-            } catch (error) {
-                feedback.innerText = currentLang === 'pt' ? "❌ Erro de conexão." : "❌ Connection error.";
-                feedback.style.color = "var(--danger)";
-            }
-
-            btn.disabled = false;
-        }
-
-        function logoutAdmin() {
-            document.getElementById('admin-login-area').style.display = 'block';
-            document.getElementById('admin-success-area').style.display = 'none';
-            document.getElementById('admFeedback').innerText = '';
-        }
-    </script>
-</body>
-</html>
+                    feedback.innerText = currentLang === 'pt' ? "✅ Enviado com sucesso!" : "✅ Sent successfully!";
+                    feedback.style.color = "var(--accent)";
+                    
+                    // Se o modo for padrão, esconde o botão "Padrão"
+                    if (mode
