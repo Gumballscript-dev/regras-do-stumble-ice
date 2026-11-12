@@ -7,28 +7,31 @@
     <style>
         :root {
             --bg-main: #0a1c2b;
-            --bg-panel: rgba(14, 30, 48, 0.95);
+            --bg-panel: rgba(14, 30, 48, 0.7);
             --text-color: #e0f2fe;
             --accent: #4dff9e;
             --border-color: #1a3c5e;
             --danger: #ff6b6b;
+            --glow-color: rgba(77, 255, 158, 0.4);
         }
 
         /* --- TEMAS --- */
         [data-theme="light"] {
             --bg-main: #e0f7fa;
-            --bg-panel: rgba(255, 255, 255, 0.95);
+            --bg-panel: rgba(255, 255, 255, 0.85);
             --text-color: #003333;
             --accent: #00796b;
             --border-color: #b2ebf2;
+            --glow-color: rgba(0, 121, 107, 0.3);
         }
 
         [data-theme="neon"] {
             --bg-main: #000000;
-            --bg-panel: rgba(10, 10, 10, 0.95);
+            --bg-panel: rgba(10, 10, 10, 0.8);
             --text-color: #00ffcc;
             --accent: #ff00ff;
             --border-color: #ff00ff;
+            --glow-color: rgba(255, 0, 255, 0.5);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -37,115 +40,186 @@
             background: var(--bg-main);
             color: var(--text-color);
             margin: 0; min-height: 100vh; display: flex; flex-direction: column;
-            transition: background 0.3s, color 0.3s;
+            transition: background 0.4s, color 0.4s;
+            overflow-x: hidden;
         }
 
-        /* Neve (só no tema escuro) */
+        /* --- FUNDO ANIMADO (BOLHAS) --- */
+        .bg-blob {
+            position: fixed; border-radius: 50%; filter: blur(80px);
+            z-index: 0; opacity: 0.6; animation: float 10s infinite alternate ease-in-out;
+        }
+        .blob-1 { width: 300px; height: 300px; background: #ff00ff; top: -50px; left: -50px; }
+        .blob-2 { width: 400px; height: 400px; background: #00ffcc; bottom: -100px; right: -100px; animation-delay: -5s; }
+        [data-theme="light"] .blob-1 { background: #b2ebf2; }
+        [data-theme="light"] .blob-2 { background: #a0e8ff; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* --- NEVE --- */
         .snowflake {
             position: fixed; top: -10px; color: #fff;
-            font-family: Arial; text-shadow: 0 0 5px rgba(255,255,255,0.8);
+            font-family: Arial; text-shadow: 0 0 8px rgba(255,255,255,0.9);
             user-select: none; pointer-events: none; z-index: 1;
             animation: fall linear forwards;
         }
         @keyframes fall { to { transform: translateY(105vh); } }
         [data-theme="light"] .snowflake, [data-theme="neon"] .snowflake { display: none; }
 
-        /* Barra Superior e Menu Hambúrguer RGB */
+        /* --- BARRA SUPERIOR --- */
         .top-bar {
             width: 100%; padding: 15px 20px; box-sizing: border-box;
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--bg-panel); border-bottom: 1px solid var(--border-color);
+            background: var(--bg-panel); backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-color);
             position: sticky; top: 0; z-index: 50;
         }
+        
         .menu-btn {
             display: flex; flex-direction: column; justify-content: space-between;
-            width: 30px; height: 22px; cursor: pointer; background: none; border: none; padding: 0;
+            width: 32px; height: 24px; cursor: pointer; background: none; border: none; padding: 0;
         }
-        .menu-btn span {
-            display: block; height: 4px; width: 100%; border-radius: 2px;
+        .menu-btn span { display: block; height: 4px; width: 100%; border-radius: 2px; }
+        
+        /* ANIMAÇÃO RGB DO MENU */
+        .menu-btn span:nth-child(1) { animation: rgb1 3s infinite; }
+        .menu-btn span:nth-child(2) { animation: rgb2 3s infinite; }
+        .menu-btn span:nth-child(3) { animation: rgb3 3s infinite; }
+
+        @keyframes rgb1 { 0% { background: #ff0000; } 33% { background: #00ff00; } 66% { background: #0000ff; } 100% { background: #ff0000; } }
+        @keyframes rgb2 { 0% { background: #00ff00; } 33% { background: #0000ff; } 66% { background: #ff0000; } 100% { background: #00ff00; } }
+        @keyframes rgb3 { 0% { background: #0000ff; } 33% { background: #ff0000; } 66% { background: #00ff00; } 100% { background: #0000ff; } }
+
+        .logo-area { 
+            font-size: 20px; font-weight: 900; color: var(--accent); 
+            text-shadow: 0 0 15px var(--glow-color); letter-spacing: 1px;
         }
-        .menu-btn span:nth-child(1) { background: #ff0000; }
-        .menu-btn span:nth-child(2) { background: #00ff00; }
-        .menu-btn span:nth-child(3) { background: #0000ff; }
 
-        .logo-area { font-size: 20px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
-
-        /* Menu Lateral */
+        /* --- MENU LATERAL --- */
         #sidebar {
             position: fixed; top: 0; left: -280px; width: 260px; height: 100vh;
-            background: var(--bg-panel); border-right: 2px solid var(--border-color);
-            z-index: 100; transition: left 0.3s ease; padding: 20px;
+            background: var(--bg-panel); backdrop-filter: blur(20px);
+            border-right: 2px solid var(--border-color);
+            z-index: 100; transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 20px;
             display: flex; flex-direction: column; gap: 10px;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.5);
         }
         #sidebar.open { left: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .close-btn { font-size: 28px; color: var(--danger); cursor: pointer; background: none; border: none; }
+        .close-btn { font-size: 28px; color: var(--danger); cursor: pointer; background: none; border: none; transition: 0.2s; }
+        .close-btn:active { transform: scale(0.8); }
         
         .nav-item {
-            padding: 15px; border-radius: 10px; background: transparent;
+            padding: 15px; border-radius: 12px; background: transparent;
             border: 1px solid var(--border-color); color: var(--text-color);
             font-size: 16px; font-weight: bold; cursor: pointer; text-align: left;
-            transition: 0.2s; display: flex; align-items: center; gap: 10px;
+            transition: 0.3s; display: flex; align-items: center; gap: 10px;
         }
-        .nav-item:hover, .nav-item.active { background: rgba(77,255,158,0.1); border-color: var(--accent); color: var(--accent); }
+        .nav-item:hover, .nav-item.active { 
+            background: rgba(255,255,255,0.05); border-color: var(--accent); 
+            color: var(--accent); box-shadow: 0 0 15px var(--glow-color);
+            transform: translateX(5px);
+        }
         [data-theme="neon"] .nav-item:hover, [data-theme="neon"] .nav-item.active { background: rgba(255,0,255,0.1); }
 
-        /* Conteúdo Principal */
+        /* --- CONTEÚDO PRINCIPAL --- */
         .content-area {
             flex: 1; display: flex; flex-direction: column; align-items: center;
             padding: 20px; width: 100%; max-width: 800px; margin: 0 auto;
+            position: relative; z-index: 10;
         }
-        .tab-content { display: none; width: 100%; animation: fadeIn 0.3s; }
+        .tab-content { display: none; width: 100%; animation: slideUp 0.4s ease; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .panel { background: var(--bg-panel); padding: 25px; border-radius: 20px; border: 1px solid var(--border-color); margin-bottom: 20px; }
-        .panel h2 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin-top: 0; }
+        .panel { 
+            background: var(--bg-panel); backdrop-filter: blur(15px);
+            padding: 25px; border-radius: 24px; 
+            border: 1px solid var(--border-color); 
+            margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .panel h2 { 
+            color: var(--accent); border-bottom: 2px solid var(--border-color); 
+            padding-bottom: 10px; margin-top: 0; text-shadow: 0 0 10px var(--glow-color);
+        }
+        
         .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .form-group label { font-weight: bold; color: var(--accent); font-size: 14px; }
-        input[type="text"], textarea, select {
-            padding: 14px; border-radius: 10px; border: 2px solid var(--border-color); 
-            background: rgba(0,0,0,0.1); color: var(--text-color); font-size: 16px; outline: none; width: 100%;
+        
+        input[type="text"], input[type="password"], textarea, select {
+            padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); 
+            background: rgba(0,0,0,0.2); color: var(--text-color); font-size: 16px; 
+            outline: none; width: 100%; transition: 0.3s;
         }
-        [data-theme="light"] input, [data-theme="light"] textarea, [data-theme="light"] select { background: #fff; color: #000; }
-        input:focus, textarea:focus { border-color: var(--accent); }
-        .btn-primary { background: var(--accent); color: var(--bg-main); border: none; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: 900; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn-primary:active { transform: scale(0.98); }
+        [data-theme="light"] input { background: rgba(255,255,255,0.5); color: #000; }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--glow-color); }
+
+        .btn-primary { 
+            background: var(--accent); color: var(--bg-main); 
+            border: none; padding: 16px; border-radius: 12px; 
+            font-size: 16px; font-weight: 900; cursor: pointer; width: 100%; 
+            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-primary:active { transform: scale(0.96); }
+        .btn-primary:hover { box-shadow: 0 0 25px var(--glow-color); }
         .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* Regras */
         .rules-container ul { list-style: none; padding: 0; }
-        .rules-container li { margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent); }
-        [data-theme="light"] .rules-container li { background: rgba(0,0,0,0.05); }
+        .rules-container li { 
+            margin-bottom: 12px; background: rgba(255,255,255,0.03); 
+            padding: 15px; border-radius: 12px; 
+            border-left: 4px solid var(--accent); transition: 0.2s;
+        }
+        .rules-container li:hover { background: rgba(255,255,255,0.08); transform: scale(1.01); }
+        [data-theme="light"] .rules-container li { background: rgba(0,0,0,0.03); }
 
         /* Tema Switch e Tradutor */
         .theme-buttons, .lang-buttons { display: flex; gap: 10px; }
-        .theme-btn, .lang-btn { flex: 1; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; border: 2px solid var(--border-color); background: transparent; color: var(--text-color); }
-        .theme-btn.active, .lang-btn.active { border-color: var(--accent); color: var(--accent); }
+        .theme-btn, .lang-btn { 
+            flex: 1; padding: 12px; border-radius: 10px; cursor: pointer; 
+            font-weight: bold; border: 2px solid var(--border-color); 
+            background: transparent; color: var(--text-color); transition: 0.3s;
+        }
+        .theme-btn.active, .lang-btn.active { 
+            border-color: var(--accent); color: var(--accent); 
+            box-shadow: 0 0 15px var(--glow-color);
+        }
 
         /* Forms CC */
         .closed-box {
             text-align: center; padding: 40px 20px;
             background: rgba(255, 107, 107, 0.1);
             border: 2px dashed var(--danger);
-            border-radius: 15px; margin-top: 20px;
+            border-radius: 20px; margin-top: 20px;
+            animation: pulseDanger 2s infinite alternate;
         }
+        @keyframes pulseDanger { from { box-shadow: 0 0 10px rgba(255,107,107,0.2); } to { box-shadow: 0 0 30px rgba(255,107,107,0.6); } }
         .closed-box h3 { color: var(--danger); font-size: 24px; margin-bottom: 10px; }
         .closed-box p { color: var(--text-color); font-size: 16px; opacity: 0.8; }
 
         /* ADM */
         #admin-login-area { text-align: center; }
         #admin-success-area { text-align: center; display: none; }
-        .feedback-msg { margin-top: 10px; text-align: center; font-weight: bold; min-height: 20px; }
+        .feedback-msg { margin-top: 15px; text-align: center; font-weight: bold; min-height: 20px; }
 
         /* Overlay */
-        #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 90; display: none; }
+        #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 90; display: none; }
         #overlay.open { display: block; }
     </style>
 </head>
 <body data-theme="dark">
 
+    <!-- Fundo Animado -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    
+    <!-- Neve -->
     <div id="snow-container"></div>
+    
     <div id="overlay" onclick="toggleMenu()"></div>
 
     <!-- Sidebar -->
@@ -167,7 +241,7 @@
             <span></span><span></span><span></span>
         </button>
         <div class="logo-area">❄️ Stumble Ice</div>
-        <div style="width: 30px;"></div>
+        <div style="width: 32px;"></div>
     </div>
 
     <!-- Conteúdo -->
@@ -201,7 +275,7 @@
             <div class="panel" style="text-align: center;">
                 <h2 data-i18n="discord_title">Junte-se ao nosso Discord!</h2>
                 <p data-i18n="discord_desc">Clique no botão abaixo para copiar o link e entrar no servidor.</p>
-                <div style="background: #5865F2; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                <div style="background: #5865F2; border-radius: 15px; padding: 20px; margin: 20px 0; box-shadow: 0 10px 20px rgba(88,101,242,0.3);">
                     <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" style="width: 60px; margin-bottom: 10px;" alt="Discord">
                     <br>
                     <button class="btn-primary" onclick="copyLink()" style="background: #fff; color: #5865F2;" data-i18n="discord_btn">📋 Copiar Link do Discord</button>
@@ -264,7 +338,7 @@
                     </div>
                 </div>
 
-                <div class="credits" style="text-align:center; font-size:12px; margin-top:20px; color:var(--text-color); opacity:0.7;">
+                <div class="credits" style="text-align:center; font-size:12px; margin-top:30px; color:var(--text-color); opacity:0.5;">
                     Developed by: miranhaX_00
                 </div>
             </div>
@@ -322,7 +396,7 @@
             snowflake.classList.add('snowflake'); snowflake.innerHTML = '❄';
             snowflake.style.left = Math.random() * 100 + 'vw';
             snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-            snowflake.style.opacity = Math.random();
+            snowflake.style.opacity = Math.random() * 0.8 + 0.2;
             snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
             snowContainer.appendChild(snowflake);
             setTimeout(() => { snowflake.remove(); }, 5000);
