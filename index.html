@@ -15,7 +15,6 @@
             --glow-color: rgba(77, 255, 158, 0.4);
         }
 
-        /* --- TEMAS --- */
         [data-theme="light"] {
             --bg-main: #e0f7fa;
             --bg-panel: rgba(255, 255, 255, 0.85);
@@ -44,7 +43,6 @@
             overflow-x: hidden;
         }
 
-        /* --- FUNDO ANIMADO (BOLHAS) --- */
         .bg-blob {
             position: fixed; border-radius: 50%; filter: blur(80px);
             z-index: 0; opacity: 0.6; animation: float 10s infinite alternate ease-in-out;
@@ -59,7 +57,6 @@
             100% { transform: translate(50px, 50px) scale(1.1); }
         }
 
-        /* --- NEVE --- */
         .snowflake {
             position: fixed; top: -10px; color: #fff;
             font-family: Arial; text-shadow: 0 0 8px rgba(255,255,255,0.9);
@@ -69,7 +66,6 @@
         @keyframes fall { to { transform: translateY(105vh); } }
         [data-theme="light"] .snowflake, [data-theme="neon"] .snowflake { display: none; }
 
-        /* --- BARRA SUPERIOR --- */
         .top-bar {
             width: 100%; padding: 15px 20px; box-sizing: border-box;
             display: flex; justify-content: space-between; align-items: center;
@@ -84,7 +80,6 @@
         }
         .menu-btn span { display: block; height: 4px; width: 100%; border-radius: 2px; }
         
-        /* ANIMAÇÃO RGB DO MENU */
         .menu-btn span:nth-child(1) { animation: rgb1 3s infinite; }
         .menu-btn span:nth-child(2) { animation: rgb2 3s infinite; }
         .menu-btn span:nth-child(3) { animation: rgb3 3s infinite; }
@@ -98,7 +93,6 @@
             text-shadow: 0 0 15px var(--glow-color); letter-spacing: 1px;
         }
 
-        /* --- MENU LATERAL --- */
         #sidebar {
             position: fixed; top: 0; left: -280px; width: 260px; height: 100vh;
             background: var(--bg-panel); backdrop-filter: blur(20px);
@@ -125,7 +119,6 @@
         }
         [data-theme="neon"] .nav-item:hover, [data-theme="neon"] .nav-item.active { background: rgba(255,0,255,0.1); }
 
-        /* --- CONTEÚDO PRINCIPAL --- */
         .content-area {
             flex: 1; display: flex; flex-direction: column; align-items: center;
             padding: 20px; width: 100%; max-width: 800px; margin: 0 auto;
@@ -167,7 +160,6 @@
         .btn-primary:hover { box-shadow: 0 0 25px var(--glow-color); }
         .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Regras */
         .rules-container ul { list-style: none; padding: 0; }
         .rules-container li { 
             margin-bottom: 12px; background: rgba(255,255,255,0.03); 
@@ -177,7 +169,6 @@
         .rules-container li:hover { background: rgba(255,255,255,0.08); transform: scale(1.01); }
         [data-theme="light"] .rules-container li { background: rgba(0,0,0,0.03); }
 
-        /* Tema Switch e Tradutor */
         .theme-buttons, .lang-buttons { display: flex; gap: 10px; }
         .theme-btn, .lang-btn { 
             flex: 1; padding: 12px; border-radius: 10px; cursor: pointer; 
@@ -189,7 +180,6 @@
             box-shadow: 0 0 15px var(--glow-color);
         }
 
-        /* Forms CC */
         .closed-box {
             text-align: center; padding: 40px 20px;
             background: rgba(255, 107, 107, 0.1);
@@ -201,12 +191,10 @@
         .closed-box h3 { color: var(--danger); font-size: 24px; margin-bottom: 10px; }
         .closed-box p { color: var(--text-color); font-size: 16px; opacity: 0.8; }
 
-        /* ADM */
         #admin-login-area { text-align: center; }
         #admin-success-area { text-align: center; display: none; }
         .feedback-msg { margin-top: 15px; text-align: center; font-weight: bold; min-height: 20px; }
 
-        /* Opções de Envio */
         .send-options { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
         .send-btn { 
             padding: 10px 20px; border-radius: 10px; border: 2px solid var(--border-color);
@@ -216,29 +204,24 @@
         .send-btn:hover { border-color: var(--accent); color: var(--accent); }
         .send-btn.gear { font-size: 20px; padding: 8px 15px; }
 
-        /* Editor de Emojis */
         #emoji-editor { display: none; margin-top: 20px; text-align: left; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
         #emoji-editor .form-group { margin-bottom: 10px; }
         #emoji-editor input { padding: 10px; font-size: 14px; }
         .editor-actions { display: flex; gap: 10px; margin-top: 15px; }
 
-        /* Overlay */
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 90; display: none; }
         #overlay.open { display: block; }
     </style>
 </head>
 <body data-theme="dark">
 
-    <!-- Fundo Animado -->
     <div class="bg-blob blob-1"></div>
     <div class="bg-blob blob-2"></div>
     
-    <!-- Neve -->
     <div id="snow-container"></div>
     
     <div id="overlay" onclick="toggleMenu()"></div>
 
-    <!-- Sidebar -->
     <div id="sidebar">
         <div class="sidebar-header">
             <span class="logo-area">❄️ Stumble Ice</span>
@@ -251,7 +234,6 @@
         <button class="nav-item" onclick="openTab('config', this)" data-i18n="menu_config">⚙️ Configurações</button>
     </div>
 
-    <!-- Barra Superior -->
     <div class="top-bar">
         <button class="menu-btn" onclick="toggleMenu()">
             <span></span><span></span><span></span>
@@ -260,10 +242,8 @@
         <div style="width: 32px;"></div>
     </div>
 
-    <!-- Conteúdo -->
     <div class="content-area">
         
-        <!-- ABA: REGRAS -->
         <div id="tab-regras" class="tab-content active">
             <div class="panel rules-container">
                 <h1 style="text-align:center; color:var(--accent);" data-i18n="rules_title">❄️ Regras do Stumble Ice</h1>
@@ -286,7 +266,6 @@
             </div>
         </div>
 
-        <!-- ABA: DISCORD -->
         <div id="tab-discord" class="tab-content">
             <div class="panel" style="text-align: center;">
                 <h2 data-i18n="discord_title">Junte-se ao nosso Discord!</h2>
@@ -299,7 +278,6 @@
             </div>
         </div>
 
-        <!-- ABA: FORMS CC -->
         <div id="tab-formscc" class="tab-content">
             <div class="panel">
                 <h2 data-i18n="forms_title">Formulário de Criador de Conteúdo</h2>
@@ -310,7 +288,6 @@
             </div>
         </div>
 
-        <!-- ABA: ADM -->
         <div id="tab-adm" class="tab-content">
             <div class="panel" style="text-align: center;">
                 <h2 data-i18n="adm_title">Painel ADM</h2>
@@ -328,13 +305,11 @@
                     <h3 style="color: var(--accent);" data-i18n="adm_success">✅ Acesso Concedido!</h3>
                     <p data-i18n="adm_success_desc">Escolha como enviar a mensagem do torneio:</p>
                     
-                    <!-- Opções de Envio -->
                     <div class="send-options" id="send-options-area">
                         <button class="send-btn" onclick="sendTournament('padrao')">Padrão</button>
                         <button class="send-btn gear" onclick="toggleEmojiEditor()">⚙️</button>
                     </div>
 
-                    <!-- Editor de Emojis -->
                     <div id="emoji-editor">
                         <h4 style="color: var(--accent); margin-top: 0;">Editar Emojis (IDs)</h4>
                         
@@ -378,7 +353,6 @@
             </div>
         </div>
 
-        <!-- ABA: CONFIGURAÇÕES -->
         <div id="tab-config" class="tab-content">
             <div class="panel">
                 <h2 data-i18n="config_title">Configurações</h2>
@@ -409,13 +383,11 @@
     </div>
 
     <script>
-        // --- CONFIGURAÇÕES GLOBAIS ---
         const DISCORD_LINK = "https://discord.gg/ZtDZVQd7y";
         const WEBHOOK_ADM = "https://discord.com/api/webhooks/1570491955220193370/uiJffLIeprEamie6wwlHChHHwCZeuv1I-GvyVe_SrwQXK1auQUmc_pPjrydGjTa98Cf0";
         const ADMIN_PASSWORD = "secret01ice02";
         let currentLang = 'pt';
 
-        // --- SISTEMA DE TRADUÇÃO ---
         const translations = {
             pt: {
                 menu_rules: "📜 Regras", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_adm: "👑 ADM", menu_config: "⚙️ Configurações",
@@ -444,16 +416,16 @@
         function setLang(lang) {
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) event.target.classList.add('active');
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) el.innerText = translations[lang][key];
             });
         }
 
-        // --- SISTEMA DE NEVE ---
         function createSnow() {
             const snowContainer = document.getElementById('snow-container');
+            if (!snowContainer) return;
             const snowflake = document.createElement('div');
             snowflake.classList.add('snowflake'); snowflake.innerHTML = '❄';
             snowflake.style.left = Math.random() * 100 + 'vw';
@@ -465,7 +437,6 @@
         }
         setInterval(createSnow, 300);
 
-        // --- NAVEGAÇÃO E MENU ---
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('open');
@@ -479,25 +450,21 @@
             toggleMenu();
         }
 
-        // --- TEMA ---
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) event.target.classList.add('active');
         }
 
-        // --- DISCORD COPY ---
         function copyLink() {
             navigator.clipboard.writeText(DISCORD_LINK).then(() => {
                 alert(currentLang === 'pt' ? "Link do Discord copiado!" : "Discord link copied!");
             });
         }
 
-        // --- LÓGICA DO ADM ---
-        async function loginAdmin() {
+        function loginAdmin() {
             const password = document.getElementById('admPassword').value;
             const feedback = document.getElementById('admFeedback');
-            const btn = document.getElementById('btnAdmLogin');
 
             if (password !== ADMIN_PASSWORD) {
                 feedback.innerText = currentLang === 'pt' ? "❌ Senha incorreta!" : "❌ Incorrect password!";
@@ -508,6 +475,14 @@
             document.getElementById('admin-login-area').style.display = 'none';
             document.getElementById('admin-success-area').style.display = 'block';
             document.getElementById('admPassword').value = '';
+            feedback.innerText = "";
+        }
+
+        function logoutAdmin() {
+            document.getElementById('admin-login-area').style.display = 'block';
+            document.getElementById('admin-success-area').style.display = 'none';
+            document.getElementById('emoji-editor').style.display = 'none';
+            document.getElementById('admFeedback').innerText = '';
         }
 
         function toggleEmojiEditor() {
@@ -515,7 +490,7 @@
             editor.style.display = editor.style.display === 'block' ? 'none' : 'block';
         }
 
-        async function sendTournament(mode) {
+        async function sendMessageToDiscord(mode) {
             const feedback = document.getElementById('admFeedback');
             const btns = document.querySelectorAll('.send-btn');
             
@@ -523,7 +498,6 @@
             feedback.innerText = currentLang === 'pt' ? "Enviando torneio..." : "Sending tournament...";
             feedback.style.color = "#ffd166";
 
-            // Pega os valores do editor
             const ice = document.getElementById('emoji-ice').value;
             const map = document.getElementById('emoji-map').value;
             const bfhw = document.getElementById('emoji-bfhw').value;
@@ -532,15 +506,7 @@
             const choro = document.getElementById('emoji-choro').value;
             const gems = document.getElementById('emoji-gems').value;
 
-            // Monta a mensagem com os emojis escolhidos
-            const message = `# Torneio <:StumbleIce:${ice}> 
-
-\`\`\`Horario: 16:00\`\`\`
-***Mapa: <:blockdash:${map}> 
-<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> ***
-***Emotes: <:soco:${soco}> <:FirePunch:${fire}> <:chorando:${choro}> 
-<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}>***
-***Recompensa: 500 <:gems2:${gems}> ***`;
+            const message = `# Torneio <:StumbleIce:${ice}> \n\n\`\`\`Horario: 16:00\`\`\`\n***Mapa: <:blockdash:${map}> \n<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> ***\n***Emotes: <:soco:${soco}> <:FirePunch:${fire}> <:chorando:${choro}> \n<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}>***\n***Recompensa: 500 <:gems2:${gems}> ***`;
 
             try {
                 const response = await fetch(WEBHOOK_ADM, {
@@ -553,5 +519,31 @@
                     feedback.innerText = currentLang === 'pt' ? "✅ Enviado com sucesso!" : "✅ Sent successfully!";
                     feedback.style.color = "var(--accent)";
                     
-                    // Se o modo for padrão, esconde o botão "Padrão"
-                    if (mode
+                    // AQUI ESTÁ A LÓGICA QUE VOCÊ PEDIU:
+                    // Se for padrão, some com os botões "Padrão" e "⚙️" e fecha o editor
+                    if (mode === 'padrao' || mode === 'custom') {
+                        document.getElementById('send-options-area').style.display = 'none';
+                        document.getElementById('emoji-editor').style.display = 'none';
+                    }
+                } else {
+                    feedback.innerText = "❌ Erro ao enviar. Verifique o Webhook.";
+                    feedback.style.color = "var(--danger)";
+                }
+            } catch (error) {
+                feedback.innerText = "❌ Erro de conexão.";
+                feedback.style.color = "var(--danger)";
+            } finally {
+                btns.forEach(b => b.disabled = false);
+            }
+        }
+
+        function sendTournament(mode) {
+            sendMessageToDiscord(mode);
+        }
+
+        function saveAndSendCustom() {
+            sendMessageToDiscord('custom');
+        }
+    </script>
+</body>
+</html>
