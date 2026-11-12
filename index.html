@@ -142,7 +142,7 @@
         .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .form-group label { font-weight: bold; color: var(--accent); font-size: 14px; }
         
-        input[type="text"], input[type="password"], textarea, select {
+        input[type="text"], input[type="password"], input[type="file"], textarea, select {
             padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); 
             background: rgba(0,0,0,0.2); color: var(--text-color); font-size: 16px; 
             outline: none; width: 100%; transition: 0.3s;
@@ -311,7 +311,7 @@
                     </div>
 
                     <div id="emoji-editor">
-                        <h4 style="color: var(--accent); margin-top: 0;">Editar Emojis (IDs)</h4>
+                        <h4 style="color: var(--accent); margin-top: 0;">Editar Emojis e Imagem</h4>
                         
                         <div class="form-group">
                             <label>StumbleIce:</label>
@@ -340,6 +340,12 @@
                         <div class="form-group">
                             <label>Gems2 (Recompensa):</label>
                             <input type="text" id="emoji-gems" value="1570485055187456072">
+                        </div>
+
+                        <!-- NOVO CAMPO DE UPLOAD DE IMAGEM -->
+                        <div class="form-group" style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                            <label>🖼️ Anexar Imagem (Opcional):</label>
+                            <input type="file" id="image-upload" accept="image/*" style="padding: 10px; cursor: pointer;">
                         </div>
 
                         <div class="editor-actions">
@@ -483,6 +489,7 @@
             document.getElementById('admin-success-area').style.display = 'none';
             document.getElementById('emoji-editor').style.display = 'none';
             document.getElementById('admFeedback').innerText = '';
+            document.getElementById('image-upload').value = '';
         }
 
         function toggleEmojiEditor() {
@@ -505,25 +512,40 @@
             const fire = document.getElementById('emoji-fire').value;
             const choro = document.getElementById('emoji-choro').value;
             const gems = document.getElementById('emoji-gems').value;
+            const imageFile = document.getElementById('image-upload').files[0];
 
             const message = `# Torneio <:StumbleIce:${ice}> \n\n\`\`\`Horario: 16:00\`\`\`\n***Mapa: <:blockdash:${map}> \n<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> ***\n***Emotes: <:soco:${soco}> <:FirePunch:${fire}> <:chorando:${choro}> \n<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}>***\n***Recompensa: 500 <:gems2:${gems}> ***`;
 
             try {
-                const response = await fetch(WEBHOOK_ADM, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ content: message })
-                });
+                let response;
+
+                // Verifica se tem imagem anexada
+                if (imageFile) {
+                    const formData = new FormData();
+                    formData.append('file', imageFile);
+                    formData.append('payload_json', JSON.stringify({ content: message }));
+
+                    response = await fetch(WEBHOOK_ADM, {
+                        method: "POST",
+                        body: formData
+                    });
+                } else {
+                    // Envia apenas o texto
+                    response = await fetch(WEBHOOK_ADM, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ content: message })
+                    });
+                }
 
                 if (response.ok) {
                     feedback.innerText = currentLang === 'pt' ? "✅ Enviado com sucesso!" : "✅ Sent successfully!";
                     feedback.style.color = "var(--accent)";
                     
-                    // AQUI ESTÁ A LÓGICA QUE VOCÊ PEDIU:
-                    // Se for padrão, some com os botões "Padrão" e "⚙️" e fecha o editor
                     if (mode === 'padrao' || mode === 'custom') {
                         document.getElementById('send-options-area').style.display = 'none';
                         document.getElementById('emoji-editor').style.display = 'none';
+                        document.getElementById('image-upload').value = '';
                     }
                 } else {
                     feedback.innerText = "❌ Erro ao enviar. Verifique o Webhook.";
@@ -546,4 +568,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
