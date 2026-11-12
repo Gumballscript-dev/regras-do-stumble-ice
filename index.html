@@ -13,66 +13,142 @@
             --border-color: #1a3c5e;
             --danger: #ff6b6b;
         }
-        [data-theme="light"] { --bg-main: #e0f7fa; --bg-panel: rgba(255, 255, 255, 0.95); --text-color: #003333; --accent: #00796b; --border-color: #b2ebf2; }
-        [data-theme="neon"] { --bg-main: #000000; --bg-panel: rgba(10, 10, 10, 0.95); --text-color: #00ffcc; --accent: #ff00ff; --border-color: #ff00ff; }
+
+        /* --- TEMAS --- */
+        [data-theme="light"] {
+            --bg-main: #e0f7fa;
+            --bg-panel: rgba(255, 255, 255, 0.95);
+            --text-color: #003333;
+            --accent: #00796b;
+            --border-color: #b2ebf2;
+        }
+
+        [data-theme="neon"] {
+            --bg-main: #000000;
+            --bg-panel: rgba(10, 10, 10, 0.95);
+            --text-color: #00ffcc;
+            --accent: #ff00ff;
+            --border-color: #ff00ff;
+        }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-main); color: var(--text-color); margin: 0; min-height: 100vh; display: flex; flex-direction: column; transition: background 0.3s, color 0.3s; }
-        .snowflake { position: fixed; top: -10px; color: #fff; font-family: Arial; text-shadow: 0 0 5px rgba(255,255,255,0.8); user-select: none; pointer-events: none; z-index: 1; animation: fall linear forwards; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-color);
+            margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Neve (só no tema escuro) */
+        .snowflake {
+            position: fixed; top: -10px; color: #fff;
+            font-family: Arial; text-shadow: 0 0 5px rgba(255,255,255,0.8);
+            user-select: none; pointer-events: none; z-index: 1;
+            animation: fall linear forwards;
+        }
         @keyframes fall { to { transform: translateY(105vh); } }
         [data-theme="light"] .snowflake, [data-theme="neon"] .snowflake { display: none; }
-        .top-bar { width: 100%; padding: 15px 20px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; background: var(--bg-panel); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 50; }
-        .menu-btn { display: flex; flex-direction: column; justify-content: space-between; width: 30px; height: 22px; cursor: pointer; background: none; border: none; padding: 0; }
-        .menu-btn span { display: block; height: 4px; width: 100%; border-radius: 2px; }
-        .menu-btn span:nth-child(1) { background: #ff0000; } .menu-btn span:nth-child(2) { background: #00ff00; } .menu-btn span:nth-child(3) { background: #0000ff; }
+
+        /* Barra Superior e Menu Hambúrguer RGB */
+        .top-bar {
+            width: 100%; padding: 15px 20px; box-sizing: border-box;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--bg-panel); border-bottom: 1px solid var(--border-color);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .menu-btn {
+            display: flex; flex-direction: column; justify-content: space-between;
+            width: 30px; height: 22px; cursor: pointer; background: none; border: none; padding: 0;
+        }
+        .menu-btn span {
+            display: block; height: 4px; width: 100%; border-radius: 2px;
+        }
+        .menu-btn span:nth-child(1) { background: #ff0000; }
+        .menu-btn span:nth-child(2) { background: #00ff00; }
+        .menu-btn span:nth-child(3) { background: #0000ff; }
+
         .logo-area { font-size: 20px; font-weight: 900; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
-        #sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--bg-panel); border-right: 2px solid var(--border-color); z-index: 100; transition: left 0.3s ease; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+
+        /* Menu Lateral */
+        #sidebar {
+            position: fixed; top: 0; left: -280px; width: 260px; height: 100vh;
+            background: var(--bg-panel); border-right: 2px solid var(--border-color);
+            z-index: 100; transition: left 0.3s ease; padding: 20px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
         #sidebar.open { left: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .close-btn { font-size: 28px; color: var(--danger); cursor: pointer; background: none; border: none; }
-        .nav-item { padding: 15px; border-radius: 10px; background: transparent; border: 1px solid var(--border-color); color: var(--text-color); font-size: 16px; font-weight: bold; cursor: pointer; text-align: left; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        
+        .nav-item {
+            padding: 15px; border-radius: 10px; background: transparent;
+            border: 1px solid var(--border-color); color: var(--text-color);
+            font-size: 16px; font-weight: bold; cursor: pointer; text-align: left;
+            transition: 0.2s; display: flex; align-items: center; gap: 10px;
+        }
         .nav-item:hover, .nav-item.active { background: rgba(77,255,158,0.1); border-color: var(--accent); color: var(--accent); }
         [data-theme="neon"] .nav-item:hover, [data-theme="neon"] .nav-item.active { background: rgba(255,0,255,0.1); }
-        .content-area { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; width: 100%; max-width: 800px; margin: 0 auto; }
+
+        /* Conteúdo Principal */
+        .content-area {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            padding: 20px; width: 100%; max-width: 800px; margin: 0 auto;
+        }
         .tab-content { display: none; width: 100%; animation: fadeIn 0.3s; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         .panel { background: var(--bg-panel); padding: 25px; border-radius: 20px; border: 1px solid var(--border-color); margin-bottom: 20px; }
         .panel h2 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin-top: 0; }
         .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .form-group label { font-weight: bold; color: var(--accent); font-size: 14px; }
-        input[type="text"] { padding: 14px; border-radius: 10px; border: 2px solid var(--border-color); background: rgba(0,0,0,0.1); color: var(--text-color); font-size: 16px; outline: none; width: 100%; }
-        [data-theme="light"] input { background: #fff; color: #000; }
+        input[type="text"], textarea, select {
+            padding: 14px; border-radius: 10px; border: 2px solid var(--border-color); 
+            background: rgba(0,0,0,0.1); color: var(--text-color); font-size: 16px; outline: none; width: 100%;
+        }
+        [data-theme="light"] input, [data-theme="light"] textarea, [data-theme="light"] select { background: #fff; color: #000; }
+        input:focus, textarea:focus { border-color: var(--accent); }
         .btn-primary { background: var(--accent); color: var(--bg-main); border: none; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: 900; cursor: pointer; width: 100%; transition: 0.2s; }
         .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:disabled { opacity: 0.5; }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Regras */
         .rules-container ul { list-style: none; padding: 0; }
         .rules-container li { margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent); }
+        [data-theme="light"] .rules-container li { background: rgba(0,0,0,0.05); }
+
+        /* Tema Switch e Tradutor */
         .theme-buttons, .lang-buttons { display: flex; gap: 10px; }
         .theme-btn, .lang-btn { flex: 1; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; border: 2px solid var(--border-color); background: transparent; color: var(--text-color); }
         .theme-btn.active, .lang-btn.active { border-color: var(--accent); color: var(--accent); }
-        .closed-box { text-align: center; padding: 40px 20px; background: rgba(255, 107, 107, 0.1); border: 2px dashed var(--danger); border-radius: 15px; margin-top: 20px; }
+
+        /* Forms CC */
+        .closed-box {
+            text-align: center; padding: 40px 20px;
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px dashed var(--danger);
+            border-radius: 15px; margin-top: 20px;
+        }
         .closed-box h3 { color: var(--danger); font-size: 24px; margin-bottom: 10px; }
         .closed-box p { color: var(--text-color); font-size: 16px; opacity: 0.8; }
+
+        /* ADM */
+        #admin-login-area { text-align: center; }
+        #admin-success-area { text-align: center; display: none; }
+        .feedback-msg { margin-top: 10px; text-align: center; font-weight: bold; min-height: 20px; }
+
+        /* Overlay */
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 90; display: none; }
         #overlay.open { display: block; }
-
-        /* ESTILOS DA CALL */
-        .call-room-btn { background: #081824; border: 2px solid var(--border-color); color: var(--text-color); padding: 20px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; text-align: left; transition: 0.2s; }
-        .call-room-btn:hover { border-color: var(--accent); background: rgba(77,255,158,0.1); }
-        #call-active-area { display: none; text-align: center; }
-        #call-active-area.active { display: block; }
-        .call-controls { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
-        .call-ctrl-btn { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); background: #081824; color: white; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .call-ctrl-btn.active { border-color: var(--accent); background: rgba(77,255,158,0.2); }
-        .call-ctrl-btn.end { border-color: var(--danger); background: rgba(255,107,107,0.2); }
-        #screen-video { width: 100%; max-width: 100%; border-radius: 10px; margin-top: 15px; background: #000; min-height: 200px; display: none; }
-        #screen-video.active { display: block; }
     </style>
 </head>
 <body data-theme="dark">
+
     <div id="snow-container"></div>
     <div id="overlay" onclick="toggleMenu()"></div>
 
+    <!-- Sidebar -->
     <div id="sidebar">
         <div class="sidebar-header">
             <span class="logo-area">❄️ Stumble Ice</span>
@@ -80,29 +156,43 @@
         </div>
         <button class="nav-item active" onclick="openTab('regras', this)" data-i18n="menu_rules">📜 Regras</button>
         <button class="nav-item" onclick="openTab('discord', this)" data-i18n="menu_discord">💬 Discord</button>
-        <button class="nav-item" onclick="openTab('call', this)" data-i18n="menu_call">🎙️ Call</button>
         <button class="nav-item" onclick="openTab('formscc', this)" data-i18n="menu_forms">📝 Forms CC</button>
+        <button class="nav-item" onclick="openTab('adm', this)" data-i18n="menu_adm">👑 ADM</button>
         <button class="nav-item" onclick="openTab('config', this)" data-i18n="menu_config">⚙️ Configurações</button>
     </div>
 
+    <!-- Barra Superior -->
     <div class="top-bar">
-        <button class="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+        <button class="menu-btn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
         <div class="logo-area">❄️ Stumble Ice</div>
         <div style="width: 30px;"></div>
     </div>
 
+    <!-- Conteúdo -->
     <div class="content-area">
+        
         <!-- ABA: REGRAS -->
         <div id="tab-regras" class="tab-content active">
             <div class="panel rules-container">
                 <h1 style="text-align:center; color:var(--accent);" data-i18n="rules_title">❄️ Regras do Stumble Ice</h1>
                 <p data-i18n="rules_welcome">Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.</p>
                 <h2 data-i18n="rules_h1">1. Respeito</h2>
-                <ul><li data-i18n="rules_li1">🚫 Zero xingamento ou preconceito.</li><li data-i18n="rules_li2">✅ Brincadeiras liberadas, sem passar do limite.</li></ul>
+                <ul>
+                    <li data-i18n="rules_li1">🚫 Zero xingamento ou preconceito.</li>
+                    <li data-i18n="rules_li2">✅ Brincadeiras liberadas, sem passar do limite.</li>
+                </ul>
                 <h2 data-i18n="rules_h2">2. Chat Limpo</h2>
-                <ul><li data-i18n="rules_li3">🚫 Sem spam, flood ou divulgação de outros servidores.</li><li data-i18n="rules_li4">🚫 Sem conteúdo NSFW.</li></ul>
+                <ul>
+                    <li data-i18n="rules_li3">🚫 Sem spam, flood ou divulgação de outros servidores.</li>
+                    <li data-i18n="rules_li4">🚫 Sem conteúdo NSFW.</li>
+                </ul>
                 <h2 data-i18n="rules_h3">3. Fair Play</h2>
-                <ul><li data-i18n="rules_li5">🚫 Proibido cheats, hacks ou exploits.</li><li data-i18n="rules_li6">✅ Respeite os resultados.</li></ul>
+                <ul>
+                    <li data-i18n="rules_li5">🚫 Proibido cheats, hacks ou exploits.</li>
+                    <li data-i18n="rules_li6">✅ Respeite os resultados.</li>
+                </ul>
             </div>
         </div>
 
@@ -112,37 +202,9 @@
                 <h2 data-i18n="discord_title">Junte-se ao nosso Discord!</h2>
                 <p data-i18n="discord_desc">Clique no botão abaixo para copiar o link e entrar no servidor.</p>
                 <div style="background: #5865F2; border-radius: 10px; padding: 20px; margin: 20px 0;">
-                    <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" style="width: 60px; margin-bottom: 10px;" alt="Discord"><br>
+                    <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" style="width: 60px; margin-bottom: 10px;" alt="Discord">
+                    <br>
                     <button class="btn-primary" onclick="copyLink()" style="background: #fff; color: #5865F2;" data-i18n="discord_btn">📋 Copiar Link do Discord</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ABA: CALL -->
-        <div id="tab-call" class="tab-content">
-            <div class="panel">
-                <h2 data-i18n="call_title">Canais de Call</h2>
-                
-                <!-- Lista de Salas -->
-                <div id="call-room-list">
-                    <button class="call-room-btn" onclick="joinCall('transmissao-1')">📡 Call Transmissão 1</button>
-                    <button class="call-room-btn" onclick="joinCall('transmissao-2')">📡 Call Transmissão 2</button>
-                    <button class="call-room-btn" onclick="joinCall('transmissao-3')">📡 Call Transmissão 3</button>
-                </div>
-
-                <!-- Área Ativa (após entrar) -->
-                <div id="call-active-area">
-                    <h3 id="current-room-name" style="color: var(--accent);"></h3>
-                    <p data-i18n="call_connected">Você está conectado. Ative o microfone ou compartilhe a tela.</p>
-                    
-                    <video id="screen-video" autoplay playsinline muted></video>
-
-                    <div class="call-controls">
-                        <button class="call-ctrl-btn" id="btn-mic" onclick="toggleMic()" title="Silenciar/Ativar Microfone">🎤</button>
-                        <button class="call-ctrl-btn" id="btn-screen" onclick="toggleScreen()" title="Transmitir Tela">🖥️</button>
-                        <button class="call-ctrl-btn end" onclick="leaveCall()" title="Sair da Call">📞</button>
-                    </div>
-                    <p style="font-size: 12px; opacity: 0.6; margin-top: 15px;" data-i18n="call_note">Nota: A conexão com outros jogadores requer um servidor de sinalização ativo.</p>
                 </div>
             </div>
         </div>
@@ -158,10 +220,33 @@
             </div>
         </div>
 
+        <!-- ABA: ADM -->
+        <div id="tab-adm" class="tab-content">
+            <div class="panel" style="text-align: center;">
+                <h2 data-i18n="adm_title">Painel ADM</h2>
+                
+                <div id="admin-login-area">
+                    <div class="form-group">
+                        <label data-i18n="adm_label">Login Admin:</label>
+                        <input type="password" id="admPassword" placeholder="Digite a senha...">
+                    </div>
+                    <button class="btn-primary" id="btnAdmLogin" onclick="loginAdmin()" data-i18n="adm_connect">Conectar</button>
+                    <div id="admFeedback" class="feedback-msg"></div>
+                </div>
+
+                <div id="admin-success-area">
+                    <h3 style="color: var(--accent);" data-i18n="adm_success">✅ Acesso Concedido!</h3>
+                    <p data-i18n="adm_success_desc">A mensagem do torneio foi enviada para o Discord.</p>
+                    <button class="btn-primary" onclick="logoutAdmin()" style="background: var(--danger); color: white; margin-top: 20px;" data-i18n="adm_logout">Sair</button>
+                </div>
+            </div>
+        </div>
+
         <!-- ABA: CONFIGURAÇÕES -->
         <div id="tab-config" class="tab-content">
             <div class="panel">
                 <h2 data-i18n="config_title">Configurações</h2>
+                
                 <div class="form-group">
                     <label data-i18n="config_theme">Mudar Tema:</label>
                     <div class="theme-buttons">
@@ -170,6 +255,7 @@
                         <button class="theme-btn" onclick="setTheme('neon')" data-i18n="theme_neon">Neon</button>
                     </div>
                 </div>
+
                 <div class="form-group" style="margin-top: 20px;">
                     <label data-i18n="config_lang">Tradutor:</label>
                     <div class="lang-buttons">
@@ -177,41 +263,44 @@
                         <button class="lang-btn" onclick="setLang('en')" data-i18n="lang_en">Inglês</button>
                     </div>
                 </div>
-                <div class="credits" style="text-align:center; font-size:12px; margin-top:20px; color:var(--text-color); opacity:0.7;">Developed by: miranhaX_00</div>
+
+                <div class="credits" style="text-align:center; font-size:12px; margin-top:20px; color:var(--text-color); opacity:0.7;">
+                    Developed by: miranhaX_00
+                </div>
             </div>
         </div>
+
     </div>
 
     <script>
+        // --- CONFIGURAÇÕES GLOBAIS ---
         const DISCORD_LINK = "https://discord.gg/ZtDZVQd7y";
+        const WEBHOOK_ADM = "https://discord.com/api/webhooks/1570491955220193370/uiJffLIeprEamie6wwlHChHHwCZeuv1I-GvyVe_SrwQXK1auQUmc_pPjrydGjTa98Cf0";
+        const ADMIN_PASSWORD = "secret01ice02";
         let currentLang = 'pt';
-        let currentCallRoom = null;
-        let localStream = null;
-        let screenStream = null;
-        let isMicOn = false;
-        let isScreenOn = false;
 
+        // --- SISTEMA DE TRADUÇÃO ---
         const translations = {
             pt: {
-                menu_rules: "📜 Regras", menu_discord: "💬 Discord", menu_call: "🎙️ Call", menu_forms: "📝 Forms CC", menu_config: "⚙️ Configurações",
+                menu_rules: "📜 Regras", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_adm: "👑 ADM", menu_config: "⚙️ Configurações",
                 rules_title: "❄️ Regras do Stumble Ice", rules_welcome: "Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.",
                 rules_h1: "1. Respeito", rules_li1: "🚫 Zero xingamento ou preconceito.", rules_li2: "✅ Brincadeiras liberadas, sem passar do limite.",
                 rules_h2: "2. Chat Limpo", rules_li3: "🚫 Sem spam, flood ou divulgação de outros servidores.", rules_li4: "🚫 Sem conteúdo NSFW.",
                 rules_h3: "3. Fair Play", rules_li5: "🚫 Proibido cheats, hacks ou exploits.", rules_li6: "✅ Respeite os resultados.",
                 discord_title: "Junte-se ao nosso Discord!", discord_desc: "Clique no botão abaixo para copiar o link e entrar no servidor.", discord_btn: "📋 Copiar Link do Discord",
-                call_title: "Canais de Call", call_connected: "Você está conectado. Ative o microfone ou compartilhe a tela.", call_note: "Nota: A conexão com outros jogadores requer um servidor de sinalização ativo.",
                 forms_title: "Formulário de Criador de Conteúdo", forms_closed_title: "🚫 Vagas Fechadas!", forms_closed_desc: "No momento, não estamos aceitando novos influenciadores. Fique de olho no nosso Discord para futuras oportunidades!",
+                adm_title: "Painel ADM", adm_label: "Login Admin:", adm_connect: "Conectar", adm_success: "✅ Acesso Concedido!", adm_success_desc: "A mensagem do torneio foi enviada para o Discord.", adm_logout: "Sair",
                 config_title: "Configurações", config_theme: "Mudar Tema:", theme_dark: "Escuro", theme_light: "Branco", theme_neon: "Neon", config_lang: "Tradutor:", lang_pt: "Brasil", lang_en: "Inglês"
             },
             en: {
-                menu_rules: "📜 Rules", menu_discord: "💬 Discord", menu_call: "🎙️ Call", menu_forms: "📝 Forms CC", menu_config: "⚙️ Settings",
+                menu_rules: "📜 Rules", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_adm: "👑 ADM", menu_config: "⚙️ Settings",
                 rules_title: "❄️ Stumble Ice Rules", rules_welcome: "Welcome to the coolest server! By entering, you agree to the rules below.",
                 rules_h1: "1. Respect", rules_li1: "🚫 No swearing or prejudice.", rules_li2: "✅ Jokes allowed, don't cross the line.",
                 rules_h2: "2. Clean Chat", rules_li3: "🚫 No spam, flood, or advertising other servers.", rules_li4: "🚫 No NSFW content.",
                 rules_h3: "3. Fair Play", rules_li5: "🚫 No cheats, hacks, or exploits.", rules_li6: "✅ Respect the results.",
                 discord_title: "Join our Discord!", discord_desc: "Click the button below to copy the link and join the server.", discord_btn: "📋 Copy Discord Link",
-                call_title: "Call Channels", call_connected: "You are connected. Turn on the mic or share your screen.", call_note: "Note: Connecting with other players requires an active signaling server.",
                 forms_title: "Content Creator Form", forms_closed_title: "🚫 Applications Closed!", forms_closed_desc: "We are currently not accepting new influencers. Keep an eye on our Discord for future opportunities!",
+                adm_title: "ADM Panel", adm_label: "Admin Login:", adm_connect: "Connect", adm_success: "✅ Access Granted!", adm_success_desc: "The tournament message was sent to Discord.", adm_logout: "Logout",
                 config_title: "Settings", config_theme: "Change Theme:", theme_dark: "Dark", theme_light: "Light", theme_neon: "Neon", config_lang: "Translator:", lang_pt: "Brazil", lang_en: "English"
             }
         };
@@ -226,6 +315,7 @@
             });
         }
 
+        // --- SISTEMA DE NEVE ---
         function createSnow() {
             const snowContainer = document.getElementById('snow-container');
             const snowflake = document.createElement('div');
@@ -239,6 +329,7 @@
         }
         setInterval(createSnow, 300);
 
+        // --- NAVEGAÇÃO E MENU ---
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('open');
@@ -252,99 +343,72 @@
             toggleMenu();
         }
 
+        // --- TEMA ---
         function setTheme(theme) {
             document.body.setAttribute('data-theme', theme);
             document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
         }
 
+        // --- DISCORD COPY ---
         function copyLink() {
-            navigator.clipboard.writeText(DISCORD_LINK).then(() => alert(currentLang === 'pt' ? "Link do Discord copiado!" : "Discord link copied!"));
+            navigator.clipboard.writeText(DISCORD_LINK).then(() => {
+                alert(currentLang === 'pt' ? "Link do Discord copiado!" : "Discord link copied!");
+            });
         }
 
-        // --- LÓGICA DA CALL ---
-        async function joinCall(roomId) {
-            currentCallRoom = roomId;
-            document.getElementById('call-room-list').style.display = 'none';
-            document.getElementById('call-active-area').classList.add('active');
-            
-            const roomNames = {
-                'transmissao-1': 'Call Transmissão 1',
-                'transmissao-2': 'Call Transmissão 2',
-                'transmissao-3': 'Call Transmissão 3'
-            };
-            document.getElementById('current-room-name').innerText = roomNames[roomId] || roomId;
-            
-            // Tenta capturar o microfone (mas não liga por padrão para evitar eco)
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-            } catch (err) {
-                console.log("Microfone não autorizado ou indisponível:", err);
-                alert(currentLang === 'pt' ? "Não foi possível acessar o microfone. Verifique as permissões." : "Could not access microphone. Check permissions.");
-            }
-        }
+        // --- LÓGICA DO ADM ---
+        async function loginAdmin() {
+            const password = document.getElementById('admPassword').value;
+            const feedback = document.getElementById('admFeedback');
+            const btn = document.getElementById('btnAdmLogin');
 
-        function toggleMic() {
-            if (!localStream) {
-                alert(currentLang === 'pt' ? "Microfone não disponível." : "Microphone not available.");
+            if (password !== ADMIN_PASSWORD) {
+                feedback.innerText = currentLang === 'pt' ? "❌ Senha incorreta!" : "❌ Incorrect password!";
+                feedback.style.color = "var(--danger)";
                 return;
             }
-            const audioTrack = localStream.getAudioTracks()[0];
-            if (audioTrack) {
-                isMicOn = !isMicOn;
-                audioTrack.enabled = isMicOn;
-                document.getElementById('btn-mic').classList.toggle('active', isMicOn);
-                document.getElementById('btn-mic').innerText = isMicOn ? '🎤' : '🔇';
-            }
-        }
 
-        async function toggleScreen() {
-            if (!isScreenOn) {
-                try {
-                    screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
-                    const videoEl = document.getElementById('screen-video');
-                    videoEl.srcObject = screenStream;
-                    videoEl.classList.add('active');
-                    isScreenOn = true;
-                    document.getElementById('btn-screen').classList.add('active');
-                    
-                    // Para a transmissão quando o usuário clicar em "Parar compartilhamento" no navegador
-                    screenStream.getVideoTracks()[0].onended = () => {
-                        stopScreen();
-                    };
-                } catch (err) {
-                    console.log("Compartilhamento de tela cancelado ou falhou:", err);
+            feedback.innerText = currentLang === 'pt' ? "Enviando torneio..." : "Sending tournament...";
+            feedback.style.color = "#ffd166";
+            btn.disabled = true;
+
+            const message = `# Torneio <:StumbleIce:1568312467589824674> 
+
+\`\`\`Horario: 16:00\`\`\`
+***Mapa: <:blockdash:1570486524997533826> 
+<:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> ***
+***Emotes: <:soco:1568312390788063314> <:FirePunch:1570485523800137930> <:chorando:1569409303037870140> 
+<:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821> <:BFHW:1570490998335733821>***
+***Recompensa: 500 <:gems2:1570485055187456072> ***`;
+
+            try {
+                const response = await fetch(WEBHOOK_ADM, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ content: message })
+                });
+
+                if (response.ok) {
+                    document.getElementById('admin-login-area').style.display = 'none';
+                    document.getElementById('admin-success-area').style.display = 'block';
+                    document.getElementById('admPassword').value = '';
+                } else {
+                    feedback.innerText = currentLang === 'pt' ? "❌ Erro ao enviar. Verifique o Webhook." : "❌ Error sending. Check the Webhook.";
+                    feedback.style.color = "var(--danger)";
                 }
-            } else {
-                stopScreen();
+            } catch (error) {
+                feedback.innerText = currentLang === 'pt' ? "❌ Erro de conexão." : "❌ Connection error.";
+                feedback.style.color = "var(--danger)";
             }
+
+            btn.disabled = false;
         }
 
-        function stopScreen() {
-            if (screenStream) {
-                screenStream.getTracks().forEach(track => track.stop());
-                screenStream = null;
-            }
-            const videoEl = document.getElementById('screen-video');
-            videoEl.srcObject = null;
-            videoEl.classList.remove('active');
-            isScreenOn = false;
-            document.getElementById('btn-screen').classList.remove('active');
-        }
-
-        function leaveCall() {
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-                localStream = null;
-            }
-            stopScreen();
-            isMicOn = false;
-            document.getElementById('btn-mic').classList.remove('active');
-            document.getElementById('btn-mic').innerText = '🎤';
-            
-            currentCallRoom = null;
-            document.getElementById('call-active-area').classList.remove('active');
-            document.getElementById('call-room-list').style.display = 'block';
+        function logoutAdmin() {
+            document.getElementById('admin-login-area').style.display = 'block';
+            document.getElementById('admin-success-area').style.display = 'none';
+            document.getElementById('admFeedback').innerText = '';
         }
     </script>
 </body>
