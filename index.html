@@ -2,570 +2,428 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stumble Ice - Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Stumble Ice</title>
     <style>
-        :root {
-            --bg-main: #0a1c2b;
-            --bg-panel: rgba(14, 30, 48, 0.7);
-            --text-color: #e0f2fe;
-            --accent: #4dff9e;
-            --border-color: #1a3c5e;
-            --danger: #ff6b6b;
-            --glow-color: rgba(77, 255, 158, 0.4);
-        }
-
-        [data-theme="light"] {
-            --bg-main: #e0f7fa;
-            --bg-panel: rgba(255, 255, 255, 0.85);
-            --text-color: #003333;
-            --accent: #00796b;
-            --border-color: #b2ebf2;
-            --glow-color: rgba(0, 121, 107, 0.3);
-        }
-
-        [data-theme="neon"] {
-            --bg-main: #000000;
-            --bg-panel: rgba(10, 10, 10, 0.8);
-            --text-color: #00ffcc;
-            --accent: #ff00ff;
-            --border-color: #ff00ff;
-            --glow-color: rgba(255, 0, 255, 0.5);
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--bg-main);
-            color: var(--text-color);
-            margin: 0; min-height: 100vh; display: flex; flex-direction: column;
-            transition: background 0.4s, color 0.4s;
-            overflow-x: hidden;
-        }
-
-        .bg-blob {
-            position: fixed; border-radius: 50%; filter: blur(80px);
-            z-index: 0; opacity: 0.6; animation: float 10s infinite alternate ease-in-out;
-        }
-        .blob-1 { width: 300px; height: 300px; background: #ff00ff; top: -50px; left: -50px; }
-        .blob-2 { width: 400px; height: 400px; background: #00ffcc; bottom: -100px; right: -100px; animation-delay: -5s; }
-        [data-theme="light"] .blob-1 { background: #b2ebf2; }
-        [data-theme="light"] .blob-2 { background: #a0e8ff; }
+        body { margin: 0; overflow: hidden; background-color: #1a1a2e; font-family: 'Arial Black', sans-serif; }
         
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 50px) scale(1.1); }
-        }
-
-        .snowflake {
-            position: fixed; top: -10px; color: #fff;
-            font-family: Arial; text-shadow: 0 0 8px rgba(255,255,255,0.9);
-            user-select: none; pointer-events: none; z-index: 1;
-            animation: fall linear forwards;
-        }
-        @keyframes fall { to { transform: translateY(105vh); } }
-        [data-theme="light"] .snowflake, [data-theme="neon"] .snowflake { display: none; }
-
-        .top-bar {
-            width: 100%; padding: 15px 20px; box-sizing: border-box;
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--bg-panel); backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky; top: 0; z-index: 50;
-        }
+        /* --- LOBBY --- */
+        #lobby { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #0f3460 0%, #1a1a2e 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+        #lobby h1 { font-size: 45px; color: #4dff9e; text-shadow: 3px 3px 0 #000, 0 0 20px #4dff9e; margin: 0; letter-spacing: 2px; }
+        #lobby p { color: #aaa; margin-top: 5px; font-size: 14px; }
         
-        .menu-btn {
-            display: flex; flex-direction: column; justify-content: space-between;
-            width: 32px; height: 24px; cursor: pointer; background: none; border: none; padding: 0;
-        }
-        .menu-btn span { display: block; height: 4px; width: 100%; border-radius: 2px; }
+        .section-title { font-size: 16px; color: #ffd700; margin-top: 25px; margin-bottom: 10px; text-transform: uppercase; }
         
-        .menu-btn span:nth-child(1) { animation: rgb1 3s infinite; }
-        .menu-btn span:nth-child(2) { animation: rgb2 3s infinite; }
-        .menu-btn span:nth-child(3) { animation: rgb3 3s infinite; }
-
-        @keyframes rgb1 { 0% { background: #ff0000; } 33% { background: #00ff00; } 66% { background: #0000ff; } 100% { background: #ff0000; } }
-        @keyframes rgb2 { 0% { background: #00ff00; } 33% { background: #0000ff; } 66% { background: #ff0000; } 100% { background: #00ff00; } }
-        @keyframes rgb3 { 0% { background: #0000ff; } 33% { background: #ff0000; } 66% { background: #00ff00; } 100% { background: #0000ff; } }
-
-        .logo-area { 
-            font-size: 20px; font-weight: 900; color: var(--accent); 
-            text-shadow: 0 0 15px var(--glow-color); letter-spacing: 1px;
-        }
-
-        #sidebar {
-            position: fixed; top: 0; left: -280px; width: 260px; height: 100vh;
-            background: var(--bg-panel); backdrop-filter: blur(20px);
-            border-right: 2px solid var(--border-color);
-            z-index: 100; transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 20px;
-            display: flex; flex-direction: column; gap: 10px;
-            box-shadow: 5px 0 30px rgba(0,0,0,0.5);
-        }
-        #sidebar.open { left: 0; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .close-btn { font-size: 28px; color: var(--danger); cursor: pointer; background: none; border: none; transition: 0.2s; }
-        .close-btn:active { transform: scale(0.8); }
+        .skins-container { display: flex; gap: 12px; }
+        .skin-btn { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #444; cursor: pointer; transition: 0.2s; }
+        .skin-btn.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 15px #fff; }
         
-        .nav-item {
-            padding: 15px; border-radius: 12px; background: transparent;
-            border: 1px solid var(--border-color); color: var(--text-color);
-            font-size: 16px; font-weight: bold; cursor: pointer; text-align: left;
-            transition: 0.3s; display: flex; align-items: center; gap: 10px;
-        }
-        .nav-item:hover, .nav-item.active { 
-            background: rgba(255,255,255,0.05); border-color: var(--accent); 
-            color: var(--accent); box-shadow: 0 0 15px var(--glow-color);
-            transform: translateX(5px);
-        }
-        [data-theme="neon"] .nav-item:hover, [data-theme="neon"] .nav-item.active { background: rgba(255,0,255,0.1); }
+        .maps-container { display: flex; gap: 15px; }
+        .map-btn { background: #16213e; border: 2px solid #4dff9e; color: #4dff9e; padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
+        .map-btn.selected { background: #4dff9e; color: #000; box-shadow: 0 0 15px #4dff9e; }
 
-        .content-area {
-            flex: 1; display: flex; flex-direction: column; align-items: center;
-            padding: 20px; width: 100%; max-width: 800px; margin: 0 auto;
-            position: relative; z-index: 10;
-        }
-        .tab-content { display: none; width: 100%; animation: slideUp 0.4s ease; }
-        .tab-content.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .panel { 
-            background: var(--bg-panel); backdrop-filter: blur(15px);
-            padding: 25px; border-radius: 24px; 
-            border: 1px solid var(--border-color); 
-            margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .panel h2 { 
-            color: var(--accent); border-bottom: 2px solid var(--border-color); 
-            padding-bottom: 10px; margin-top: 0; text-shadow: 0 0 10px var(--glow-color);
-        }
+        #playBtn { margin-top: 30px; padding: 18px 60px; font-size: 22px; font-weight: 900; background: #ffd700; border: none; border-radius: 12px; color: #000; cursor: pointer; text-transform: uppercase; box-shadow: 0 6px 0 #b38f00; transition: 0.1s; }
+        #playBtn:active { transform: translateY(6px); box-shadow: none; }
         
-        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        .form-group label { font-weight: bold; color: var(--accent); font-size: 14px; }
+        /* --- HUD --- */
+        #hud { position: absolute; top: 15px; left: 15px; color: white; font-size: 22px; text-shadow: 2px 2px 0 #000; display: none; z-index: 5; font-weight: bold; }
+        #hud span { color: #4dff9e; }
         
-        input[type="text"], input[type="password"], input[type="file"], textarea, select {
-            padding: 15px; border-radius: 12px; border: 2px solid var(--border-color); 
-            background: rgba(0,0,0,0.2); color: var(--text-color); font-size: 16px; 
-            outline: none; width: 100%; transition: 0.3s;
-        }
-        [data-theme="light"] input { background: rgba(255,255,255,0.5); color: #000; }
-        input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--glow-color); }
+        #controls { position: absolute; bottom: 25px; width: 100%; display: none; justify-content: space-between; padding: 0 25px; box-sizing: border-box; z-index: 5; }
+        .dpad { display: flex; gap: 15px; }
+        .control-btn { width: 75px; height: 75px; background: rgba(255,255,255,0.15); border: 3px solid rgba(255,255,255,0.4); border-radius: 20px; font-size: 32px; color: white; display: flex; justify-content: center; align-items: center; user-select: none; touch-action: manipulation; backdrop-filter: blur(4px); }
+        .control-btn:active { background: rgba(255,255,255,0.5); }
+        #btnJump { width: 95px; border-radius: 50%; background: rgba(77, 255, 158, 0.3); border-color: #4dff9e; }
+        #btnJump:active { background: rgba(77, 255, 158, 0.7); }
 
-        .btn-primary { 
-            background: var(--accent); color: var(--bg-main); 
-            border: none; padding: 16px; border-radius: 12px; 
-            font-size: 16px; font-weight: 900; cursor: pointer; width: 100%; 
-            transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .btn-primary:active { transform: scale(0.96); }
-        .btn-primary:hover { box-shadow: 0 0 25px var(--glow-color); }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .rules-container ul { list-style: none; padding: 0; }
-        .rules-container li { 
-            margin-bottom: 12px; background: rgba(255,255,255,0.03); 
-            padding: 15px; border-radius: 12px; 
-            border-left: 4px solid var(--accent); transition: 0.2s;
-        }
-        .rules-container li:hover { background: rgba(255,255,255,0.08); transform: scale(1.01); }
-        [data-theme="light"] .rules-container li { background: rgba(0,0,0,0.03); }
-
-        .theme-buttons, .lang-buttons { display: flex; gap: 10px; }
-        .theme-btn, .lang-btn { 
-            flex: 1; padding: 12px; border-radius: 10px; cursor: pointer; 
-            font-weight: bold; border: 2px solid var(--border-color); 
-            background: transparent; color: var(--text-color); transition: 0.3s;
-        }
-        .theme-btn.active, .lang-btn.active { 
-            border-color: var(--accent); color: var(--accent); 
-            box-shadow: 0 0 15px var(--glow-color);
-        }
-
-        .closed-box {
-            text-align: center; padding: 40px 20px;
-            background: rgba(255, 107, 107, 0.1);
-            border: 2px dashed var(--danger);
-            border-radius: 20px; margin-top: 20px;
-            animation: pulseDanger 2s infinite alternate;
-        }
-        @keyframes pulseDanger { from { box-shadow: 0 0 10px rgba(255,107,107,0.2); } to { box-shadow: 0 0 30px rgba(255,107,107,0.6); } }
-        .closed-box h3 { color: var(--danger); font-size: 24px; margin-bottom: 10px; }
-        .closed-box p { color: var(--text-color); font-size: 16px; opacity: 0.8; }
-
-        #admin-login-area { text-align: center; }
-        #admin-success-area { text-align: center; display: none; }
-        .feedback-msg { margin-top: 15px; text-align: center; font-weight: bold; min-height: 20px; }
-
-        .send-options { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
-        .send-btn { 
-            padding: 10px 20px; border-radius: 10px; border: 2px solid var(--border-color);
-            background: transparent; color: var(--text-color); font-weight: bold; cursor: pointer;
-            display: flex; align-items: center; gap: 5px; transition: 0.2s;
-        }
-        .send-btn:hover { border-color: var(--accent); color: var(--accent); }
-        .send-btn.gear { font-size: 20px; padding: 8px 15px; }
-
-        #emoji-editor { display: none; margin-top: 20px; text-align: left; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
-        #emoji-editor .form-group { margin-bottom: 10px; }
-        #emoji-editor input { padding: 10px; font-size: 14px; }
-        .editor-actions { display: flex; gap: 10px; margin-top: 15px; }
-
-        #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 90; display: none; }
-        #overlay.open { display: block; }
+        #gameOverScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; color: white; }
+        #gameOverScreen h1 { color: #ff4444; font-size: 45px; text-shadow: 3px 3px 0 #000; margin-bottom: 10px; }
+        #finalScore { font-size: 22px; margin-bottom: 20px; color: #ffd700; }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-<body data-theme="dark">
+<body>
 
-    <div class="bg-blob blob-1"></div>
-    <div class="bg-blob blob-2"></div>
-    
-    <div id="snow-container"></div>
-    
-    <div id="overlay" onclick="toggleMenu()"></div>
-
-    <div id="sidebar">
-        <div class="sidebar-header">
-            <span class="logo-area">❄️ Stumble Ice</span>
-            <button class="close-btn" onclick="toggleMenu()">×</button>
-        </div>
-        <button class="nav-item active" onclick="openTab('regras', this)" data-i18n="menu_rules">📜 Regras</button>
-        <button class="nav-item" onclick="openTab('discord', this)" data-i18n="menu_discord">💬 Discord</button>
-        <button class="nav-item" onclick="openTab('formscc', this)" data-i18n="menu_forms">📝 Forms CC</button>
-        <button class="nav-item" onclick="openTab('adm', this)" data-i18n="menu_adm">👑 ADM</button>
-        <button class="nav-item" onclick="openTab('config', this)" data-i18n="menu_config">⚙️ Configurações</button>
-    </div>
-
-    <div class="top-bar">
-        <button class="menu-btn" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
-        </button>
-        <div class="logo-area">❄️ Stumble Ice</div>
-        <div style="width: 32px;"></div>
-    </div>
-
-    <div class="content-area">
+    <!-- LOBBY -->
+    <div id="lobby">
+        <h1>STUMBLE ICE</h1>
+        <p>Mobile Edition</p>
         
-        <div id="tab-regras" class="tab-content active">
-            <div class="panel rules-container">
-                <h1 style="text-align:center; color:var(--accent);" data-i18n="rules_title">❄️ Regras do Stumble Ice</h1>
-                <p data-i18n="rules_welcome">Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.</p>
-                <h2 data-i18n="rules_h1">1. Respeito</h2>
-                <ul>
-                    <li data-i18n="rules_li1">🚫 Zero xingamento ou preconceito.</li>
-                    <li data-i18n="rules_li2">✅ Brincadeiras liberadas, sem passar do limite.</li>
-                </ul>
-                <h2 data-i18n="rules_h2">2. Chat Limpo</h2>
-                <ul>
-                    <li data-i18n="rules_li3">🚫 Sem spam, flood ou divulgação de outros servidores.</li>
-                    <li data-i18n="rules_li4">🚫 Sem conteúdo NSFW.</li>
-                </ul>
-                <h2 data-i18n="rules_h3">3. Fair Play</h2>
-                <ul>
-                    <li data-i18n="rules_li5">🚫 Proibido cheats, hacks ou exploits.</li>
-                    <li data-i18n="rules_li6">✅ Respeite os resultados.</li>
-                </ul>
-            </div>
+        <div class="section-title">Skin</div>
+        <div class="skins-container">
+            <div class="skin-btn selected" style="background: #00a8ff;" onclick="selectSkin(0x00a8ff, this)"></div>
+            <div class="skin-btn" style="background: #e84118;" onclick="selectSkin(0xe84118, this)"></div>
+            <div class="skin-btn" style="background: #4cd137;" onclick="selectSkin(0x4cd137, this)"></div>
+            <div class="skin-btn" style="background: #fbc531;" onclick="selectSkin(0xfbc531, this)"></div>
+            <div class="skin-btn" style="background: #9c88ff;" onclick="selectSkin(0x9c88ff, this)"></div>
         </div>
 
-        <div id="tab-discord" class="tab-content">
-            <div class="panel" style="text-align: center;">
-                <h2 data-i18n="discord_title">Junte-se ao nosso Discord!</h2>
-                <p data-i18n="discord_desc">Clique no botão abaixo para copiar o link e entrar no servidor.</p>
-                <div style="background: #5865F2; border-radius: 15px; padding: 20px; margin: 20px 0; box-shadow: 0 10px 20px rgba(88,101,242,0.3);">
-                    <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" style="width: 60px; margin-bottom: 10px;" alt="Discord">
-                    <br>
-                    <button class="btn-primary" onclick="copyLink()" style="background: #fff; color: #5865F2;" data-i18n="discord_btn">📋 Copiar Link do Discord</button>
-                </div>
-            </div>
+        <div class="section-title">Mapa</div>
+        <div class="maps-container">
+            <div class="map-btn selected" id="btnMapBlock" onclick="selectMap('block', this)">Block Dash</div>
+            <div class="map-btn" id="btnMapLaser" onclick="selectMap('laser', this)">Laser Tracer</div>
         </div>
 
-        <div id="tab-formscc" class="tab-content">
-            <div class="panel">
-                <h2 data-i18n="forms_title">Formulário de Criador de Conteúdo</h2>
-                <div class="closed-box">
-                    <h3 data-i18n="forms_closed_title">🚫 Vagas Fechadas!</h3>
-                    <p data-i18n="forms_closed_desc">No momento, não estamos aceitando novos influenciadores. Fique de olho no nosso Discord para futuras oportunidades!</p>
-                </div>
-            </div>
+        <button id="playBtn" onclick="startGame()">Jogar</button>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud">Distância: <span id="score">0</span>m</div>
+    
+    <!-- CONTROLES -->
+    <div id="controls">
+        <div class="dpad">
+            <div class="control-btn" id="btnLeft">◀</div>
+            <div class="control-btn" id="btnRight">▶</div>
         </div>
+        <div class="control-btn" id="btnJump">PULO</div>
+    </div>
 
-        <div id="tab-adm" class="tab-content">
-            <div class="panel" style="text-align: center;">
-                <h2 data-i18n="adm_title">Painel ADM</h2>
-                
-                <div id="admin-login-area">
-                    <div class="form-group">
-                        <label data-i18n="adm_label">Login Admin:</label>
-                        <input type="password" id="admPassword" placeholder="Digite a senha...">
-                    </div>
-                    <button class="btn-primary" id="btnAdmLogin" onclick="loginAdmin()" data-i18n="adm_connect">Conectar</button>
-                    <div id="admFeedback" class="feedback-msg"></div>
-                </div>
-
-                <div id="admin-success-area">
-                    <h3 style="color: var(--accent);" data-i18n="adm_success">✅ Acesso Concedido!</h3>
-                    <p data-i18n="adm_success_desc">Escolha como enviar a mensagem do torneio:</p>
-                    
-                    <div class="send-options" id="send-options-area">
-                        <button class="send-btn" onclick="sendTournament('padrao')">Padrão</button>
-                        <button class="send-btn gear" onclick="toggleEmojiEditor()">⚙️</button>
-                    </div>
-
-                    <div id="emoji-editor">
-                        <h4 style="color: var(--accent); margin-top: 0;">Editar Emojis e Imagem</h4>
-                        
-                        <div class="form-group">
-                            <label>StumbleIce:</label>
-                            <input type="text" id="emoji-ice" value="1568312467589824674">
-                        </div>
-                        <div class="form-group">
-                            <label>Blockdash (Mapa):</label>
-                            <input type="text" id="emoji-map" value="1570486524997533826">
-                        </div>
-                        <div class="form-group">
-                            <label>BFHW (Separador):</label>
-                            <input type="text" id="emoji-bfhw" value="1570490998335733821">
-                        </div>
-                        <div class="form-group">
-                            <label>Soco:</label>
-                            <input type="text" id="emoji-soco" value="1568312390788063314">
-                        </div>
-                        <div class="form-group">
-                            <label>FirePunch:</label>
-                            <input type="text" id="emoji-fire" value="1570485523800137930">
-                        </div>
-                        <div class="form-group">
-                            <label>Chorando:</label>
-                            <input type="text" id="emoji-choro" value="1569409303037870140">
-                        </div>
-                        <div class="form-group">
-                            <label>Gems2 (Recompensa):</label>
-                            <input type="text" id="emoji-gems" value="1570485055187456072">
-                        </div>
-
-                        <!-- NOVO CAMPO DE UPLOAD DE IMAGEM -->
-                        <div class="form-group" style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                            <label>🖼️ Anexar Imagem (Opcional):</label>
-                            <input type="file" id="image-upload" accept="image/*" style="padding: 10px; cursor: pointer;">
-                        </div>
-
-                        <div class="editor-actions">
-                            <button class="btn-primary" onclick="saveAndSendCustom()" style="padding: 10px;">Salvar e Enviar</button>
-                            <button class="send-btn" onclick="toggleEmojiEditor()" style="flex:1; justify-content:center;">Cancelar</button>
-                        </div>
-                    </div>
-
-                    <button class="btn-primary" onclick="logoutAdmin()" style="background: var(--danger); color: white; margin-top: 20px;" data-i18n="adm_logout">Sair</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-config" class="tab-content">
-            <div class="panel">
-                <h2 data-i18n="config_title">Configurações</h2>
-                
-                <div class="form-group">
-                    <label data-i18n="config_theme">Mudar Tema:</label>
-                    <div class="theme-buttons">
-                        <button class="theme-btn active" onclick="setTheme('dark')" data-i18n="theme_dark">Escuro</button>
-                        <button class="theme-btn" onclick="setTheme('light')" data-i18n="theme_light">Branco</button>
-                        <button class="theme-btn" onclick="setTheme('neon')" data-i18n="theme_neon">Neon</button>
-                    </div>
-                </div>
-
-                <div class="form-group" style="margin-top: 20px;">
-                    <label data-i18n="config_lang">Tradutor:</label>
-                    <div class="lang-buttons">
-                        <button class="lang-btn active" onclick="setLang('pt')" data-i18n="lang_pt">Brasil</button>
-                        <button class="lang-btn" onclick="setLang('en')" data-i18n="lang_en">Inglês</button>
-                    </div>
-                </div>
-
-                <div class="credits" style="text-align:center; font-size:12px; margin-top:30px; color:var(--text-color); opacity:0.5;">
-                    Developed by: miranhaX_00
-                </div>
-            </div>
-        </div>
-
+    <!-- GAME OVER -->
+    <div id="gameOverScreen">
+        <h1>ELIMINADO!</h1>
+        <p id="finalScore">Você chegou a 0m</p>
+        <button class="map-btn" style="border-color: #ffd700; color: #ffd700; font-size: 18px; padding: 15px 30px;" onclick="location.reload()">JOGAR NOVAMENTE</button>
     </div>
 
     <script>
-        const DISCORD_LINK = "https://discord.gg/ZtDZVQd7y";
-        const WEBHOOK_ADM = "https://discord.com/api/webhooks/1570491955220193370/uiJffLIeprEamie6wwlHChHHwCZeuv1I-GvyVe_SrwQXK1auQUmc_pPjrydGjTa98Cf0";
-        const ADMIN_PASSWORD = "secret01ice02";
-        let currentLang = 'pt';
+        // --- CONFIGURAÇÃO GLOBAL ---
+        let scene, camera, renderer;
+        let player;
+        let isPlaying = false;
+        let playerColor = 0x00a8ff;
+        let currentMap = 'block';
+        
+        let score = 0;
+        let baseSpeed = 0.45;
+        let speed = baseSpeed;
+        
+        let playerLane = 0; // -1, 0, 1
+        let targetX = 0;
+        let isJumping = false;
+        let jumpVelocity = 0;
+        let playerY = 0;
+        
+        const gravity = -0.025;
+        const jumpStrength = 0.5;
+        const laneWidth = 3.5;
 
-        const translations = {
-            pt: {
-                menu_rules: "📜 Regras", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_adm: "👑 ADM", menu_config: "⚙️ Configurações",
-                rules_title: "❄️ Regras do Stumble Ice", rules_welcome: "Bem-vindo ao servidor mais gelado! Ao entrar, você concorda com as regras abaixo.",
-                rules_h1: "1. Respeito", rules_li1: "🚫 Zero xingamento ou preconceito.", rules_li2: "✅ Brincadeiras liberadas, sem passar do limite.",
-                rules_h2: "2. Chat Limpo", rules_li3: "🚫 Sem spam, flood ou divulgação de outros servidores.", rules_li4: "🚫 Sem conteúdo NSFW.",
-                rules_h3: "3. Fair Play", rules_li5: "🚫 Proibido cheats, hacks ou exploits.", rules_li6: "✅ Respeite os resultados.",
-                discord_title: "Junte-se ao nosso Discord!", discord_desc: "Clique no botão abaixo para copiar o link e entrar no servidor.", discord_btn: "📋 Copiar Link do Discord",
-                forms_title: "Formulário de Criador de Conteúdo", forms_closed_title: "🚫 Vagas Fechadas!", forms_closed_desc: "No momento, não estamos aceitando novos influenciadores. Fique de olho no nosso Discord para futuras oportunidades!",
-                adm_title: "Painel ADM", adm_label: "Login Admin:", adm_connect: "Conectar", adm_success: "✅ Acesso Concedido!", adm_success_desc: "Escolha como enviar a mensagem do torneio:", adm_logout: "Sair",
-                config_title: "Configurações", config_theme: "Mudar Tema:", theme_dark: "Escuro", theme_light: "Branco", theme_neon: "Neon", config_lang: "Tradutor:", lang_pt: "Brasil", lang_en: "Inglês"
-            },
-            en: {
-                menu_rules: "📜 Rules", menu_discord: "💬 Discord", menu_forms: "📝 Forms CC", menu_adm: "👑 ADM", menu_config: "⚙️ Settings",
-                rules_title: "❄️ Stumble Ice Rules", rules_welcome: "Welcome to the coolest server! By entering, you agree to the rules below.",
-                rules_h1: "1. Respect", rules_li1: "🚫 No swearing or prejudice.", rules_li2: "✅ Jokes allowed, don't cross the line.",
-                rules_h2: "2. Clean Chat", rules_li3: "🚫 No spam, flood, or advertising other servers.", rules_li4: "🚫 No NSFW content.",
-                rules_h3: "3. Fair Play", rules_li5: "🚫 No cheats, hacks, or exploits.", rules_li6: "✅ Respect the results.",
-                discord_title: "Join our Discord!", discord_desc: "Click the button below to copy the link and join the server.", discord_btn: "📋 Copy Discord Link",
-                forms_title: "Content Creator Form", forms_closed_title: "🚫 Applications Closed!", forms_closed_desc: "We are currently not accepting new influencers. Keep an eye on our Discord for future opportunities!",
-                adm_title: "ADM Panel", adm_label: "Admin Login:", adm_connect: "Connect", adm_success: "✅ Access Granted!", adm_success_desc: "Choose how to send the tournament message:", adm_logout: "Logout",
-                config_title: "Settings", config_theme: "Change Theme:", theme_dark: "Dark", theme_light: "Light", theme_neon: "Neon", config_lang: "Translator:", lang_pt: "Brazil", lang_en: "English"
-            }
-        };
+        let obstacles = [];
+        let spawnTimer = 0;
+        let gameTime = 0;
+        let isLaserLow = false; // Controle para o mapa Laser
 
-        function setLang(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) el.innerText = translations[lang][key];
-            });
+        // --- INICIALIZAÇÃO ---
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            scene.fog = new THREE.Fog(0x87CEEB, 20, 70);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 5, 8);
+            camera.lookAt(0, 1, -10);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Iluminação
+            scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+            dirLight.position.set(10, 20, 10);
+            dirLight.castShadow = true;
+            scene.add(dirLight);
+
+            createPlayer();
+            window.addEventListener('resize', onWindowResize, false);
+            setupControls();
+            animate();
         }
 
-        function createSnow() {
-            const snowContainer = document.getElementById('snow-container');
-            if (!snowContainer) return;
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake'); snowflake.innerHTML = '❄';
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-            snowflake.style.opacity = Math.random() * 0.8 + 0.2;
-            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
-            snowContainer.appendChild(snowflake);
-            setTimeout(() => { snowflake.remove(); }, 5000);
-        }
-        setInterval(createSnow, 300);
-
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('open');
-        }
-
-        function openTab(tabName, btn) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-' + tabName).classList.add('active');
-            btn.classList.add('active');
-            toggleMenu();
-        }
-
-        function setTheme(theme) {
-            document.body.setAttribute('data-theme', theme);
-            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
-        }
-
-        function copyLink() {
-            navigator.clipboard.writeText(DISCORD_LINK).then(() => {
-                alert(currentLang === 'pt' ? "Link do Discord copiado!" : "Discord link copied!");
-            });
-        }
-
-        function loginAdmin() {
-            const password = document.getElementById('admPassword').value;
-            const feedback = document.getElementById('admFeedback');
-
-            if (password !== ADMIN_PASSWORD) {
-                feedback.innerText = currentLang === 'pt' ? "❌ Senha incorreta!" : "❌ Incorrect password!";
-                feedback.style.color = "var(--danger)";
-                return;
-            }
-
-            document.getElementById('admin-login-area').style.display = 'none';
-            document.getElementById('admin-success-area').style.display = 'block';
-            document.getElementById('admPassword').value = '';
-            feedback.innerText = "";
-        }
-
-        function logoutAdmin() {
-            document.getElementById('admin-login-area').style.display = 'block';
-            document.getElementById('admin-success-area').style.display = 'none';
-            document.getElementById('emoji-editor').style.display = 'none';
-            document.getElementById('admFeedback').innerText = '';
-            document.getElementById('image-upload').value = '';
-        }
-
-        function toggleEmojiEditor() {
-            const editor = document.getElementById('emoji-editor');
-            editor.style.display = editor.style.display === 'block' ? 'none' : 'block';
-        }
-
-        async function sendMessageToDiscord(mode) {
-            const feedback = document.getElementById('admFeedback');
-            const btns = document.querySelectorAll('.send-btn');
+        function createPlayer() {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: playerColor, roughness: 0.4 });
             
-            btns.forEach(b => b.disabled = true);
-            feedback.innerText = currentLang === 'pt' ? "Enviando torneio..." : "Sending tournament...";
-            feedback.style.color = "#ffd166";
+            // Corpo (Cápsula - estilo Stumble Guys)
+            const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 0.8, 4, 16), mat);
+            body.position.y = 1.0;
+            group.add(body);
 
-            const ice = document.getElementById('emoji-ice').value;
-            const map = document.getElementById('emoji-map').value;
-            const bfhw = document.getElementById('emoji-bfhw').value;
-            const soco = document.getElementById('emoji-soco').value;
-            const fire = document.getElementById('emoji-fire').value;
-            const choro = document.getElementById('emoji-choro').value;
-            const gems = document.getElementById('emoji-gems').value;
-            const imageFile = document.getElementById('image-upload').files[0];
+            // Olhos
+            const eyeMat = new THREE.MeshBasicMaterial({ color: 0x111111 });
+            const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), eyeMat);
+            eyeL.position.set(-0.15, 1.4, 0.45);
+            group.add(eyeL);
+            const eyeR = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), eyeMat);
+            eyeR.position.set(0.15, 1.4, 0.45);
+            group.add(eyeR);
 
-            const message = `# Torneio <:StumbleIce:${ice}> \n\n\`\`\`Horario: 16:00\`\`\`\n***Mapa: <:blockdash:${map}> \n<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> ***\n***Emotes: <:soco:${soco}> <:FirePunch:${fire}> <:chorando:${choro}> \n<:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}> <:BFHW:${bfhw}>***\n***Recompensa: 500 <:gems2:${gems}> ***`;
+            player = group;
+            player.position.set(0, 0, 0);
+            scene.add(player);
+        }
 
-            try {
-                let response;
+        // --- LÓGICA DE SELEÇÃO ---
+        function selectSkin(color, el) {
+            playerColor = color;
+            document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+        }
 
-                // Verifica se tem imagem anexada
-                if (imageFile) {
-                    const formData = new FormData();
-                    formData.append('file', imageFile);
-                    formData.append('payload_json', JSON.stringify({ content: message }));
+        function selectMap(map, el) {
+            currentMap = map;
+            document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+        }
 
-                    response = await fetch(WEBHOOK_ADM, {
-                        method: "POST",
-                        body: formData
-                    });
-                } else {
-                    // Envia apenas o texto
-                    response = await fetch(WEBHOOK_ADM, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ content: message })
-                    });
+        // --- INÍCIO DO JOGO ---
+        function startGame() {
+            document.getElementById('lobby').style.display = 'none';
+            document.getElementById('controls').style.display = 'flex';
+            document.getElementById('hud').style.display = 'block';
+            isPlaying = true;
+            
+            // Aplica cor
+            player.children[0].material.color.setHex(playerColor);
+            
+            // Reseta
+            score = 0;
+            playerLane = 0;
+            targetX = 0;
+            player.position.set(0, 0, 0);
+            speed = baseSpeed;
+            gameTime = 0;
+            obstacles.forEach(o => scene.remove(o));
+            obstacles = [];
+            spawnTimer = 0;
+
+            buildMap();
+        }
+
+        function buildMap() {
+            const oldFloor = scene.getObjectByName("floor");
+            if (oldFloor) scene.remove(oldFloor);
+
+            const floorGroup = new THREE.Group();
+            floorGroup.name = "floor";
+
+            if (currentMap === 'block') {
+                // Chão do Block Dash (Plataforma flutuante)
+                const floorGeo = new THREE.BoxGeometry(12, 1, 200);
+                const floorMat = new THREE.MeshStandardMaterial({ color: 0x444444, roughness: 0.8 });
+                const floor = new THREE.Mesh(floorGeo, floorMat);
+                floor.position.set(0, -0.5, -90);
+                floorGroup.add(floor);
+
+                // Linhas guias (como no jogo real)
+                for(let i=0; i<3; i++){
+                    const lineGeo = new THREE.PlaneGeometry(0.05, 200);
+                    const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                    const line = new THREE.Mesh(lineGeo, lineMat);
+                    line.rotation.x = -Math.PI / 2;
+                    line.position.set((i-1)*laneWidth, 0.01, -90);
+                    floorGroup.add(line);
                 }
+            } else {
+                // Chão do Laser Tracer (Ácido/Preto)
+                const floorGeo = new THREE.BoxGeometry(12, 1, 200);
+                const floorMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
+                const floor = new THREE.Mesh(floorGeo, floorMat);
+                floor.position.set(0, -0.5, -90);
+                floorGroup.add(floor);
 
-                if (response.ok) {
-                    feedback.innerText = currentLang === 'pt' ? "✅ Enviado com sucesso!" : "✅ Sent successfully!";
-                    feedback.style.color = "var(--accent)";
-                    
-                    if (mode === 'padrao' || mode === 'custom') {
-                        document.getElementById('send-options-area').style.display = 'none';
-                        document.getElementById('emoji-editor').style.display = 'none';
-                        document.getElementById('image-upload').value = '';
+                // Grid Vermelho (Laser)
+                const grid = new THREE.GridHelper(200, 40, 0xff0000, 0x550000);
+                grid.position.set(0, 0.01, -90);
+                grid.rotation.x = Math.PI / 2;
+                floorGroup.add(grid);
+            }
+
+            scene.add(floorGroup);
+        }
+
+        // --- CONTROLES ---
+        function setupControls() {
+            document.getElementById('btnLeft').addEventListener('touchstart', (e) => { e.preventDefault(); movePlayer(-1); });
+            document.getElementById('btnRight').addEventListener('touchstart', (e) => { e.preventDefault(); movePlayer(1); });
+            document.getElementById('btnJump').addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+            
+            window.addEventListener('keydown', (e) => {
+                if(e.key === "ArrowLeft" || e.key === "a") movePlayer(-1);
+                if(e.key === "ArrowRight" || e.key === "d") movePlayer(1);
+                if(e.key === " " || e.key === "ArrowUp") jump();
+            });
+        }
+
+        function movePlayer(dir) {
+            if (!isPlaying) return;
+            playerLane += dir;
+            if (playerLane < -1) playerLane = -1;
+            if (playerLane > 1) playerLane = 1;
+            targetX = playerLane * laneWidth;
+        }
+
+        function jump() {
+            if (!isPlaying || isJumping) return;
+            isJumping = true;
+            jumpVelocity = jumpStrength;
+        }
+
+        // --- OBSTÁCULOS ---
+        function spawnObstacle() {
+            const obsGroup = new THREE.Group();
+
+            if (currentMap === 'block') {
+                // Block Dash: Parede com buraco ou bloco inteiro
+                const isHole = Math.random() > 0.5;
+                const holeLane = Math.floor(Math.random() * 3) - 1;
+
+                if (isHole) {
+                    // Parede com buraco (3 blocos, um faltando)
+                    for (let i = -1; i <= 1; i++) {
+                        if (i !== holeLane) {
+                            const block = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.5, 1), new THREE.MeshStandardMaterial({ color: 0xff3333 }));
+                            block.position.set(i * laneWidth, 1.25, 0);
+                            obsGroup.add(block);
+                        }
                     }
                 } else {
-                    feedback.innerText = "❌ Erro ao enviar. Verifique o Webhook.";
-                    feedback.style.color = "var(--danger)";
+                    // Bloco baixo para pular
+                    const block = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1, 1), new THREE.MeshStandardMaterial({ color: 0xff8800 }));
+                    block.position.set(holeLane * laneWidth, 0.5, 0);
+                    obsGroup.add(block);
                 }
-            } catch (error) {
-                feedback.innerText = "❌ Erro de conexão.";
-                feedback.style.color = "var(--danger)";
-            } finally {
-                btns.forEach(b => b.disabled = false);
+            } else {
+                // Laser Tracer: Parede de Laser
+                const laserMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+                // Laser horizontal (baixo - pula) ou vertical (alto - agacha, mas aqui é só pular)
+                const isLow = Math.random() > 0.5;
+                const yPos = isLow ? 0.5 : 1.5;
+
+                // Criar feixe de laser
+                const beam = new THREE.Mesh(new THREE.BoxGeometry(12, 0.1, 0.1), laserMat);
+                beam.position.set(0, yPos, 0);
+                
+                // Adicionar brilho
+                const glow = new THREE.PointLight(0xff0000, 1, 5);
+                glow.position.set(0, yPos, 0);
+                obsGroup.add(glow);
+                obsGroup.add(beam);
+                
+                // Se for baixo, o jogador precisa pular. Se for alto, ele passa por baixo (mas nosso boneco é alto, então vamos fazer ele pular também)
+                // Para simplificar, o laser baixo é pulável, o alto não (mas para evitar frustração, faremos todos puláveis)
+                if (!isLow) {
+                    beam.position.y = 0.5; // Força ser baixo para ser pulável
+                }
             }
+
+            obsGroup.position.z = -100;
+            scene.add(obsGroup);
+            obstacles.push(obsGroup);
         }
 
-        function sendTournament(mode) {
-            sendMessageToDiscord(mode);
+        function checkCollision(obs) {
+            // Verifica a distância no eixo Z
+            if (Math.abs(obs.position.z - player.position.z) < 0.8) {
+                if (currentMap === 'block') {
+                    // Lógica de colisão para blocos
+                    obs.children.forEach(child => {
+                        // Se for um bloco de parede
+                        if (child.geometry.parameters.height > 2) {
+                            // Se o jogador não estiver na pista do buraco
+                            if (Math.abs(child.position.x - player.position.x) < 1.2) {
+                                if (player.position.y < 1) return true; // Colidiu
+                            }
+                        } else {
+                            // Bloco baixo (pular)
+                            if (Math.abs(child.position.x - player.position.x) < 1.2 && player.position.y < 0.8) {
+                                return true;
+                            }
+                        }
+                    });
+                } else {
+                    // Lógica de colisão para Laser
+                    // Se o jogador não estiver pulando o suficiente
+                    if (player.position.y < 0.8) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
-        function saveAndSendCustom() {
-            sendMessageToDiscord('custom');
+        function gameOver() {
+            isPlaying = false;
+            document.getElementById('gameOverScreen').style.display = 'flex';
+            document.getElementById('finalScore').innerText = "Você chegou a " + Math.floor(score) + "m";
         }
+
+        // --- LOOP DE ANIMAÇÃO ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (isPlaying) {
+                gameTime++;
+                // Aumenta velocidade com o tempo
+                speed = baseSpeed + (gameTime * 0.0001);
+                if (speed > 1.8) speed = 1.8;
+
+                // Movimento lateral suave
+                player.position.x += (targetX - player.position.x) * 0.2;
+
+                // Física do pulo
+                if (isJumping) {
+                    player.position.y += jumpVelocity;
+                    jumpVelocity += gravity;
+                    if (player.position.y <= 0) {
+                        player.position.y = 0;
+                        isJumping = false;
+                        jumpVelocity = 0;
+                    }
+                }
+
+                // Spawner
+                spawnTimer++;
+                let spawnRate = currentMap === 'block' ? 50 : 40;
+                if (spawnTimer > (spawnRate - (speed * 5))) {
+                    spawnObstacle();
+                    spawnTimer = 0;
+                }
+
+                // Atualiza obstáculos
+                for (let i = obstacles.length - 1; i >= 0; i--) {
+                    let obs = obstacles[i];
+                    obs.position.z += speed;
+
+                    if (checkCollision(obs)) {
+                        gameOver();
+                    }
+
+                    if (obs.position.z > 10) {
+                        scene.remove(obs);
+                        obstacles.splice(i, 1);
+                        score += 1;
+                        document.getElementById('score').innerText = Math.floor(score);
+                    }
+                }
+            }
+
+            // Câmera segue o jogador
+            if (isPlaying) {
+                camera.position.x += (player.position.x * 0.6 - camera.position.x) * 0.05;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Inicia
+        init();
     </script>
 </body>
-    </html>
+</html>
