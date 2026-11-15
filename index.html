@@ -9,36 +9,37 @@
         
         /* --- LOBBY --- */
         #lobby { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #0f3460 0%, #1a1a2e 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
-        #lobby h1 { font-size: 45px; color: #4dff9e; text-shadow: 3px 3px 0 #000, 0 0 20px #4dff9e; margin: 0; letter-spacing: 2px; }
-        #lobby p { color: #aaa; margin-top: 5px; font-size: 14px; }
+        #lobby h1 { font-size: 50px; color: #ffd700; text-shadow: 4px 4px 0 #000, 0 0 25px #ffd700; margin: 0; letter-spacing: 2px; text-align: center; }
+        #lobby .subtitle { color: #4dff9e; font-size: 16px; margin-bottom: 30px; text-shadow: 1px 1px 0 #000; }
         
-        .section-title { font-size: 16px; color: #ffd700; margin-top: 25px; margin-bottom: 10px; text-transform: uppercase; }
+        .section-title { font-size: 18px; color: #fff; margin-top: 15px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 2px 2px 0 #000; }
         
-        .skins-container { display: flex; gap: 12px; }
-        .skin-btn { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #444; cursor: pointer; transition: 0.2s; }
-        .skin-btn.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 15px #fff; }
+        .skins-container { display: flex; gap: 15px; margin-bottom: 20px; }
+        .skin-btn { width: 55px; height: 55px; border-radius: 50%; border: 4px solid #555; cursor: pointer; transition: 0.2s; position: relative; }
+        .skin-btn.selected { border-color: #fff; transform: scale(1.2); box-shadow: 0 0 20px #fff; }
+        .skin-btn::after { content: '👀'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; }
         
-        .maps-container { display: flex; gap: 15px; }
-        .map-btn { background: #16213e; border: 2px solid #4dff9e; color: #4dff9e; padding: 12px 18px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
-        .map-btn.selected { background: #4dff9e; color: #000; box-shadow: 0 0 15px #4dff9e; }
+        .maps-container { display: flex; gap: 15px; margin-bottom: 30px; }
+        .map-btn { background: #16213e; border: 3px solid #4dff9e; color: #4dff9e; padding: 15px 25px; border-radius: 15px; font-size: 16px; font-weight: 900; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
+        .map-btn.selected { background: #4dff9e; color: #000; box-shadow: 0 0 20px #4dff9e; }
 
-        #playBtn { margin-top: 30px; padding: 18px 60px; font-size: 22px; font-weight: 900; background: #ffd700; border: none; border-radius: 12px; color: #000; cursor: pointer; text-transform: uppercase; box-shadow: 0 6px 0 #b38f00; transition: 0.1s; }
-        #playBtn:active { transform: translateY(6px); box-shadow: none; }
+        #playBtn { padding: 20px 80px; font-size: 24px; font-weight: 900; background: #ffd700; border: none; border-radius: 15px; color: #000; cursor: pointer; text-transform: uppercase; box-shadow: 0 8px 0 #b38f00; transition: 0.1s; }
+        #playBtn:active { transform: translateY(8px); box-shadow: none; }
         
         /* --- HUD --- */
-        #hud { position: absolute; top: 15px; left: 15px; color: white; font-size: 22px; text-shadow: 2px 2px 0 #000; display: none; z-index: 5; font-weight: bold; }
+        #hud { position: absolute; top: 20px; left: 20px; color: white; font-size: 24px; text-shadow: 3px 3px 0 #000; display: none; z-index: 5; font-weight: bold; }
         #hud span { color: #4dff9e; }
         
-        #controls { position: absolute; bottom: 25px; width: 100%; display: none; justify-content: space-between; padding: 0 25px; box-sizing: border-box; z-index: 5; }
-        .dpad { display: flex; gap: 15px; }
-        .control-btn { width: 75px; height: 75px; background: rgba(255,255,255,0.15); border: 3px solid rgba(255,255,255,0.4); border-radius: 20px; font-size: 32px; color: white; display: flex; justify-content: center; align-items: center; user-select: none; touch-action: manipulation; backdrop-filter: blur(4px); }
-        .control-btn:active { background: rgba(255,255,255,0.5); }
-        #btnJump { width: 95px; border-radius: 50%; background: rgba(77, 255, 158, 0.3); border-color: #4dff9e; }
-        #btnJump:active { background: rgba(77, 255, 158, 0.7); }
+        #controls { position: absolute; bottom: 30px; width: 100%; display: none; justify-content: space-between; padding: 0 30px; box-sizing: border-box; z-index: 5; }
+        .dpad { display: flex; gap: 20px; }
+        .control-btn { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border: 4px solid rgba(255,255,255,0.5); border-radius: 25px; font-size: 35px; color: white; display: flex; justify-content: center; align-items: center; user-select: none; touch-action: manipulation; backdrop-filter: blur(5px); }
+        .control-btn:active { background: rgba(255,255,255,0.6); }
+        #btnJump { width: 100px; border-radius: 50%; background: rgba(77, 255, 158, 0.4); border-color: #4dff9e; }
+        #btnJump:active { background: rgba(77, 255, 158, 0.8); }
 
         #gameOverScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; color: white; }
-        #gameOverScreen h1 { color: #ff4444; font-size: 45px; text-shadow: 3px 3px 0 #000; margin-bottom: 10px; }
-        #finalScore { font-size: 22px; margin-bottom: 20px; color: #ffd700; }
+        #gameOverScreen h1 { color: #ff4444; font-size: 50px; text-shadow: 3px 3px 0 #000; margin-bottom: 10px; }
+        #finalScore { font-size: 24px; margin-bottom: 30px; color: #ffd700; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -47,9 +48,9 @@
     <!-- LOBBY -->
     <div id="lobby">
         <h1>STUMBLE ICE</h1>
-        <p>Mobile Edition</p>
+        <div class="subtitle">Mobile Edition</div>
         
-        <div class="section-title">Skin</div>
+        <div class="section-title">Personalizar Skin</div>
         <div class="skins-container">
             <div class="skin-btn selected" style="background: #00a8ff;" onclick="selectSkin(0x00a8ff, this)"></div>
             <div class="skin-btn" style="background: #e84118;" onclick="selectSkin(0xe84118, this)"></div>
@@ -83,7 +84,7 @@
     <div id="gameOverScreen">
         <h1>ELIMINADO!</h1>
         <p id="finalScore">Você chegou a 0m</p>
-        <button class="map-btn" style="border-color: #ffd700; color: #ffd700; font-size: 18px; padding: 15px 30px;" onclick="location.reload()">JOGAR NOVAMENTE</button>
+        <button class="map-btn" style="border-color: #ffd700; color: #ffd700; font-size: 20px; padding: 15px 40px;" onclick="location.reload()">JOGAR NOVAMENTE</button>
     </div>
 
     <script>
@@ -98,7 +99,7 @@
         let baseSpeed = 0.45;
         let speed = baseSpeed;
         
-        let playerLane = 0; // -1, 0, 1
+        let playerLane = 0;
         let targetX = 0;
         let isJumping = false;
         let jumpVelocity = 0;
@@ -111,7 +112,6 @@
         let obstacles = [];
         let spawnTimer = 0;
         let gameTime = 0;
-        let isLaserLow = false; // Controle para o mapa Laser
 
         // --- INICIALIZAÇÃO ---
         function init() {
@@ -127,12 +127,12 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
-            // Iluminação
-            scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-            dirLight.position.set(10, 20, 10);
-            dirLight.castShadow = true;
-            scene.add(dirLight);
+            // Iluminação (Configuração recomendada para mobile: poucas luzes)
+            scene.add(new THREE.HemisphereLight(0xbbddff, 0x443322, 1.0));
+            const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
+            keyLight.position.set(5, 10, 7);
+            keyLight.castShadow = true;
+            scene.add(keyLight);
 
             createPlayer();
             window.addEventListener('resize', onWindowResize, false);
@@ -142,20 +142,22 @@
 
         function createPlayer() {
             const group = new THREE.Group();
-            const mat = new THREE.MeshStandardMaterial({ color: playerColor, roughness: 0.4 });
+            const mat = new THREE.MeshStandardMaterial({ color: playerColor, roughness: 0.3, metalness: 0.1 });
             
-            // Corpo (Cápsula - estilo Stumble Guys)
+            // Corpo (Cápsula - Formato do Stumble Guys)
             const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 0.8, 4, 16), mat);
             body.position.y = 1.0;
+            body.castShadow = true;
+            body.receiveShadow = true;
             group.add(body);
 
-            // Olhos
+            // Olhos (Para dar vida)
             const eyeMat = new THREE.MeshBasicMaterial({ color: 0x111111 });
-            const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), eyeMat);
-            eyeL.position.set(-0.15, 1.4, 0.45);
+            const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), eyeMat);
+            eyeL.position.set(-0.2, 1.4, 0.45);
             group.add(eyeL);
-            const eyeR = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), eyeMat);
-            eyeR.position.set(0.15, 1.4, 0.45);
+            const eyeR = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), eyeMat);
+            eyeR.position.set(0.2, 1.4, 0.45);
             group.add(eyeR);
 
             player = group;
@@ -183,10 +185,8 @@
             document.getElementById('hud').style.display = 'block';
             isPlaying = true;
             
-            // Aplica cor
             player.children[0].material.color.setHex(playerColor);
             
-            // Reseta
             score = 0;
             playerLane = 0;
             targetX = 0;
@@ -208,16 +208,16 @@
             floorGroup.name = "floor";
 
             if (currentMap === 'block') {
-                // Chão do Block Dash (Plataforma flutuante)
+                // Chão do Block Dash
                 const floorGeo = new THREE.BoxGeometry(12, 1, 200);
-                const floorMat = new THREE.MeshStandardMaterial({ color: 0x444444, roughness: 0.8 });
+                const floorMat = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.8 });
                 const floor = new THREE.Mesh(floorGeo, floorMat);
                 floor.position.set(0, -0.5, -90);
+                floor.receiveShadow = true;
                 floorGroup.add(floor);
 
-                // Linhas guias (como no jogo real)
                 for(let i=0; i<3; i++){
-                    const lineGeo = new THREE.PlaneGeometry(0.05, 200);
+                    const lineGeo = new THREE.PlaneGeometry(0.1, 200);
                     const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
                     const line = new THREE.Mesh(lineGeo, lineMat);
                     line.rotation.x = -Math.PI / 2;
@@ -225,14 +225,14 @@
                     floorGroup.add(line);
                 }
             } else {
-                // Chão do Laser Tracer (Ácido/Preto)
+                // Chão do Laser Tracer
                 const floorGeo = new THREE.BoxGeometry(12, 1, 200);
                 const floorMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
                 const floor = new THREE.Mesh(floorGeo, floorMat);
                 floor.position.set(0, -0.5, -90);
+                floor.receiveShadow = true;
                 floorGroup.add(floor);
 
-                // Grid Vermelho (Laser)
                 const grid = new THREE.GridHelper(200, 40, 0xff0000, 0x550000);
                 grid.position.set(0, 0.01, -90);
                 grid.rotation.x = Math.PI / 2;
@@ -274,47 +274,35 @@
             const obsGroup = new THREE.Group();
 
             if (currentMap === 'block') {
-                // Block Dash: Parede com buraco ou bloco inteiro
                 const isHole = Math.random() > 0.5;
                 const holeLane = Math.floor(Math.random() * 3) - 1;
 
                 if (isHole) {
-                    // Parede com buraco (3 blocos, um faltando)
                     for (let i = -1; i <= 1; i++) {
                         if (i !== holeLane) {
                             const block = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.5, 1), new THREE.MeshStandardMaterial({ color: 0xff3333 }));
                             block.position.set(i * laneWidth, 1.25, 0);
+                            block.castShadow = true;
+                            block.receiveShadow = true;
                             obsGroup.add(block);
                         }
                     }
                 } else {
-                    // Bloco baixo para pular
                     const block = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1, 1), new THREE.MeshStandardMaterial({ color: 0xff8800 }));
                     block.position.set(holeLane * laneWidth, 0.5, 0);
+                    block.castShadow = true;
+                    block.receiveShadow = true;
                     obsGroup.add(block);
                 }
             } else {
-                // Laser Tracer: Parede de Laser
                 const laserMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-                // Laser horizontal (baixo - pula) ou vertical (alto - agacha, mas aqui é só pular)
-                const isLow = Math.random() > 0.5;
-                const yPos = isLow ? 0.5 : 1.5;
-
-                // Criar feixe de laser
                 const beam = new THREE.Mesh(new THREE.BoxGeometry(12, 0.1, 0.1), laserMat);
-                beam.position.set(0, yPos, 0);
+                beam.position.set(0, 0.5, 0);
                 
-                // Adicionar brilho
                 const glow = new THREE.PointLight(0xff0000, 1, 5);
-                glow.position.set(0, yPos, 0);
+                glow.position.set(0, 0.5, 0);
                 obsGroup.add(glow);
                 obsGroup.add(beam);
-                
-                // Se for baixo, o jogador precisa pular. Se for alto, ele passa por baixo (mas nosso boneco é alto, então vamos fazer ele pular também)
-                // Para simplificar, o laser baixo é pulável, o alto não (mas para evitar frustração, faremos todos puláveis)
-                if (!isLow) {
-                    beam.position.y = 0.5; // Força ser baixo para ser pulável
-                }
             }
 
             obsGroup.position.z = -100;
@@ -323,30 +311,17 @@
         }
 
         function checkCollision(obs) {
-            // Verifica a distância no eixo Z
             if (Math.abs(obs.position.z - player.position.z) < 0.8) {
                 if (currentMap === 'block') {
-                    // Lógica de colisão para blocos
                     obs.children.forEach(child => {
-                        // Se for um bloco de parede
                         if (child.geometry.parameters.height > 2) {
-                            // Se o jogador não estiver na pista do buraco
-                            if (Math.abs(child.position.x - player.position.x) < 1.2) {
-                                if (player.position.y < 1) return true; // Colidiu
-                            }
+                            if (Math.abs(child.position.x - player.position.x) < 1.2 && player.position.y < 1) return true;
                         } else {
-                            // Bloco baixo (pular)
-                            if (Math.abs(child.position.x - player.position.x) < 1.2 && player.position.y < 0.8) {
-                                return true;
-                            }
+                            if (Math.abs(child.position.x - player.position.x) < 1.2 && player.position.y < 0.8) return true;
                         }
                     });
                 } else {
-                    // Lógica de colisão para Laser
-                    // Se o jogador não estiver pulando o suficiente
-                    if (player.position.y < 0.8) {
-                        return true;
-                    }
+                    if (player.position.y < 0.8) return true;
                 }
             }
             return false;
@@ -364,14 +339,11 @@
 
             if (isPlaying) {
                 gameTime++;
-                // Aumenta velocidade com o tempo
                 speed = baseSpeed + (gameTime * 0.0001);
                 if (speed > 1.8) speed = 1.8;
 
-                // Movimento lateral suave
                 player.position.x += (targetX - player.position.x) * 0.2;
 
-                // Física do pulo
                 if (isJumping) {
                     player.position.y += jumpVelocity;
                     jumpVelocity += gravity;
@@ -382,7 +354,6 @@
                     }
                 }
 
-                // Spawner
                 spawnTimer++;
                 let spawnRate = currentMap === 'block' ? 50 : 40;
                 if (spawnTimer > (spawnRate - (speed * 5))) {
@@ -390,7 +361,6 @@
                     spawnTimer = 0;
                 }
 
-                // Atualiza obstáculos
                 for (let i = obstacles.length - 1; i >= 0; i--) {
                     let obs = obstacles[i];
                     obs.position.z += speed;
@@ -408,7 +378,6 @@
                 }
             }
 
-            // Câmera segue o jogador
             if (isPlaying) {
                 camera.position.x += (player.position.x * 0.6 - camera.position.x) * 0.05;
             }
@@ -422,7 +391,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // Inicia
         init();
     </script>
 </body>
