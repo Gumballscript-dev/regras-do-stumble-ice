@@ -3,71 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Stumble Ice</title>
+    <title>Stumble Ice - Full Game</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #0b1a2a; font-family: 'Arial Black', sans-serif; touch-action: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+        body { margin: 0; overflow: hidden; background-color: #0b1a2a; font-family: 'Bungee', cursive; touch-action: none; }
         
         /* --- LOBBY --- */
         #lobby { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #0f3460 0%, #1a1a2e 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
-        #lobby h1 { font-size: 45px; color: #4dff9e; text-shadow: 4px 4px 0 #000, 0 0 25px #4dff9e; margin: 0; letter-spacing: 2px; text-align: center; }
-        #lobby .subtitle { color: #ffd700; font-size: 14px; margin-bottom: 20px; text-shadow: 1px 1px 0 #000; letter-spacing: 2px; }
+        #lobby h1 { font-size: 40px; color: #4dff9e; text-shadow: 4px 4px 0 #000, 0 0 25px #4dff9e; margin: 0; letter-spacing: 2px; text-align: center; }
+        #lobby .subtitle { color: #ffd700; font-size: 12px; margin-bottom: 20px; letter-spacing: 2px; }
         
-        .section-title { font-size: 16px; color: #fff; margin-top: 10px; margin-bottom: 10px; text-transform: uppercase; text-shadow: 2px 2px 0 #000; }
+        .coins-display { background: #000; padding: 5px 15px; border-radius: 20px; border: 2px solid #ffd700; color: #ffd700; font-size: 18px; margin-bottom: 20px; }
+        
+        .section-title { font-size: 14px; color: #fff; margin-top: 10px; margin-bottom: 10px; text-transform: uppercase; }
         
         .skins-container { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; max-width: 300px; }
-        .skin-btn { width: 45px; height: 45px; border-radius: 50%; border: 3px solid #444; cursor: pointer; transition: 0.2s; }
+        .skin-btn { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #444; cursor: pointer; transition: 0.2s; }
         .skin-btn.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 15px #fff; }
         
-        #playBtn { margin-top: 20px; padding: 18px 60px; font-size: 22px; font-weight: 900; background: #ffd700; border: none; border-radius: 15px; color: #000; cursor: pointer; text-transform: uppercase; box-shadow: 0 6px 0 #b38f00; transition: 0.1s; }
+        .map-btn { background: #16213e; border: 3px solid #4dff9e; color: #4dff9e; padding: 10px 20px; border-radius: 15px; font-size: 14px; cursor: pointer; text-transform: uppercase; margin-bottom: 15px; }
+        
+        #playBtn { padding: 15px 50px; font-size: 20px; background: #ffd700; border: none; border-radius: 15px; color: #000; cursor: pointer; text-transform: uppercase; box-shadow: 0 6px 0 #b38f00; transition: 0.1s; }
         #playBtn:active { transform: translateY(6px); box-shadow: none; }
         
         /* --- HUD --- */
-        #hud { position: absolute; top: 15px; left: 15px; color: white; font-size: 20px; text-shadow: 2px 2px 0 #000; display: none; z-index: 5; font-weight: bold; }
-        #hud span { color: #4dff9e; }
-        #hud-players { position: absolute; top: 15px; right: 15px; color: #ffd700; font-size: 20px; text-shadow: 2px 2px 0 #000; display: none; z-index: 5; font-weight: bold; }
+        #hud { position: absolute; top: 15px; left: 15px; color: white; font-size: 18px; text-shadow: 2px 2px 0 #000; display: none; z-index: 5; }
+        #hud-score span { color: #4dff9e; }
+        #hud-coins { position: absolute; top: 15px; right: 15px; color: #ffd700; font-size: 18px; text-shadow: 2px 2px 0 #000; display: none; z-index: 5; }
         
         /* --- CONTROLES (JOYSTICK E PULO) --- */
         #controls { position: absolute; bottom: 0; width: 100%; height: 40%; display: none; z-index: 5; pointer-events: none; }
-        
-        /* Área do Joystick (Esquerda) */
-        #joystick-zone { position: absolute; bottom: 20px; left: 20px; width: 150px; height: 150px; pointer-events: auto; }
+        #joystick-zone { position: absolute; bottom: 20px; left: 20px; width: 130px; height: 130px; pointer-events: auto; }
         #joystick-base { position: absolute; width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; box-sizing: border-box; }
-        #joystick-stick { position: absolute; top: 50%; left: 50%; width: 60px; height: 60px; background: rgba(255,255,255,0.5); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        
-        /* Botão de Pulo (Direita) */
-        #btnJump { position: absolute; bottom: 40px; right: 40px; width: 90px; height: 90px; border-radius: 50%; background: rgba(77, 255, 158, 0.4); border: 4px solid #4dff9e; color: white; font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center; pointer-events: auto; text-shadow: 1px 1px 0 #000; }
+        #joystick-stick { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; background: rgba(255,255,255,0.5); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        #btnJump { position: absolute; bottom: 40px; right: 30px; width: 80px; height: 80px; border-radius: 50%; background: rgba(77, 255, 158, 0.4); border: 4px solid #4dff9e; color: white; font-size: 16px; display: flex; justify-content: center; align-items: center; pointer-events: auto; text-shadow: 1px 1px 0 #000; }
         #btnJump:active { background: rgba(77, 255, 158, 0.8); transform: scale(0.95); }
 
         /* --- GAME OVER --- */
         #gameOverScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; color: white; }
-        #gameOverScreen h1 { color: #ff4444; font-size: 40px; text-shadow: 3px 3px 0 #000; margin-bottom: 10px; }
-        #finalScore { font-size: 20px; margin-bottom: 20px; color: #ffd700; }
-        
-        /* Aviso de Rotação */
-        #rotate-warning { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: white; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; text-align: center; padding: 20px; box-sizing: border-box; }
-        @media (orientation: portrait) { #rotate-warning { display: flex; } }
+        #gameOverScreen h1 { color: #ff4444; font-size: 35px; text-shadow: 3px 3px 0 #000; margin-bottom: 10px; }
+        #finalScore { font-size: 18px; margin-bottom: 20px; color: #ffd700; text-align: center; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <div id="rotate-warning">
-        <h2>Gire o Celular</h2>
-        <p>Stumble Ice foi feito para ser jogado na horizontal (landscape).</p>
-    </div>
-
     <div id="lobby">
         <h1>STUMBLE ICE</h1>
-        <div class="subtitle">MULTIPLAYER (BOTS)</div>
+        <div class="subtitle">FULL GAME EDITION</div>
         
-        <div class="section-title">Personalizar Skin</div>
+        <div class="coins-display">🪙 <span id="lobbyCoins">0</span></div>
+        
+        <div class="section-title">Escolha sua Skin</div>
         <div class="skins-container" id="skinContainer"></div>
 
         <button id="playBtn" onclick="startGame()">JOGAR</button>
     </div>
 
-    <div id="hud">Distância: <span id="score">0</span>m</div>
-    <div id="hud-players">Vivos: <span id="aliveCount">30</span></div>
+    <div id="hud" class="hud-score">Distância: <span id="score">0</span>m</div>
+    <div id="hud-coins">🪙 <span id="gameCoins">0</span></div>
     
     <div id="controls">
         <div id="joystick-zone">
@@ -78,9 +72,9 @@
     </div>
 
     <div id="gameOverScreen">
-        <h1>ELIMINADO!</h1>
+        <h1>GAME OVER</h1>
         <p id="finalScore">Você chegou a 0m</p>
-        <button class="map-btn" style="border: 2px solid #ffd700; color: #ffd700; font-size: 18px; padding: 15px 30px; background: transparent; border-radius: 10px;" onclick="location.reload()">TENTAR NOVAMENTE</button>
+        <button id="playBtn" onclick="location.reload()" style="padding: 10px 30px; font-size: 16px;">JOGAR NOVAMENTE</button>
     </div>
 
     <script>
@@ -88,11 +82,11 @@
         let scene, camera, renderer;
         let player;
         let isPlaying = false;
-        let playerColor = 0x00a8ff;
         
         let score = 0;
-        let baseSpeed = 0.5;
-        let speed = baseSpeed;
+        let coins = 0; // Moedas na partida
+        let totalCoins = 0; // Moedas salvas
+        let speed = 0.5;
         let gameTime = 0;
 
         // Física do Jogador
@@ -102,27 +96,29 @@
         const gravity = -0.03;
         const jumpStrength = 0.55;
         const laneWidth = 3.5;
-        const maxLanes = 1.5; // Limite lateral (-1.5 a 1.5)
 
         // Joystick
         let joystickActive = false;
         let joystickInputX = 0;
         const joystickMaxDist = 50;
 
-        // Bots
-        let bots = [];
-        let aliveBots = 30;
-        const botColors = [0xe84118, 0x4cd137, 0xfbc531, 0x9c88ff, 0xff6b81, 0x00cec9];
-
-        // Obstáculos
-        let obstacles = [];
+        // Cenário e Objetos
+        let obstacles = []; // Trens e barreiras
+        let collectibles = []; // Moedas
         let spawnTimer = 0;
+        let coinTimer = 0;
+
+        let playerColor = 0x00a8ff;
+        const skinColors = [0x00a8ff, 0xe84118, 0x4cd137, 0xfbc531, 0x9c88ff, 0xff6b81];
 
         // --- INICIALIZAÇÃO ---
         function init() {
+            loadProgress();
+            createSkinButtons();
+
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x87CEEB); // Céu Azul
-            scene.fog = new THREE.Fog(0x87CEEB, 30, 100);
+            scene.background = new THREE.Color(0x87CEEB); // Céu azul
+            scene.fog = new THREE.Fog(0x87CEEB, 30, 100); // Neblina
 
             camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 7, 12);
@@ -142,16 +138,46 @@
 
             createFloor();
             createPlayer();
-            createBots();
             setupControls();
-            createSkinButtons();
+
+            // Efeito de Neve
+            createSnow();
 
             window.addEventListener('resize', onWindowResize, false);
             animate();
         }
 
+        // --- LOBBY E SKINS ---
+        function createSkinButtons() {
+            const container = document.getElementById('skinContainer');
+            skinColors.forEach((color, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'skin-btn' + (index === 0 ? ' selected' : '');
+                btn.style.backgroundColor = '#' + color.toString(16).padStart(6, '0');
+                btn.onclick = () => selectSkin(color, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectSkin(color, el) {
+            playerColor = color;
+            document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            if(player) player.children[0].material.color.setHex(color);
+        }
+
+        function loadProgress() {
+            const savedCoins = localStorage.getItem('stumbleIceCoins');
+            if (savedCoins) totalCoins = parseInt(savedCoins);
+            document.getElementById('lobbyCoins').innerText = totalCoins;
+        }
+
+        function saveProgress() {
+            localStorage.setItem('stumbleIceCoins', totalCoins);
+        }
+
+        // --- CENA 3D ---
         function createFloor() {
-            // Chão Principal
             const floorGeo = new THREE.BoxGeometry(15, 1, 200);
             const floorMat = new THREE.MeshStandardMaterial({ color: 0x666666 });
             const floor = new THREE.Mesh(floorGeo, floorMat);
@@ -159,21 +185,19 @@
             floor.receiveShadow = true;
             scene.add(floor);
 
-            // Linhas brancas no chão
-            for(let i=0; i<4; i++){
-                const lineGeo = new THREE.PlaneGeometry(0.1, 200);
-                const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            // Trilhos
+            for(let i=0; i<3; i++){
+                const lineGeo = new THREE.BoxGeometry(0.2, 0.1, 200);
+                const lineMat = new THREE.MeshStandardMaterial({ color: 0x888888 });
                 const line = new THREE.Mesh(lineGeo, lineMat);
-                line.rotation.x = -Math.PI / 2;
-                line.position.set((i-1.5)*laneWidth, 0.01, -90);
+                line.position.set((i-1)*laneWidth, 0.01, -90);
                 scene.add(line);
             }
         }
 
-        function createCharacter(color) {
+        function createPlayer() {
             const group = new THREE.Group();
-            const mat = new THREE.MeshStandardMaterial({ color: color, roughness: 0.3 });
-            
+            const mat = new THREE.MeshStandardMaterial({ color: playerColor, roughness: 0.3 });
             const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 0.8, 4, 16), mat);
             body.position.y = 1.0;
             body.castShadow = true;
@@ -187,288 +211,162 @@
             eyeR.position.set(0.2, 1.4, 0.45);
             group.add(eyeR);
 
-            return group;
-        }
-
-        function createPlayer() {
-            player = createCharacter(playerColor);
+            player = group;
             player.position.set(0, 0, 0);
             scene.add(player);
         }
 
-        function createBots() {
-            for (let i = 0; i < 30; i++) {
-                const color = botColors[Math.floor(Math.random() * botColors.length)];
-                const bot = createCharacter(color);
-                
-                // Posição inicial aleatória (na frente do jogador)
-                bot.position.set(
-                    (Math.random() - 0.5) * 10, 
-                    0, 
-                    -10 - Math.random() * 30
-                );
-                
-                bot.userData = {
-                    isAlive: true,
-                    targetX: bot.position.x,
-                    speed: baseSpeed + (Math.random() * 0.2),
-                    jumpTimer: 0,
-                    isJumping: false,
-                    jumpVel: 0
-                };
-                
-                scene.add(bot);
-                bots.push(bot);
+        function createSnow() {
+            const particleCount = 1000;
+            const particles = new THREE.BufferGeometry();
+            const posArray = new Float32Array(particleCount * 3);
+
+            for(let i = 0; i < particleCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 100; // Espalha a neve
             }
-            updateAliveCount();
+            particles.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const material = new THREE.PointsMaterial({ size: 0.2, color: 0xffffff, transparent: true, opacity: 0.8 });
+            const snow = new THREE.Points(particles, material);
+            scene.add(snow);
+
+            // Função para animar a neve (chamada no animate)
+            snow.userData.update = () => {
+                const positions = snow.geometry.attributes.position.array;
+                for(let i = 1; i < positions.length; i += 3) {
+                    positions[i] -= 0.05; // Queda
+                    if(positions[i] < -5) positions[i] = 20;
+                }
+                snow.geometry.attributes.position.needsUpdate = true;
+            };
+            scene.userData.snow = snow;
         }
 
-        function createSkinButtons() {
-            const container = document.getElementById('skinContainer');
-            const colors = [0x00a8ff, 0xe84118, 0x4cd137, 0xfbc531, 0x9c88ff, 0xff6b81];
-            
-            colors.forEach((color, index) => {
-                const btn = document.createElement('div');
-                btn.className = 'skin-btn' + (index === 0 ? ' selected' : '');
-                btn.style.backgroundColor = '#' + color.toString(16).padStart(6, '0');
-                btn.onclick = () => {
-                    playerColor = color;
-                    document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected');
-                };
-                container.appendChild(btn);
-            });
-        }
-
-        // --- CONTROLES (JOYSTICK) ---
+        // --- CONTROLES ---
         function setupControls() {
             const zone = document.getElementById('joystick-zone');
             const stick = document.getElementById('joystick-stick');
             const base = document.getElementById('joystick-base');
             const btnJump = document.getElementById('btnJump');
 
-            // Eventos do Joystick
-            zone.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                joystickActive = true;
-                updateJoystick(e.touches[0]);
-            });
-
-            zone.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                if (joystickActive) updateJoystick(e.touches[0]);
-            });
-
-            zone.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                joystickActive = false;
-                joystickInputX = 0;
-                stick.style.transform = `translate(-50%, -50%)`;
-            });
+            zone.addEventListener('touchstart', (e) => { e.preventDefault(); joystickActive = true; updateJoystick(e.touches[0]); });
+            zone.addEventListener('touchmove', (e) => { e.preventDefault(); if (joystickActive) updateJoystick(e.touches[0]); });
+            zone.addEventListener('touchend', (e) => { e.preventDefault(); joystickActive = false; joystickInputX = 0; stick.style.transform = `translate(-50%, -50%)`; });
 
             function updateJoystick(touch) {
                 const rect = base.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
                 const centerY = rect.top + rect.height / 2;
-                
                 let deltaX = touch.clientX - centerX;
                 let deltaY = touch.clientY - centerY;
-                
-                // Limitar distância
                 const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
                 if (distance > joystickMaxDist) {
                     deltaX = (deltaX / distance) * joystickMaxDist;
                     deltaY = (deltaY / distance) * joystickMaxDist;
                 }
-                
                 stick.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
-                
-                // Normalizar valor de X (-1 a 1)
                 joystickInputX = deltaX / joystickMaxDist;
             }
 
-            // Botão de Pulo
-            btnJump.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (isPlaying && !isJumping) {
-                    isJumping = true;
-                    jumpVelocity = jumpStrength;
-                }
-            });
-            
-            // Teclado para teste PC
-            window.addEventListener('keydown', (e) => {
-                if(!isPlaying) return;
-                if(e.key === "ArrowLeft" || e.key === "a") joystickInputX = -1;
-                if(e.key === "ArrowRight" || e.key === "d") joystickInputX = 1;
-                if(e.key === " " || e.key === "ArrowUp") {
-                    if(!isJumping) { isJumping = true; jumpVelocity = jumpStrength; }
-                }
-            });
+            btnJump.addEventListener('touchstart', (e) => { e.preventDefault(); if (isPlaying && !isJumping) { isJumping = true; jumpVelocity = jumpStrength; } });
         }
 
-        // --- INÍCIO DO JOGO ---
+        // --- JOGO ---
         function startGame() {
             document.getElementById('lobby').style.display = 'none';
             document.getElementById('controls').style.display = 'block';
             document.getElementById('hud').style.display = 'block';
-            document.getElementById('hud-players').style.display = 'block';
+            document.getElementById('hud-coins').style.display = 'block';
             isPlaying = true;
             
-            player.children[0].material.color.setHex(playerColor);
-            
-            // Reset Jogador
             player.position.set(0, 0, 0);
             playerX = 0;
             isJumping = false;
-            jumpVelocity = 0;
-            
             score = 0;
-            speed = baseSpeed;
+            coins = 0;
+            speed = 0.5;
             gameTime = 0;
+            
             obstacles.forEach(o => scene.remove(o));
             obstacles = [];
+            collectibles.forEach(c => scene.remove(c));
+            collectibles = [];
             spawnTimer = 0;
+            coinTimer = 0;
         }
 
-        // --- LÓGICA DE BOTS E OBSTÁCULOS ---
         function spawnObstacle() {
-            const obsGroup = new THREE.Group();
-            const isHole = Math.random() > 0.5;
-            const holeLane = Math.floor(Math.random() * 3) - 1;
-
-            if (isHole) {
-                // Parede com buraco (3 blocos, 1 some)
-                for (let i = -1; i <= 1; i++) {
-                    if (i !== holeLane) {
-                        const block = new THREE.Mesh(new THREE.BoxGeometry(2.8, 2.5, 1), new THREE.MeshStandardMaterial({ color: 0xff3333 }));
-                        block.position.set(i * laneWidth, 1.25, 0);
-                        block.castShadow = true;
-                        obsGroup.add(block);
-                    }
-                }
+            const type = Math.random() > 0.5 ? 'train' : 'barrier';
+            const lane = Math.floor(Math.random() * 3) - 1;
+            
+            const group = new THREE.Group();
+            
+            if (type === 'train') {
+                // Trem
+                const mat = new THREE.MeshStandardMaterial({ color: 0xff3333 });
+                const body = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3, 15), mat);
+                body.position.y = 1.5;
+                body.castShadow = true;
+                group.add(body);
+                group.userData = { type: 'train', lane: lane };
+                group.position.set(lane * laneWidth, 0, -150);
             } else {
-                // Bloco baixo (pular)
-                const block = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1, 1), new THREE.MeshStandardMaterial({ color: 0xff8800 }));
-                block.position.set(holeLane * laneWidth, 0.5, 0);
-                block.castShadow = true;
-                obsGroup.add(block);
+                // Barreira Baixa (Pular)
+                const mat = new THREE.MeshStandardMaterial({ color: 0xffaa00 });
+                const body = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1, 1), mat);
+                body.position.y = 0.5;
+                body.castShadow = true;
+                group.add(body);
+                group.userData = { type: 'barrier', lane: lane };
+                group.position.set(lane * laneWidth, 0, -100);
             }
-
-            obsGroup.position.z = -120;
-            obsGroup.userData = { isHole: isHole, holeLane: holeLane, lane: holeLane * laneWidth };
-            scene.add(obsGroup);
-            obstacles.push(obsGroup);
+            
+            scene.add(group);
+            obstacles.push(group);
         }
 
-        function updateBots() {
-            bots.forEach(bot => {
-                if (!bot.userData.isAlive) return;
-
-                // Bots se movem para frente
-                bot.position.z += speed * 0.9; // Bots um pouco mais lentos
-
-                // IA Simples: Desviar de obstáculos
-                let shouldJump = false;
-                let targetX = bot.position.x;
-
-                obstacles.forEach(obs => {
-                    // Se o obstáculo está perto do bot
-                    if (obs.position.z > bot.position.z - 20 && obs.position.z < bot.position.z + 2) {
-                        if (obs.userData.isHole) {
-                            // Se for parede com buraco, vai para o buraco
-                            targetX = obs.userData.holeLane * laneWidth;
-                        } else {
-                            // Se for bloco baixo, tenta pular ou desviar
-                            if (Math.abs(bot.position.x - obs.userData.lane) < 1.5) {
-                                shouldJump = true;
-                            }
-                        }
-                    }
-                });
-
-                // Movimento lateral do bot (suave)
-                bot.position.x += (targetX - bot.position.x) * 0.05;
-                // Limitar bordas
-                bot.position.x = Math.max(-5, Math.min(5, bot.position.x));
-
-                // Pulo do bot
-                if (shouldJump && !bot.userData.isJumping && Math.random() > 0.1) { // 10% de chance de errar o pulo
-                    bot.userData.isJumping = true;
-                    bot.userData.jumpVel = jumpStrength;
-                }
-
-                // Física de pulo do bot
-                if (bot.userData.isJumping) {
-                    bot.position.y += bot.userData.jumpVel;
-                    bot.userData.jumpVel += gravity;
-                    if (bot.position.y <= 0) {
-                        bot.position.y = 0;
-                        bot.userData.isJumping = false;
-                        bot.userData.jumpVel = 0;
-                    }
-                }
-
-                // Colisão do bot (se bater, ele morre)
-                obstacles.forEach(obs => {
-                    if (Math.abs(obs.position.z - bot.position.z) < 0.5) {
-                        if (obs.userData.isHole) {
-                            // Se for parede, verifica se o bot está na pista do buraco
-                            if (Math.abs(bot.position.x - obs.userData.lane) < 1.5 && bot.position.y < 1) {
-                                bot.userData.isAlive = false;
-                                bot.visible = false;
-                                aliveBots--;
-                                updateAliveCount();
-                            }
-                        } else {
-                            // Se for bloco baixo e o bot não pulou
-                            if (Math.abs(bot.position.x - obs.userData.lane) < 1.5 && bot.position.y < 0.8) {
-                                bot.userData.isAlive = false;
-                                bot.visible = false;
-                                aliveBots--;
-                                updateAliveCount();
-                            }
-                        }
-                    }
-                });
-
-                // Se o bot passar do jogador, ele "some" (para não lotar a tela)
-                if (bot.position.z > 15) {
-                    bot.userData.isAlive = false;
-                    bot.visible = false;
-                }
-            });
-        }
-
-        function updateAliveCount() {
-            if (aliveBots < 0) aliveBots = 0;
-            document.getElementById('aliveCount').innerText = aliveBots;
+        function spawnCoin() {
+            const lane = Math.floor(Math.random() * 3) - 1;
+            const coinGroup = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.8, roughness: 0.2 });
+            const coin = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.1, 16), mat);
+            coin.rotation.x = Math.PI / 2;
+            coin.position.y = 1.0;
+            coinGroup.add(coin);
+            
+            coinGroup.position.set(lane * laneWidth, 0, -120);
+            coinGroup.userData = { lane: lane };
+            scene.add(coinGroup);
+            collectibles.push(coinGroup);
         }
 
         function gameOver() {
             isPlaying = false;
+            totalCoins += coins;
+            saveProgress();
             document.getElementById('gameOverScreen').style.display = 'flex';
-            document.getElementById('finalScore').innerText = "Você chegou a " + Math.floor(score) + "m";
+            document.getElementById('finalScore').innerText = `Você correu ${Math.floor(score)}m\nGanhou ${coins} moedas!`;
         }
 
         // --- LOOP PRINCIPAL ---
         function animate() {
             requestAnimationFrame(animate);
 
+            // Atualiza Neve
+            if(scene.userData.snow) scene.userData.snow.userData.update();
+
             if (isPlaying) {
                 gameTime++;
-                speed = baseSpeed + (gameTime * 0.0001);
-                if (speed > 1.8) speed = 1.8;
+                speed = 0.5 + (gameTime * 0.0001);
+                if (speed > 2.0) speed = 2.0;
 
-                // Movimento do Jogador (Joystick)
+                // Movimento e Física
                 if (joystickInputX !== 0) {
-                    playerX += joystickInputX * 0.2; // Velocidade lateral
-                    playerX = Math.max(-5, Math.min(5, playerX)); // Limite da pista
+                    playerX += joystickInputX * 0.2;
+                    playerX = Math.max(-5, Math.min(5, playerX));
                 }
-                player.position.x += (playerX - player.position.x) * 0.3; // Suavização
-                player.rotation.z = -joystickInputX * 0.2; // Inclinação ao andar
+                player.position.x += (playerX - player.position.x) * 0.3;
+                player.rotation.z = -joystickInputX * 0.2;
 
-                // Física do Jogador
                 if (isJumping) {
                     player.position.y += jumpVelocity;
                     jumpVelocity += gravity;
@@ -479,38 +377,50 @@
                     }
                 }
 
-                // Spawn de Obstáculos
+                // Spawners
                 spawnTimer++;
-                if (spawnTimer > (50 - (speed * 5))) {
-                    spawnObstacle();
-                    spawnTimer = 0;
-                }
-
-                // Atualiza Bots
-                updateBots();
+                if (spawnTimer > 70) { spawnObstacle(); spawnTimer = 0; }
+                
+                coinTimer++;
+                if (coinTimer > 50) { spawnCoin(); coinTimer = 0; }
 
                 // Atualiza Obstáculos
                 for (let i = obstacles.length - 1; i >= 0; i--) {
                     let obs = obstacles[i];
-                    obs.position.z += speed;
+                    obs.position.z += speed * (obs.userData.type === 'train' ? 1.5 : 1.0);
 
-                    // Colisão do Jogador
-                    if (Math.abs(obs.position.z - player.position.z) < 0.8) {
-                        obs.children.forEach(child => {
-                            if (child.geometry.parameters.height > 2) { // Parede
-                                if (Math.abs(child.position.x - player.position.x) < 1.2 && player.position.y < 1) gameOver();
-                            } else { // Bloco baixo
-                                if (Math.abs(child.position.x - player.position.x) < 1.2 && player.position.y < 0.8) gameOver();
-                            }
-                        });
+                    // Colisão
+                    if (Math.abs(obs.position.z - player.position.z) < (obs.userData.type === 'train' ? 7.5 : 0.5)) {
+                        if (Math.abs(player.position.x - (obs.userData.lane * laneWidth)) < 1.5) {
+                            if (obs.userData.type === 'train' && player.position.y < 3) gameOver();
+                            if (obs.userData.type === 'barrier' && player.position.y < 0.8) gameOver();
+                        }
                     }
 
-                    // Remove obstáculo
-                    if (obs.position.z > 15) {
+                    // Remove
+                    if (obs.position.z > 20) {
                         scene.remove(obs);
                         obstacles.splice(i, 1);
-                        score += 1;
+                        score += (obs.userData.type === 'train' ? 5 : 1);
                         document.getElementById('score').innerText = Math.floor(score);
+                    }
+                }
+
+                // Atualiza Moedas
+                for (let i = collectibles.length - 1; i >= 0; i--) {
+                    let coin = collectibles[i];
+                    coin.position.z += speed;
+                    coin.rotation.y += 0.1;
+
+                    if (Math.abs(coin.position.z - player.position.z) < 1 && Math.abs(player.position.x - (coin.userData.lane * laneWidth)) < 1) {
+                        scene.remove(coin);
+                        collectibles.splice(i, 1);
+                        coins++;
+                        document.getElementById('gameCoins').innerText = coins;
+                    }
+                    if (coin.position.z > 20) {
+                        scene.remove(coin);
+                        collectibles.splice(i, 1);
                     }
                 }
 
