@@ -109,12 +109,10 @@
             document.getElementById('sizeLabel').innerText = document.getElementById('imageSize').value + 'px';
         }
 
-        // FUNÇÃO DE ENVIO CORRIGIDA PARA GITHUB PAGES
         async function sendMessage() {
             const text = document.getElementById('messageInput').value;
             const feedback = document.getElementById('feedback');
             const url = WEBHOOKS[selectedChannel];
-            const imgSize = document.getElementById('imageSize').value;
 
             if (!text && !imageFile) {
                 feedback.innerText = "Digite uma mensagem ou anexe uma imagem!";
@@ -125,12 +123,11 @@
             feedback.innerText = "Enviando...";
             feedback.style.color = "#ffd700";
 
-            // Cria um FormData para evitar o bloqueio de CORS do navegador
             const formData = new FormData();
-            
             let payload = {};
 
             if (sendMode === 'embed') {
+                // MODO ANÚNCIO (Embed)
                 const embed = {
                     title: "📢 Anúncio do Painel Stumble Lucky",
                     description: text || " ",
@@ -138,33 +135,26 @@
                     footer: { text: "Stumble Lucky Admin" },
                     timestamp: new Date().toISOString()
                 };
-                payload = {
-                    username: "Stumble Lucky ADM",
-                    embeds: [embed]
-                };
+                
+                // AQUI: Removemos o username e avatar_url para usar os da webhook
+                payload = { embeds: [embed] };
             } else {
-                payload = {
-                    content: text,
-                    username: "Stumble Lucky ADM"
-                };
+                // MODO PURO (Texto Normal)
+                // AQUI: Removemos o username e avatar_url para usar os da webhook
+                payload = { content: text };
             }
 
-            // Adiciona o JSON ao FormData
             formData.append('payload_json', JSON.stringify(payload));
 
-            // Se tiver imagem, anexa o arquivo e referencia no Embed
             if (imageFile) {
                 formData.append('file', imageFile);
-                // Se for modo Embed, coloca a imagem no embed referenciando o anexo
                 if (sendMode === 'embed') {
                     payload.embeds[0].image = { url: "attachment://" + imageFile.name };
-                    // Atualiza o JSON com a imagem
                     formData.set('payload_json', JSON.stringify(payload));
                 }
             }
 
             try {
-                // Envia como FormData (não precisa de headers, o navegador define)
                 const response = await fetch(url, {
                     method: 'POST',
                     body: formData
@@ -181,7 +171,7 @@
                     feedback.style.color = "#ff4444";
                 }
             } catch (error) {
-                feedback.innerText = "❌ Erro de conexão. Verifique sua internet.";
+                feedback.innerText = "❌ Erro de conexão.";
                 feedback.style.color = "#ff4444";
             }
         }
