@@ -1,410 +1,180 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Metro Dash - Ultimate</title>
-<link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-html,body{height:100%;overflow:hidden;background:#1b1530;font-family:'Lilita One',Impact,'Arial Black',sans-serif;color:#fff;touch-action:none}
-#c{position:fixed;inset:0;width:100%;height:100%;z-index:1}
-.ov{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;background:radial-gradient(ellipse at center,#0000 30%,#000d);padding:12px;z-index:10}
-.hide{display:none!important}
-.logo{font-size:clamp(40px,10vw,80px);line-height:.9;color:#fff;text-shadow:0 5px 0 #000, 0 0 20px #ffd700; margin-bottom:20px;}
-.btn{font:inherit;font-size:clamp(20px,5vw,30px);padding:12px 40px;border:0;border-radius:60px;background:linear-gradient(#6dff86,#12c93d);color:#fff;text-shadow:0 3px 0 #0a7a25;box-shadow:0 8px 0 #0a7a25,0 14px 24px #0007;cursor:pointer;transition:0.1s}
-.btn:active{transform:translateY(5px);box-shadow:0 3px 0 #0a7a25}
-.btn.b2{background:linear-gradient(#ffd23f,#ff9d1c);text-shadow:0 3px 0 #a85c00;box-shadow:0 8px 0 #a85c00,0 14px 24px #0007;font-size:clamp(16px,4vw,24px);padding:8px 20px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stumble Lucky - Painel ADM</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Lilita One', cursive; }
+        body { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        
+        #login-screen { background: rgba(0, 0, 0, 0.6); border: 4px solid #ffd700; border-radius: 20px; padding: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 400px; }
+        h1 { font-size: 40px; color: #ffd700; text-shadow: 3px 3px 0 #000; margin-bottom: 10px; transform: rotate(-2deg); }
+        .subtitle { color: #4dff9e; font-size: 16px; margin-bottom: 30px; text-shadow: 1px 1px 0 #000; }
+        input[type="password"] { width: 100%; padding: 15px; border-radius: 10px; border: 3px solid #4dff9e; background: rgba(255,255,255,0.1); color: #fff; font-size: 20px; text-align: center; margin-bottom: 20px; outline: none; }
+        button { width: 100%; padding: 15px; border-radius: 10px; border: none; background: linear-gradient(180deg, #4dff9e, #12c93d); color: #000; font-size: 22px; cursor: pointer; box-shadow: 0 5px 0 #0a7a25; transition: 0.1s; }
+        button:active { transform: translateY(5px); box-shadow: none; }
 
-.panel { background: rgba(20,20,30,0.95); border: 3px solid #ffd700; border-radius: 20px; padding: 20px; width: 95%; max-width: 600px; max-height: 85vh; overflow-y: auto; z-index: 11; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 10px; margin-top: 15px; }
-.card{background:#ffffff18;border:3px solid #fff3;border-radius:15px;padding:5px;cursor:pointer;transition:transform .15s;display:flex;flex-direction:column;align-items:center}
-.card.on{border-color:#ffd23f;background:#ffd23f33;transform:scale(1.05)}
-.card canvas{width:60px;height:80px;display:block}
-.card div{font-size:12px;margin-top:5px;text-align:center}
-
-#overlay { position: fixed; bottom: 20px; right: 20px; width: 140px; height: 100px; background: rgba(0,0,0,0.5); border: 2px solid #fff; border-radius: 10px; display: none; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 5px; padding: 10px; z-index: 50; pointer-events: none; background-size: cover; background-position: center; }
-.key { border: 2px solid #fff; border-radius: 5px; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: bold; color: #fff; text-shadow: 1px 1px 0 #000; }
-.key.active { background: #fff; color: #000; }
-
-#hud{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:10px;font-size:24px;text-shadow:0 3px 0 #000;pointer-events:none;z-index:5}
-#pb{pointer-events:auto;background:#0006;color:#fff;border:2px solid #fff6;border-radius:10px;padding:0 10px;font-size:18px;cursor:pointer}
-select, input[type="file"], input[type="color"] { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 8px; border: none; font-size: 16px; font-family: inherit; }
-</style>
+        #admin-panel { display: none; width: 100%; max-width: 600px; background: rgba(0, 0, 0, 0.7); border: 4px solid #ffd700; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #admin-panel h2 { color: #ffd700; text-align: center; margin-bottom: 20px; font-size: 30px; text-shadow: 2px 2px 0 #000; }
+        .channel-select { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .channel-btn { background: #16213e; border: 2px solid #4dff9e; color: #4dff9e; padding: 10px; border-radius: 10px; cursor: pointer; font-size: 14px; text-align: center; }
+        .channel-btn.active { background: #4dff9e; color: #000; box-shadow: 0 0 10px #4dff9e; }
+        textarea { width: 100%; height: 120px; padding: 15px; border-radius: 10px; border: 2px solid #fff; background: rgba(255,255,255,0.1); color: #fff; font-size: 16px; resize: none; margin-bottom: 15px; outline: none; }
+        .mode-select { display: flex; gap: 15px; margin-bottom: 15px; justify-content: center; }
+        .mode-btn { flex: 1; padding: 10px; border: 2px solid #fff; background: transparent; color: #fff; border-radius: 8px; cursor: pointer; }
+        .mode-btn.active { background: #ffd700; color: #000; border-color: #ffd700; font-weight: bold; }
+        .image-upload { margin-bottom: 15px; }
+        .image-upload input[type="file"] { color: #fff; margin-bottom: 5px; }
+        .image-upload input[type="range"] { width: 100%; margin-bottom: 5px; }
+        .image-upload label { font-size: 14px; color: #ffd700; }
+        #feedback { text-align: center; font-size: 16px; margin-top: 10px; min-height: 20px; color: #4dff9e; }
+    </style>
 </head>
 <body>
-<canvas id="c"></canvas>
 
-<div id="hud" class="hide">
-  <div><span id="sc">0</span><small id="bs" style="display:block;font-size:12px;color:#ffd700"></small></div>
-  <div style="text-align:right">🪙 <span id="co">0</span><br><button id="pb">❚❚</button></div>
-</div>
+    <div id="login-screen">
+        <h1>PAINEL ADM</h1>
+        <div class="subtitle">STUMBLE LUCKY</div>
+        <input type="password" id="passwordInput" placeholder="Digite a senha...">
+        <button onclick="login()">ENTRAR</button>
+    </div>
 
-<!-- OVERLAY DE TECLAS -->
-<div id="overlay">
-    <div class="key" id="kW" style="grid-column:2;grid-row:1">W</div>
-    <div class="key" id="kA" style="grid-column:1;grid-row:2">A</div>
-    <div class="key" id="kS" style="grid-column:2;grid-row:2">S</div>
-    <div class="key" id="kD" style="grid-column:3;grid-row:2">D</div>
-</div>
+    <div id="admin-panel">
+        <h2>ENVIAR MENSAGEM</h2>
+        <div class="channel-select">
+            <div class="channel-btn active" onclick="selectChannel('chat', this)"># Chat Br</div>
+            <div class="channel-btn" onclick="selectChannel('news', this)"># News</div>
+            <div class="channel-btn" onclick="selectChannel('download', this)"># Download</div>
+            <div class="channel-btn" onclick="selectChannel('subnews', this)"># Sub News</div>
+        </div>
+        <div class="mode-select">
+            <button class="mode-btn active" id="mode-embed" onclick="setMode('embed')">Anúncio ADM (Embed)</button>
+            <button class="mode-btn" id="mode-pure" onclick="setMode('pure')">Mensagem Pura</button>
+        </div>
+        <textarea id="messageInput" placeholder="Digite sua mensagem aqui..."></textarea>
+        <div class="image-upload">
+            <label>Escolha uma imagem (opcional):</label><br>
+            <input type="file" id="imageInput" accept="image/*" onchange="previewImage()">
+            <div style="margin-top: 10px;">
+                <label>Tamanho da Imagem: <span id="sizeLabel">200px</span></label>
+                <input type="range" id="imageSize" min="50" max="500" value="200" oninput="updateSizeLabel()">
+            </div>
+        </div>
+        <button onclick="sendMessage()" style="background: linear-gradient(180deg, #ffd700, #ffa500); box-shadow: 0 5px 0 #b8860b; color: #000;">ENVIAR PARA O DISCORD</button>
+        <div id="feedback"></div>
+    </div>
 
-<div id="menu" class="ov">
-  <div class="logo">METRO<br><span style="color:#ffd700">DASH</span></div>
-  <button class="btn" id="btnSkins">SKINS (30)</button>
-  <button class="btn b2" id="btnOverlay" style="margin-top:10px">CONFIG OVERLAY</button>
-  <button class="btn" id="play" style="margin-top:20px;">JOGAR</button>
-</div>
-
-<!-- MENU DE SKINS -->
-<div id="skinsMenu" class="ov hide">
-  <div class="panel">
-      <h2 style="color:#ffd700;margin-bottom:10px;">ESCOLHA SUA SKIN</h2>
-      <div class="grid" id="skinsGrid"></div>
-      <!-- BOTÃO DE VOLTAR CORRIGIDO -->
-      <button class="btn b2" id="btnBackSkins" style="margin-top:20px;width:100%">VOLTAR AO MENU</button>
-  </div>
-</div>
-
-<!-- MENU DE CONFIGURAÇÃO DO OVERLAY -->
-<div id="overlayMenu" class="ov hide">
-  <div class="panel">
-      <h2 style="color:#ffd700;margin-bottom:15px;">CONFIGURAR OVERLAY</h2>
-      <label style="text-align:left;display:block">Layout das Teclas:</label>
-      <select id="layoutSel">
-          <option value="wasd">WASD</option>
-          <option value="arrows">Setas (↑ ↓ ← →)</option>
-      </select>
-      <label style="text-align:left;display:block">Cor do Fundo:</label>
-      <input type="color" id="bgColorSel" value="#000000">
-      <label style="text-align:left;display:block">Imagem de Fundo (Opcional):</label>
-      <input type="file" id="bgImg" accept="image/*">
-      <button class="btn b2" id="btnBackOverlay" style="width:100%;margin-top:10px">SALVAR E VOLTAR</button>
-  </div>
-</div>
-
-<!-- GAME OVER -->
-<div id="over" class="ov hide">
-  <div class="logo" style="font-size:40px">VOCÊ BATEU!</div>
-  <div style="font-size:24px">Pontos: <b id="fs">0</b></div>
-  <div style="font-size:24px">🪙 Moedas: <b id="fc">0</b></div>
-  <button class="btn" id="again" style="margin-top:20px">DE NOVO</button>
-  <button class="btn b2" id="tomenu">MENU</button>
-</div>
-
-<div id="pause" class="ov hide" style="background:#000a">
-  <div class="logo" style="font-size:50px">PAUSADO</div>
-  <button class="btn" id="resume">CONTINUAR</button>
-</div>
-
-<script>
-const $=id=>document.getElementById(id);
-const cv=$('c'),g=cv.getContext('2d');
-const LW=2.2,CH=3.2,BACK=6;
-let W,H,F,hy,dpr,sky=[];
-const ls={get(k){try{return +localStorage.getItem(k)||0}catch(e){return 0}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const hash=i=>Math.abs(Math.sin(i*12.9898)*43758.5453)%1;
-
-// GERADOR DE 30 SKINS
-const CHARS=[];
-const accList=['sword','ninja','crown','helmet','wings','shield','none','wand','backpack','hat'];
-const colors=['#19b5a5','#a64dff','#ff7a1a','#2a2a2a','#ff0000','#1e90ff','#ffffff','#8b0000','#00ff00','#ffd700'];
-for(let i=0;i<30;i++){
-    CHARS.push({
-        n:'Skin '+(i+1),
-        hood:colors[i%10],
-        cap:colors[(i+3)%10],
-        pants:colors[(i+6)%10],
-        skin:'#f1c27d',
-        acc:accList[i%10]
-    });
-}
-
-function rs(){
-  dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;
-  cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0);
-  F=Math.min(H*.84,W*.82);hy=H*.8-CH*F/BACK;
-  sky=[];for(let i=0;i<40;i++)sky.push({x:i*(W/28)-W*.1,w:W/28+4,h:20+hash(i)*H*.12});
-}
-addEventListener('resize',rs);rs();
-
-let S='menu',dist=0,speed=15,coins=0,obs=[],nextZ=60,lane=0,px=0,py=0,vy=0,roll=0,t=0,camX=0,shake=0,crashT=0,paused=false;
-let sel=Math.min(ls.get('mdc'),29),best=ls.get('mdb'),bank=ls.get('mdt');
-
-let overlayLayout=localStorage.getItem('ov_layout')||'wasd';
-let overlayBg=localStorage.getItem('ov_bg')||'#000000';
-let overlayImg=localStorage.getItem('ov_img')||'';
-
-function reset(){dist=0;coins=0;obs=[];nextZ=60;lane=0;px=0;py=0;vy=0;roll=0;camX=0;shake=0;}
-
-let ac;
-function snd(f,d,ty,v){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),n=ac.createGain();o.type=ty||'square';o.frequency.value=f;n.gain.value=v||.04;n.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(n);n.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
-const sCoin=()=>{snd(988,.08);setTimeout(()=>snd(1319,.12),70)};
-
-const HUES=[2,210,45,140,28,285];
-function spawn(){
-  const z=nextZ,r=Math.random(),L=[-1,0,1].sort(()=>Math.random()-.5),[a,b,c]=L;
-  let len=2;
-  const hue=()=>HUES[Math.random()*HUES.length|0];
-  const train=(l,n,v)=>{obs.push({t:'train',l,z,len:n,h:hue(),v:v||0});len=Math.max(len,n)};
-  const low=(l,zz)=>obs.push({t:'low',l,z:zz===undefined?z:zz,len:.6});
-  const high=l=>obs.push({t:'high',l,z,len:.6});
-  const line=(l,n,y)=>{for(let i=0;i<n;i++)obs.push({t:'coin',l,z:z+i*1.8,y:y||1,len:1});len=Math.max(len,n*1.8)};
-  const arch=l=>{const n=9;for(let i=0;i<n;i++)obs.push({t:'coin',l,z:z+i*1.4,y:.8+1.5*Math.sin(Math.PI*i/(n-1)),len:1});low(l,z+5.6);len=Math.max(len,n*1.4)};
-  
-  if(r<.26){train(a,10+Math.random()*10,Math.random()<.4?6:0);line(c,10)}
-  else if(r<.44){train(a,10+Math.random()*8);train(b,10+Math.random()*8);line(c,10)}
-  else if(r<.60){low(a);if(Math.random()<.6)low(b);line(c,8)}
-  else if(r<.74){high(a);if(Math.random()<.5)high(b);line(c,8)}
-  else if(r<.88){arch(a);if(Math.random()<.5)low(b)}
-  else{train(a,12);low(b);line(c,10)}
-  
-  nextZ += len + 20 + (speed * 2.5) + Math.random() * 10; 
-}
-
-const P=(X,Y,d)=>{const s=F/d;return[W/2+(X-camX)*s,hy+(CH-Y)*s];};
-function poly(p,c){g.fillStyle=c;g.beginPath();p.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.closePath();g.fill();}
-function box(x0,x1,y0,y1,d0,d1,col,deco){
-  if(d1<.4)return;d0=Math.max(d0,.4);
-  if(CH>y1)poly([P(x0,y1,d0),P(x1,y1,d0),P(x1,y1,d1),P(x0,y1,d1)],col.t);
-  if(camX<x0)poly([P(x0,y0,d0),P(x0,y0,d1),P(x0,y1,d1),P(x0,y1,d0)],col.s);
-  else if(camX>x1)poly([P(x1,y0,d0),P(x1,y0,d1),P(x1,y1,d1),P(x1,y1,d0)],col.s);
-  const a=P(x0,y1,d0),b=P(x1,y0,d0);
-  g.fillStyle=col.f;g.fillRect(a[0],a[1],b[0]-a[0],b[1]-a[1]);
-  if(deco)deco(a[0],a[1],b[0]-a[0],b[1]-a[1]);
-}
-const mk=(h,s,l)=>({f:`hsl(${h},${s}%,${l}%)`,s:`hsl(${h},${s}%,${l-14}%)`,t:`hsl(${h},${s-8}%,${l+16}%)`});
-
-// FUNÇÃO DE DESENHO CORRIGIDA (Sem bugs de tela preta)
-function drawChar(c,cx,fy,h,ch,tt,mode,rot){
-  const u=h/1.9;c.save();c.translate(cx,fy);
-  if(mode==='roll'){
-    c.translate(0,-.42*u);c.rotate(tt*16);
-    c.fillStyle=ch.hood;c.beginPath();c.arc(0,0,.42*u,0,7);c.fill();
-    c.restore();return;
-  }
-  if(rot)c.rotate(rot);
-  const sw=mode==='idle'?Math.sin(tt*3)*.1:Math.sin(tt*14);
-  const rr=(a,b,w,hh,col,r)=>{c.fillStyle=col;c.beginPath();c.roundRect(a*u,b*u,w*u,hh*u,r*u);c.fill();};
-  
-  for(const i of[-1,1]){c.save();c.translate(i*.15*u,-.8*u);c.rotate(sw*i*.7);rr(-.1,0,.2,.6,ch.pants,.06);rr(-.13,.52,.27,.2,'#f4f4f4',.08);c.restore();}
-  rr(-.33,-1.42,.66,.68,ch.hood,.14);
-  
-  // Desenha acessórios de forma segura
-  if(ch.acc === 'ninja') { rr(-.33,-.9,.66,.1,'#cc0000',.02); }
-  else if (ch.acc === 'crown') { c.fillStyle='#ffd700'; c.beginPath(); c.moveTo(-.2*u,-1.9*u); c.lineTo(-.1*u,-1.6*u); c.lineTo(0,-1.9*u); c.lineTo(.1*u,-1.6*u); c.lineTo(.2*u,-1.9*u); c.fill(); }
-  else if (ch.acc === 'sword') { rr(-.4,-1.4,.08,.6,'#888',.02); rr(-.42,-.9,.12,.05,'#ffd700',.02); }
-  else if (ch.acc === 'helmet') { c.fillStyle='#555'; c.beginPath(); c.arc(0,-1.62*u,.35*u,Math.PI,0); c.fill(); }
-  else if (ch.acc === 'wings') { c.fillStyle='#fff'; c.beginPath(); c.ellipse(-.4*u,-1.2*u,.2*u,.4*u,-.5,0,7); c.fill(); c.beginPath(); c.ellipse(.4*u,-1.2*u,.2*u,.4*u,.5,0,7); c.fill(); }
-  else if (ch.acc === 'shield') { c.fillStyle='#aaa'; c.beginPath(); c.arc(-.4*u,-1.2*u,.15*u,0,7); c.fill(); }
-  else { rr(-.22,-1.32,.44,.46,ch.hood,.08); }
-  
-  for(const i of[-1,1]){c.save();c.translate(i*.4*u,-1.32*u);c.rotate(-sw*i*.8);rr(-.08,0,.16,.5,ch.hood,.07);c.fillStyle=ch.skin;c.beginPath();c.arc(0,.54*u,.09*u,0,7);c.fill();c.restore();}
-  rr(-.09,-1.5,.18,.12,ch.skin,.03);
-  c.fillStyle=ch.skin;c.beginPath();c.arc(0,-1.62*u,.27*u,0,7);c.fill();
-  c.fillStyle=ch.cap;c.beginPath();c.arc(0,-1.64*u,.29*u,Math.PI,0);c.fill();
-  rr(-.29,-1.66,.58,.07,ch.cap,.03); rr(-.1,-1.62,.2,.05,'#0004',.02);
-  c.restore();
-}
-
-function hit(){
-  for(const o of obs){
-    if(o.t==='coin')continue;
-    const oz=o.z-dist;
-    if(Math.abs(px-o.l*LW)>.85)continue;
-    if(o.t==='train'){if(oz<.3&&oz+o.len>-.3&&py<2.5)return true;}
-    else if(oz<.35&&oz>-.9){
-      if(o.t==='low'&&py<.8)return true;
-      if(o.t==='high'&&!(roll>0&&py===0)&&py<2.0)return true;
-    }
-  }
-  return false;
-}
-
-function update(dt){
-  t+=dt;
-  const play=S==='play';
-  if(play){
-    speed=Math.min(16+dist*.012,40);
-    dist+=speed*dt;
-    while(nextZ<dist+120)spawn();
-    obs=obs.filter(o=>o.z+o.len>dist-14);
-    for(const o of obs)if(o.v)o.z-=o.v*dt;
-    px+=(lane*LW-px)*Math.min(1,dt*14);
-    vy-=40*dt;py+=vy*dt;if(py<=0){py=0;vy=0;}
-    if(roll>0)roll-=dt;
-    camX+=(px*.7-camX)*Math.min(1,dt*6);
-    for(const o of obs)if(o.t==='coin'&&!o.got&&Math.abs(o.z-dist)<.8&&Math.abs(px-o.l*LW)<.9&&o.y>py-.4&&o.y<py+1.9){o.got=1;coins++;sCoin();}
-    if(hit())crash();
-    $('sc').textContent=Math.floor(dist)+coins*5;$('co').textContent=coins;
-  }
-  if(shake>0)shake-=dt;
-  updateOverlay();
-}
-
-function crash(){
-  S='over';shake=.5;crashT=t;snd(110,.5,'sawtooth',.12);
-  const sc=Math.floor(dist)+coins*5;bank+=coins;ls.set('mdt',bank);
-  if(sc>best){best=sc;ls.set('mdb',best);}
-  setTimeout(()=>{if(S!=='over')return;$('fs').textContent=sc;$('fc').textContent=coins;$('over').classList.remove('hide');},800);
-}
-
-function render(){
-  g.save();
-  if(shake>0)g.translate((Math.random()-.5)*28*shake,(Math.random()-.5)*28*shake);
-  const sg=g.createLinearGradient(0,0,0,hy);sg.addColorStop(0,'#1c1b5e');sg.addColorStop(.6,'#8a3fa8');sg.addColorStop(1,'#ff9a6a');
-  g.fillStyle=sg;g.fillRect(-20,-20,W+40,hy+20);
-  g.fillStyle='#ffe2a0';g.beginPath();g.arc(W*.5-camX*6,hy-H*.03,Math.min(W,H)*.11,0,7);g.fill();
-  g.fillStyle='#3a2a64';for(const b of sky)g.fillRect(b.x-camX*5,hy-b.h,b.w,b.h+2);
-  const gg=g.createLinearGradient(0,hy,0,H);gg.addColorStop(0,'#4a3f66');gg.addColorStop(1,'#241c38');
-  g.fillStyle=gg;g.fillRect(-20,hy,W+40,H-hy+20);
-  
-  poly([P(-3.7,0,.4),P(3.7,0,.4),P(3.7,0,150),P(-3.7,0,150)],'#5b5273');
-  
-  const z0=Math.floor(dist/1.6)*1.6;
-  for(let i=-4;i<85;i++){const d=z0+i*1.6-dist+BACK;if(d<.4)continue;poly([P(-3.4,0,d),P(3.4,0,d),P(3.4,0,d+.35),P(-3.4,0,d+.35)],'#6e4b33');}
-  for(let l=-1;l<=1;l++)for(const o of[-.6,.6]){const X=l*LW+o;poly([P(X-.07,0,.4),P(X+.07,0,.4),P(X+.07,0,150),P(X-.07,0,150)],'#b7bfd1');}
-  
-  const it=[];
-  const k0=Math.floor((dist-20)/14);
-  for(let k=k0;k<k0+11;k++){
-    const d0=k*14-dist+BACK;
-    for(const sd of[-1,1]){
-      const hh=7+hash(k*2+(sd>0?1:0))*20,hu=240+hash(k+(sd>0?9:0))*50,w=5+hash(k*3+sd)*3;
-      const x0=sd>0?6:-6-w,x1=x0+w;
-      it.push({d:d0,f:()=>box(x0,x1,0,hh,d0,d0+11,mk(hu,30,24))});
-    }
-  }
-  for(const o of obs){
-    const d0=o.z-dist+BACK,d1=d0+o.len;
-    if(d1<.4||d0>150)continue;
-    const X0=o.l*LW-.9,X1=o.l*LW+.9;
-    if(o.t==='train')it.push({d:d0,f:()=>box(X0,X1,.2,2.6,d0,d1,mk(o.h,65,48))});
-    else if(o.t==='low')it.push({d:d0,f:()=>box(X0,X1,0,.8,d0,d1,mk(8,75,50))});
-    else if(o.t==='high')it.push({d:d0,f:()=>{
-      box(X0,X0+.2,0,2,d0,d1,mk(0,0,35));box(X1-.2,X1,0,2,d0,d1,mk(0,0,35));
-      box(X0,X1,1.25,1.95,d0,d1,mk(48,90,50));
-    }});
-    else if(o.t==='coin'&&!o.got)it.push({d:d0,f:()=>{
-      const p=P(o.l*LW,o.y,d0),r=.34*F/d0,wv=Math.abs(Math.cos(t*5+o.z))*r+r*.15;
-      g.fillStyle='#f5a300';g.beginPath();g.ellipse(p[0],p[1],wv,r,0,0,7);g.fill();
-      g.fillStyle='#ffd84a';g.beginPath();g.ellipse(p[0],p[1],wv*.72,r*.78,0,0,7);g.fill();
-    }});
-  }
-  if(S==='play'||S==='over')it.push({d:BACK,f:playerDraw});
-  it.sort((a,b)=>b.d-a.d);
-  for(const i of it){g.globalAlpha=i.d>70?Math.max(0,1-(i.d-70)/60):1;i.f();}
-  g.globalAlpha=1;
-  g.restore();
-  
-  if(S==='skins')for(const [i,c] of cardCtx.entries()){c.clearRect(0,0,160,200);drawChar(c,80,185,170,CHARS[i],t,'run');}
-}
-
-function playerDraw(){
-  const s=F/BACK,p=P(px,py,BACK),sh=P(px,0,BACK);
-  g.fillStyle='#0006';g.beginPath();g.ellipse(sh[0],sh[1],.5*s*(1-Math.min(py,2)*.2),.14*s,0,0,7);g.fill();
-  const rolling=roll>0&&py===0&&S!=='over';
-  drawChar(g,p[0],p[1],1.8*s,CHARS[sel],S==='over'?0:t,rolling?'roll':'run',S==='over'?Math.min((t-crashT)*6,1.5):0);
-}
-
-function act(a){
-  if(S!=='play'||paused)return;
-  if(a==='l'&&lane>-1){lane--;snd(300,.06,'triangle');}
-  if(a==='r'&&lane<1){lane++;snd(300,.06,'triangle');}
-  if(a==='u'&&py===0){vy=13;roll=0;snd(520,.12,'sine');}
-  if(a==='d'){if(py>0)vy=-22;else{roll=.65;snd(200,.12,'triangle');}}
-}
-
-// OVERLAY
-function setupOverlay(){
-    const isW = overlayLayout==='wasd';
-    $('kW').innerText = isW ? 'W' : '↑';
-    $('kA').innerText = isW ? 'A' : '←';
-    $('kS').innerText = isW ? 'S' : '↓';
-    $('kD').innerText = isW ? 'D' : '→';
-    $('overlay').style.backgroundColor = overlayBg;
-    if(overlayImg) $('overlay').style.backgroundImage = `url(${overlayImg})`;
-    else $('overlay').style.backgroundImage = 'none';
-}
-
-window.currentKeys = {};
-addEventListener('keydown',e=>{window.currentKeys[e.key.toLowerCase()]=true;});
-addEventListener('keyup',e=>{window.currentKeys[e.key.toLowerCase()]=false;});
-
-function updateOverlay(){
-    if(S!=='play'){ $('overlay').style.display='none'; return; }
-    $('overlay').style.display='grid';
-    const k = window.currentKeys;
-    $('kW').classList.toggle('active', k['w']||k['arrowup']);
-    $('kA').classList.toggle('active', k['a']||k['arrowleft']);
-    $('kS').classList.toggle('active', k['s']||k['arrowdown']);
-    $('kD').classList.toggle('active', k['d']||k['arrowright']);
-}
-
-addEventListener('keydown',e=>{
-  const k=e.key.toLowerCase();
-  const m={arrowleft:'l',a:'l',arrowright:'r',d:'r',arrowup:'u',w:'u',' ':'u',arrowdown:'d',s:'d'}[k];
-  if(m){act(m);e.preventDefault();}
-  if(k==='p'||k==='escape')togglePause();
-});
-let tx,ty;
-addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
-addEventListener('touchend',e=>{
-  if(tx==null)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;tx=null;
-  if(Math.max(Math.abs(dx),Math.abs(dy))<28)return;
-  if(Math.abs(dx)>Math.abs(dy))act(dx>0?'r':'l');else act(dy<0?'u':'d');
-});
-
-function togglePause(){ if(S!=='play')return;paused=!paused;$('pause').classList.toggle('hide',!paused); }
-function start(){ reset();S='play';$('menu').classList.add('hide');$('skinsMenu').classList.add('hide');$('overlayMenu').classList.add('hide');$('over').classList.add('hide');$('hud').classList.remove('hide');$('bs').textContent='Recorde '+best;snd(660,.15,'sine'); }
-function toMenu(){ reset();S='menu';$('over').classList.add('hide');$('hud').classList.add('hide');$('menu').classList.remove('hide');$('skinsMenu').classList.add('hide');$('overlayMenu').classList.add('hide');$('bank').textContent=bank;$('best').textContent=best; }
-
-$('btnSkins').onclick = () => { S='skins'; $('menu').classList.add('hide'); $('skinsMenu').classList.remove('hide'); };
-$('btnBackSkins').onclick = () => { S='menu'; $('skinsMenu').classList.add('hide'); $('menu').classList.remove('hide'); };
-
-$('btnOverlay').onclick = () => { S='overlay'; $('menu').classList.add('hide'); $('overlayMenu').classList.remove('hide'); };
-$('btnBackOverlay').onclick = () => {
-    overlayLayout = $('layoutSel').value;
-    overlayBg = $('bgColorSel').value;
-    const imgFile = $('bgImg').files[0];
-    if(imgFile){
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            overlayImg = e.target.result;
-            localStorage.setItem('ov_img', overlayImg);
-            setupOverlay(); S='menu'; $('overlayMenu').classList.add('hide'); $('menu').classList.remove('hide');
+    <script>
+        const WEBHOOKS = {
+            chat: 'https://discord.com/api/webhooks/1572286114318786790/7s-8A73wqQVQQT8tSahJ2cAmoTgywCwEQml1ZStmuxHA_7FxNrwjuWMus9UpjmGx71It',
+            news: 'https://discord.com/api/webhooks/1572286550648037386/CKNQC_m6XgS13OJmv1sGPMOLiNTV4RhdW0aVeEG-psAzR-DbwjxCsD9Q0B-WoBboyvdy',
+            download: 'https://discord.com/api/webhooks/1572277126114181301/B5t7BN5QiPiEJ5SDTy9SbH04jHBr669KuWwj4581uVR4WWpECi_EaDnE6N3oP4K7pngl',
+            subnews: 'https://discord.com/api/webhooks/1572287662063358103/NJBHV9b6WNhWSiSrWkMVJL4v_wGqq8LMBWwjFoUcrl3TUozijF099igUNwfY4n0cOfDk'
         };
-        reader.readAsDataURL(imgFile);
-    } else {
-        overlayImg = localStorage.getItem('ov_img')||'';
-        setupOverlay(); S='menu'; $('overlayMenu').classList.add('hide'); $('menu').classList.remove('hide');
-    }
-    localStorage.setItem('ov_layout', overlayLayout);
-    localStorage.setItem('ov_bg', overlayBg);
-};
 
-$('play').onclick=start;$('again').onclick=start;$('tomenu').onclick=toMenu;
-$('pb').onclick=togglePause;$('resume').onclick=togglePause;
+        let selectedChannel = 'chat';
+        let sendMode = 'embed';
+        let imageFile = null;
 
-const cardCtx=[];
-const skinsGrid = $('skinsGrid');
-CHARS.forEach((ch,i)=>{
-  const d=document.createElement('div');d.className='card'+(i===sel?' on':'');
-  const c=document.createElement('canvas');c.width=160;c.height=200;
-  const n=document.createElement('div');n.textContent=ch.n;
-  d.append(c,n);skinsGrid.append(d);cardCtx.push(c.getContext('2d'));
-  d.onclick=()=>{sel=i;ls.set('mdc',i);[...skinsGrid.children].forEach((x,j)=>x.classList.toggle('on',j===i));snd(700,.08,'sine');};
-});
+        function login() {
+            const pass = document.getElementById('passwordInput').value;
+            if (pass === 'luckysecret77') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+            } else {
+                alert('Senha incorreta!');
+            }
+        }
 
-$('bank').textContent=bank;$('best').textContent=best;
-setupOverlay();
+        function selectChannel(channel, btn) {
+            selectedChannel = channel;
+            document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
 
-let last=0;
-function loop(ts){
-  const dt=Math.min((ts-last)/1000||0,.05);last=ts;
-  if(!paused)update(dt);
-  render();requestAnimationFrame(loop);
-}
-requestAnimationFrame(loop);
-</script>
+        function setMode(mode) {
+            sendMode = mode;
+            document.getElementById('mode-embed').classList.toggle('active', mode === 'embed');
+            document.getElementById('mode-pure').classList.toggle('active', mode === 'pure');
+        }
+
+        function previewImage() {
+            const file = document.getElementById('imageInput').files[0];
+            imageFile = file || null;
+        }
+
+        function updateSizeLabel() {
+            document.getElementById('sizeLabel').innerText = document.getElementById('imageSize').value + 'px';
+        }
+
+        async function sendMessage() {
+            const text = document.getElementById('messageInput').value;
+            const feedback = document.getElementById('feedback');
+            const url = WEBHOOKS[selectedChannel];
+
+            if (!text && !imageFile) {
+                feedback.innerText = "Digite uma mensagem ou anexe uma imagem!";
+                feedback.style.color = "#ff4444";
+                return;
+            }
+
+            feedback.innerText = "Enviando...";
+            feedback.style.color = "#ffd700";
+
+            const formData = new FormData();
+            let payload = {};
+
+            if (sendMode === 'embed') {
+                // MODO ANÚNCIO (Embed)
+                const embed = {
+                    title: "📢 Anúncio do Painel Stumble Lucky",
+                    description: text || " ",
+                    color: 0xffd700,
+                    footer: { text: "Stumble Lucky Admin" },
+                    timestamp: new Date().toISOString()
+                };
+                
+                // AQUI: Removemos o username e avatar_url para usar os da webhook
+                payload = { embeds: [embed] };
+            } else {
+                // MODO PURO (Texto Normal)
+                // AQUI: Removemos o username e avatar_url para usar os da webhook
+                payload = { content: text };
+            }
+
+            formData.append('payload_json', JSON.stringify(payload));
+
+            if (imageFile) {
+                formData.append('file', imageFile);
+                if (sendMode === 'embed') {
+                    payload.embeds[0].image = { url: "attachment://" + imageFile.name };
+                    formData.set('payload_json', JSON.stringify(payload));
+                }
+            }
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    feedback.innerText = "✅ Mensagem enviada com sucesso!";
+                    feedback.style.color = "#4dff9e";
+                    document.getElementById('messageInput').value = '';
+                    document.getElementById('imageInput').value = '';
+                    imageFile = null;
+                } else {
+                    feedback.innerText = "❌ Erro ao enviar. Verifique a webhook.";
+                    feedback.style.color = "#ff4444";
+                }
+            } catch (error) {
+                feedback.innerText = "❌ Erro de conexão.";
+                feedback.style.color = "#ff4444";
+            }
+        }
+    </script>
 </body>
 </html>
